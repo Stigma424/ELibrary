@@ -1,0 +1,25 @@
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="300"
+     height="420"
+     viewBox="0 0 300 420">
+  <rect width="300" height="420" rx="16"
+        fill="#e8eef6"/>
+  <rect x="50" y="80" width="200" height="260"
+        rx="12" fill="#c8d6e8"/>
+  <path d="M100 150 Q125 138 150 153
+           Q175 138 200 150 V260
+           Q175 248 150 263
+           Q125 248 100 260 Z"
+        fill="#52749a"/>
+  <path d="M150 153 V263"
+        stroke="#e8eef6" stroke-width="4"/>
+  <text x="150" y="305"
+        text-anchor="middle"
+        font-family="Arial"
+        font-size="18"
+        font-weight="bold"
+        fill="#365474">
+    NO COVER
+  </text>
+</svg>

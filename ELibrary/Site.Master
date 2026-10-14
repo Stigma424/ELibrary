@@ -1,0 +1,423 @@
+﻿
+<%@ Master Language="C#"
+    AutoEventWireup="true"
+    CodeBehind="Site.Master.cs"
+    Inherits="ELibrary.SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <title>E-Library Management System</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+        href="<%= ResolveUrl("~/Content/elibrary-ui.css") %>" />
+
+    <asp:ContentPlaceHolder
+        ID="head"
+        runat="server" />
+</head>
+
+<body id="pageBody" runat="server">
+
+<form id="form1" runat="server">
+
+    <!-- ADMIN SIDEBAR: PRESERVED -->
+    <asp:Panel
+        ID="pnlAdminSidebar"
+        runat="server"
+        CssClass="el-sidebar"
+        Visible="false">
+
+        <div class="el-sidebar-brand">
+            <div class="el-brand-logo">EL</div>
+
+            <div>
+                <div class="el-brand-name">
+                    E-Library
+                </div>
+                <div class="el-brand-caption">
+                    Administration
+                </div>
+            </div>
+        </div>
+
+        <div class="el-sidebar-scroll">
+
+            <div class="el-menu-label">WORKSPACE</div>
+
+            <asp:HyperLink
+                ID="navAdminDashboard"
+                runat="server"
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-menu-link"
+                Text="Dashboard" />
+
+            <button type="button" class="el-menu-group-toggle" data-el-group="catalog" aria-expanded="true" aria-controls="el-group-catalog">
+                <span>Catalog Management</span><span class="el-menu-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div id="el-group-catalog" class="el-menu-group-content">
+
+            <asp:HyperLink
+                ID="navManageBooks"
+                runat="server"
+                NavigateUrl="~/Admin/Books/ManageBooks.aspx"
+                CssClass="el-menu-link"
+                Text="Manage Books" />
+
+            <asp:HyperLink
+                ID="navManageGenres"
+                runat="server"
+                NavigateUrl="~/Admin/Books/ManageGenres.aspx"
+                CssClass="el-menu-link"
+                Text="Manage Genres" />
+
+            <asp:HyperLink
+                ID="navManageUsers"
+                runat="server"
+                NavigateUrl="~/Admin/Users/ManageUsers.aspx"
+                CssClass="el-menu-link"
+                Text="Manage Users" />
+
+            </div>
+
+            <button type="button" class="el-menu-group-toggle" data-el-group="operations" aria-expanded="true" aria-controls="el-group-operations">
+                <span>Library Operations</span><span class="el-menu-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div id="el-group-operations" class="el-menu-group-content">
+
+            <asp:HyperLink
+                ID="navManageBorrows"
+                runat="server"
+                NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
+                CssClass="el-menu-link"
+                Text="Manage Borrowings" />
+           <asp:HyperLink
+                ID="navWalkInBorrow"
+                runat="server"
+                NavigateUrl="~/Admin/Borrowing/WalkInBorrow.aspx"
+                CssClass="el-menu-link"
+                Text="Walk-in Borrowing" />
+            <asp:HyperLink
+                ID="navOverdueBooks"
+                runat="server"
+                NavigateUrl="~/Admin/Borrowing/OverdueBooks.aspx"
+                CssClass="el-menu-link"
+                Text="Overdue Books" />
+
+            <asp:HyperLink
+                ID="navBorrowHistory"
+                runat="server"
+                NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
+                CssClass="el-menu-link"
+                Text="Borrow History" />
+
+            <asp:HyperLink
+                ID="navTransactions"
+                runat="server"
+                NavigateUrl="~/Admin/Transactions/ManageTransactions.aspx"
+                CssClass="el-menu-link"
+                Text="Transactions" />
+
+            </div>
+
+            <button type="button" class="el-menu-group-toggle" data-el-group="records" aria-expanded="true" aria-controls="el-group-records">
+                <span>System Records</span><span class="el-menu-chevron" aria-hidden="true">&#9662;</span>
+            </button>
+            <div id="el-group-records" class="el-menu-group-content">
+
+            <asp:HyperLink
+                ID="navArchivedBooks"
+                runat="server"
+                NavigateUrl="~/Admin/Archive/ArchiveBooks.aspx"
+                CssClass="el-menu-link"
+                Text="Archived Books" />
+
+            <asp:HyperLink
+                ID="navAuditLogs"
+                runat="server"
+                NavigateUrl="~/Admin/Audit/AuditLogs.aspx"
+                CssClass="el-menu-link"
+                Text="Audit Logs" />
+
+        </div>
+            </div>
+
+        <div class="el-sidebar-footer">
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/Logout.aspx"
+                CssClass="el-menu-link el-signout"
+                Text="Sign Out" />
+        </div>
+
+    </asp:Panel>
+
+    <!-- ADMIN HEADER: PRESERVED -->
+    <asp:Panel
+        ID="pnlAdminHeader"
+        runat="server"
+        CssClass="el-admin-header"
+        Visible="false">
+
+        <div class="el-header-left">
+
+            <button
+                type="button"
+                class="el-menu-toggle"
+                onclick="toggleSidebar()"
+                aria-label="Toggle sidebar">
+                &#9776;
+            </button>
+
+            <div class="el-header-title">
+                <strong>Library Management</strong>
+                <span>Administrator Workspace</span>
+            </div>
+
+        </div>
+
+        <div class="el-header-right">
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-header-link"
+                Text="Dashboard" />
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/Logout.aspx"
+                CssClass="el-header-link el-header-logout"
+                Text="Logout" />
+
+            <asp:Image
+                ID="imgAdminAvatar"
+                runat="server"
+                CssClass="el-user-avatar el-avatar-image"
+                AlternateText="Administrator profile picture" />
+
+        </div>
+
+    </asp:Panel>
+
+    <!-- GUEST / CUSTOMER HEADER -->
+    <asp:Panel
+        ID="pnlPublicHeader"
+        runat="server"
+        CssClass="el-public-header">
+
+        <asp:HyperLink
+            ID="lnkPublicBrand"
+            runat="server"
+            NavigateUrl="~/Default.aspx"
+            CssClass="el-public-brand"
+            Text="E-Library" />
+
+        <!-- GUEST NAVIGATION -->
+        <nav class="el-public-nav">
+
+            <asp:PlaceHolder
+                ID="phGuestNavigation"
+                runat="server">
+
+                <asp:HyperLink
+                    runat="server"
+                    NavigateUrl="~/Default.aspx"
+                    Text="Home" />
+
+                <asp:HyperLink
+                    runat="server"
+                    NavigateUrl="~/Login.aspx"
+                    Text="Login" />
+
+                <asp:HyperLink
+                    runat="server"
+                    NavigateUrl="~/Register.aspx"
+                    Text="Register" />
+
+            </asp:PlaceHolder>
+
+        </nav>
+
+        <!-- CUSTOMER NAVIGATION -->
+        <asp:PlaceHolder
+            ID="phCustomerNavigation"
+            runat="server"
+            Visible="false">
+
+            <div class="el-customer-header-content">
+
+                <button
+                    type="button"
+                    class="el-customer-menu-toggle"
+                    onclick="toggleCustomerMenu()"
+                    aria-label="Toggle customer navigation">
+                    ☰
+                </button>
+
+                <nav
+                    id="customerNav"
+                    class="el-customer-nav"
+                    aria-label="Customer navigation">
+
+                    <asp:HyperLink
+                        ID="navCustomerDashboard"
+                        runat="server"
+                        NavigateUrl="~/CustomerHome.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Home" />
+
+                    <asp:HyperLink
+                        ID="navCustomerBooks"
+                        runat="server"
+                        NavigateUrl="~/Customer/Books.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Browse Books" />
+
+                    <asp:HyperLink
+                        ID="navCustomerBorrows"
+                        runat="server"
+                        NavigateUrl="~/Customer/MyBorrows.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="My Borrowings" />
+
+                    <asp:HyperLink
+                        ID="navCustomerHistory"
+                        runat="server"
+                        NavigateUrl="~/Customer/BorrowHistory.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="History" />
+
+                    <asp:HyperLink
+                        ID="navCustomerTransactions"
+                        runat="server"
+                        NavigateUrl="~/Customer/MyTransactions.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Transactions" />
+
+                    <asp:HyperLink
+                        ID="navCustomerProfile"
+                        runat="server"
+                        NavigateUrl="~/Customer/Profile.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Profile" />
+
+                    <asp:HyperLink
+                        ID="navCustomerLogout"
+                        runat="server"
+                        NavigateUrl="~/Logout.aspx"
+                        CssClass="el-customer-nav-link el-customer-logout"
+                        Text="Logout" />
+
+                </nav>
+
+                <asp:HyperLink
+                    ID="lnkCustomerAvatar"
+                    runat="server"
+                    NavigateUrl="~/Customer/Profile.aspx"
+                    CssClass="el-customer-avatar-link">
+
+                    <asp:Image
+                        ID="imgCustomerAvatar"
+                        runat="server"
+                        CssClass="el-user-avatar el-avatar-image"
+                        AlternateText="My profile picture" />
+
+                </asp:HyperLink>
+
+            </div>
+
+        </asp:PlaceHolder>
+
+    </asp:Panel>
+
+    <main class="el-main">
+
+        <!-- ADMIN TOOLBAR: PRESERVED -->
+        <asp:Panel
+            ID="pnlAdminToolbar"
+            runat="server"
+            CssClass="el-page-toolbar"
+            Visible="false">
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-back-link"
+                Text="&#8592; Admin Dashboard" />
+
+            <span class="el-toolbar-caption">
+                E-Library Administration
+            </span>
+
+        </asp:Panel>
+
+        <div class="el-page-container">
+
+            <asp:ContentPlaceHolder
+                ID="MainContent"
+                runat="server" />
+
+        </div>
+
+    </main>
+
+    <footer class="el-footer">
+        &copy; 2026 E-Library Management System
+    </footer>
+
+</form>
+
+<script>
+    function toggleSidebar() {
+        document.body.classList.toggle("el-sidebar-open");
+    }
+
+
+    // Collapsible admin navigation. Store each group's state across page changes.
+    (function () {
+        var buttons = document.querySelectorAll('.el-menu-group-toggle');
+        for (var i = 0; i < buttons.length; i++) {
+            (function (button) {
+                var key = button.getAttribute('data-el-group');
+                var panel = document.getElementById('el-group-' + key);
+                if (!panel) return;
+                var saved = null;
+                try { saved = localStorage.getItem('el-admin-group-' + key); } catch (e) { }
+                var hasActiveLink = !!panel.querySelector('.el-menu-link.active');
+                var expanded = saved === null ? true : saved === 'open';
+                // Keep the current page's navigation visible, even if previously collapsed.
+                if (hasActiveLink) expanded = true;
+                function apply() {
+                    panel.hidden = !expanded;
+                    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                    button.classList.toggle('is-expanded', expanded);
+                }
+                apply();
+                button.addEventListener('click', function () {
+                    expanded = !expanded;
+                    apply();
+                    try { localStorage.setItem('el-admin-group-' + key, expanded ? 'open' : 'closed'); } catch (e) { }
+                });
+            })(buttons[i]);
+        }
+    })();
+
+    function toggleCustomerMenu() {
+        var nav = document.getElementById("customerNav");
+
+        if (nav) {
+            nav.classList.toggle("el-customer-nav-open");
+        }
+    }
+</script>
+
+</body>
+</html>
