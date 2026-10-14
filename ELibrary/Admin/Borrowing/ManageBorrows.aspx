@@ -136,6 +136,7 @@
             background: #fff;
             color: #172b43;
             font-size: 13px;
+            box-sizing: border-box;
         }
 
         .el-admin-borrowing .br-field input:focus,
@@ -268,6 +269,7 @@
             border: 1px solid #dce5ee;
             border-radius: 7px;
             font-size: 12px;
+            box-sizing: border-box;
         }
 
         .el-admin-borrowing .br-muted {
@@ -294,6 +296,58 @@
             cursor: default;
         }
 
+        /* Batch 5: customer lost-book controls */
+        .el-admin-borrowing .br-lost-box {
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid #f3d2d2;
+            border-radius: 8px;
+            background: #fffafa;
+            min-width: 200px;
+        }
+
+        .el-admin-borrowing .br-lost-title {
+            display: block;
+            font-size: 12px;
+            font-weight: 750;
+            color: #a83b3b;
+            margin-bottom: 8px;
+        }
+
+        .el-admin-borrowing .br-lost-box label {
+            display: block;
+            margin: 8px 0 4px;
+            color: #43566b;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .el-admin-borrowing .br-lost-input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            border: 1px solid #dce5ee;
+            border-radius: 7px;
+            background: #fff;
+            font-size: 12px;
+        }
+
+        .el-admin-borrowing .br-lost-button {
+            margin-top: 10px;
+            background: #fff0f0;
+            color: #a83b3b;
+            border-color: #f3d2d2;
+        }
+
+        .el-admin-borrowing .br-lost-note {
+            display: block;
+            font-size: 11px;
+            color: #718096;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
         @media (max-width: 900px) {
             .el-admin-borrowing .br-filters {
                 grid-template-columns: 1fr 1fr;
@@ -316,7 +370,6 @@
     <div class="el-admin-borrowing">
 
         <div class="br-header">
-
             <div>
                 <span class="br-eyebrow">
                     ADMINISTRATION / BORROWING
@@ -326,12 +379,11 @@
 
                 <p>
                     Manage pending pickups, active loans,
-                    cancellations, and book returns.
+                    cancellations, book returns, and lost books.
                 </p>
             </div>
 
             <div class="br-links">
-
                 <asp:Button
                     ID="btnRefresh"
                     runat="server"
@@ -353,7 +405,6 @@
                     NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
                     CssClass="br-btn"
                     Text="Borrowing History" />
-
             </div>
         </div>
 
@@ -368,8 +419,8 @@
             <div class="br-panel-head">
                 <h2>Reservations and Borrowings</h2>
                 <p>
-                    Confirm book collection, cancel pending
-                    reservations, or process physical returns.
+                    Confirm collection, cancel pending reservations,
+                    process returns, or record customer-lost books.
                 </p>
             </div>
 
@@ -480,7 +531,6 @@
                 </div>
 
                 <div class="br-filter-actions">
-
                     <asp:Button
                         ID="btnApply"
                         runat="server"
@@ -496,7 +546,6 @@
                         CssClass="br-btn"
                         CausesValidation="false"
                         OnClick="btnClearFilters_Click" />
-
                 </div>
 
             </asp:Panel>
@@ -549,9 +598,7 @@
                             HeaderText="Reserved / Borrowed"
                             DataFormatString="{0:MM/dd/yyyy}" />
 
-                        <asp:TemplateField
-                            HeaderText="Due Date">
-
+                        <asp:TemplateField HeaderText="Due Date">
                             <ItemTemplate>
                                 <%# Eval("DueDate") == DBNull.Value
                                     ? "Not assigned"
@@ -559,14 +606,10 @@
                                         Eval("DueDate"))
                                         .ToString("MM/dd/yyyy") %>
                             </ItemTemplate>
-
                         </asp:TemplateField>
 
-                        <asp:TemplateField
-                            HeaderText="Collection">
-
+                        <asp:TemplateField HeaderText="Collection">
                             <ItemTemplate>
-
                                 <span class='<%#
                                     Convert.ToString(
                                         Eval("CollectionStatus")) == "Pending"
@@ -577,34 +620,24 @@
                                     : "br-pill success" %>'>
 
                                     <%#: Eval("CollectionStatus") %>
-
                                 </span>
-
                             </ItemTemplate>
                         </asp:TemplateField>
 
-                        <asp:TemplateField
-                            HeaderText="Loan Status">
-
+                        <asp:TemplateField HeaderText="Loan Status">
                             <ItemTemplate>
-
                                 <span class='<%#
                                     Convert.ToString(Eval("Status")) == "Overdue"
                                     ? "br-pill danger"
                                     : "br-pill" %>'>
 
                                     <%#: Eval("Status") %>
-
                                 </span>
-
                             </ItemTemplate>
                         </asp:TemplateField>
 
-                        <asp:TemplateField
-                            HeaderText="Return Status">
-
+                        <asp:TemplateField HeaderText="Return Status">
                             <ItemTemplate>
-
                                 <asp:Label
                                     ID="lblReturnStatus"
                                     runat="server"
@@ -623,15 +656,13 @@
                                         ? "Return Requested"
                                         : "Not Requested" %>'
                                     CssClass="br-pill" />
-
                             </ItemTemplate>
                         </asp:TemplateField>
 
-                        <asp:TemplateField
-                            HeaderText="Actions">
-
+                        <asp:TemplateField HeaderText="Actions">
                             <ItemTemplate>
 
+                                <!-- Pending pickup actions -->
                                 <asp:PlaceHolder
                                     ID="phPending"
                                     runat="server"
@@ -670,6 +701,7 @@
 
                                 </asp:PlaceHolder>
 
+                                <!-- Collected active loans -->
                                 <asp:PlaceHolder
                                     ID="phActive"
                                     runat="server"
@@ -692,6 +724,56 @@
                                         CommandArgument='<%# Eval("BorrowLogID") %>'
                                         CausesValidation="false"
                                         OnClientClick="return confirm('Confirm that the physical book has been returned?');" />
+
+                                    <!-- Batch 5: customer lost book -->
+                                    <div class="br-lost-box">
+
+                                        <span class="br-lost-title">
+                                            Lost Book
+                                        </span>
+
+                                        <label>
+                                            Replacement Fee (PHP) *
+                                        </label>
+
+                                        <asp:TextBox
+                                            ID="txtReplacementFee"
+                                            runat="server"
+                                            CssClass="br-lost-input"
+                                            MaxLength="15"
+                                            placeholder="e.g. 500.00"
+                                            autocomplete="off" />
+
+                                        <label>
+                                            Loss Reason *
+                                        </label>
+
+                                        <asp:TextBox
+                                            ID="txtLostReason"
+                                            runat="server"
+                                            CssClass="br-lost-input"
+                                            TextMode="MultiLine"
+                                            Rows="3"
+                                            MaxLength="500"
+                                            placeholder="Describe how the book was lost" />
+
+                                        <asp:Button
+                                            ID="btnMarkLost"
+                                            runat="server"
+                                            Text="Mark Lost"
+                                            CssClass="br-action br-lost-button"
+                                            CommandName="MarkLost"
+                                            CommandArgument='<%# Eval("BorrowLogID") %>'
+                                            CausesValidation="false"
+                                            OnClientClick="return confirm('Mark this customer book as LOST? This will reduce total inventory by one and record the replacement fee.');" />
+
+                                        <span class="br-lost-note">
+                                            This records a replacement fee
+                                            owed by the customer. It does not
+                                            record a payment.
+                                        </span>
+
+                                    </div>
 
                                 </asp:PlaceHolder>
 
@@ -716,11 +798,9 @@
                     </Columns>
 
                 </asp:GridView>
-
             </div>
 
             <div class="br-pager">
-
                 <asp:Button
                     ID="btnPrevious"
                     runat="server"
@@ -741,11 +821,9 @@
                     CssClass="br-btn"
                     CausesValidation="false"
                     OnClick="btnNext_Click" />
-
             </div>
 
         </section>
-
     </div>
 
 </asp:Content>

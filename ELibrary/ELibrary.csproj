@@ -130,6 +130,7 @@
     <Content Include="Content\elibrary-ui.css" />
     <Content Include="Content\Images\default-avatar.svg" />
     <Content Include="Content\Images\default-book.svg" />
+    <Content Include="Content\ocean-teal-shell.css" />
     <Content Include="Content\Site.css" />
     <Content Include="CustomerHome.aspx" />
     <Content Include="Customer\Books.aspx" />

@@ -132,6 +132,51 @@ namespace ELibrary.Admin.Transactions
         protected global::System.Web.UI.WebControls.Button btnHistoryNext;
 
         /// <summary>
+        /// pnlPaymentHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPaymentHistory;
+
+        /// <summary>
+        /// lblSelectedReceipt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSelectedReceipt;
+
+        /// <summary>
+        /// btnClosePaymentHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClosePaymentHistory;
+
+        /// <summary>
+        /// lblPaymentHistoryMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPaymentHistoryMessage;
+
+        /// <summary>
+        /// gvPaymentHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvPaymentHistory;
+
+        /// <summary>
         /// pnlUnpaidFilters control.
         /// </summary>
         /// <remarks>

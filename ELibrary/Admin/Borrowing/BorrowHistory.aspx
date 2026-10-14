@@ -88,7 +88,9 @@
 
         .el-admin-borrowing .br-filters {
             display: grid;
-            grid-template-columns: minmax(190px,2fr) repeat(4,minmax(130px,1fr));
+            grid-template-columns:
+                minmax(190px,2fr)
+                repeat(4,minmax(130px,1fr));
             gap: 12px;
             padding: 16px;
             margin: 18px 0;
@@ -129,7 +131,7 @@
 
         .el-admin-borrowing .br-table {
             width: 100%;
-            min-width: 1150px;
+            min-width: 1550px;
             border-collapse: collapse;
             font-size: 13px;
         }
@@ -185,6 +187,25 @@
             color: #bd4141;
         }
 
+        .el-admin-borrowing .br-loss-reason {
+            max-width: 260px;
+            min-width: 170px;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        .el-admin-borrowing .br-fee {
+            font-weight: 700;
+            color: #a83b3b;
+            white-space: nowrap;
+        }
+
+        .el-admin-borrowing .br-loss-note {
+            color: #718096;
+            font-size: 12px;
+            margin: 12px 0 0;
+        }
+
         @media(max-width:1050px) {
             .el-admin-borrowing .br-filters {
                 grid-template-columns: repeat(2,minmax(0,1fr));
@@ -218,32 +239,37 @@
                 <h1>Borrowing History</h1>
 
                 <p class="br-muted">
-                    Review completed loans and cancelled reservations.
+                    Review returned books, lost books,
+                    and cancelled reservations.
                 </p>
             </div>
 
             <div class="br-links">
 
-                <asp:Button ID="btnRefresh"
+                <asp:Button
+                    ID="btnRefresh"
                     runat="server"
                     Text="Refresh"
                     CssClass="br-btn br-btn-primary"
                     CausesValidation="false"
                     OnClick="btnRefresh_Click" />
 
-                <asp:HyperLink runat="server"
+                <asp:HyperLink
+                    runat="server"
                     NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
                     CssClass="br-btn"
                     Text="Manage Borrowings" />
 
-                <asp:HyperLink runat="server"
+                <asp:HyperLink
+                    runat="server"
                     NavigateUrl="~/Admin/Borrowing/OverdueBooks.aspx"
                     CssClass="br-btn"
                     Text="Overdue Books" />
             </div>
         </div>
 
-        <asp:Label ID="lblMessage"
+        <asp:Label
+            ID="lblMessage"
             runat="server"
             EnableViewState="false"
             CssClass="br-message" />
@@ -253,20 +279,24 @@
             <h2>Borrowing Records</h2>
 
             <p class="br-muted">
-                Search and filter historical borrowing activity.
+                Search and filter historical borrowing activity,
+                including customer-lost books.
             </p>
 
-            <asp:Panel ID="pnlFilters"
+            <asp:Panel
+                ID="pnlFilters"
                 runat="server"
                 DefaultButton="btnApply"
                 CssClass="br-filters">
 
                 <div class="br-field">
-                    <asp:Label runat="server"
+                    <asp:Label
+                        runat="server"
                         AssociatedControlID="txtSearch"
                         Text="Search History" />
 
-                    <asp:TextBox ID="txtSearch"
+                    <asp:TextBox
+                        ID="txtSearch"
                         runat="server"
                         MaxLength="255"
                         placeholder="ID, customer, email, book..."
@@ -274,64 +304,103 @@
                 </div>
 
                 <div class="br-field">
-                    <asp:Label runat="server"
+                    <asp:Label
+                        runat="server"
                         AssociatedControlID="ddlStatus"
                         Text="Status" />
 
-                    <asp:DropDownList ID="ddlStatus"
+                    <asp:DropDownList
+                        ID="ddlStatus"
                         runat="server">
-                        <asp:ListItem Text="All Statuses" Value="All" />
-                        <asp:ListItem Text="Returned" Value="Returned" />
-                        <asp:ListItem Text="Lost" Value="Lost" />
-                        <asp:ListItem Text="Cancelled" Value="Cancelled" />
+
+                        <asp:ListItem
+                            Text="All Statuses"
+                            Value="All" />
+
+                        <asp:ListItem
+                            Text="Returned"
+                            Value="Returned" />
+
+                        <asp:ListItem
+                            Text="Lost"
+                            Value="Lost" />
+
+                        <asp:ListItem
+                            Text="Cancelled"
+                            Value="Cancelled" />
+
                     </asp:DropDownList>
                 </div>
 
                 <div class="br-field">
-                    <asp:Label runat="server"
+                    <asp:Label
+                        runat="server"
                         AssociatedControlID="ddlSort"
                         Text="Sort By" />
 
-                    <asp:DropDownList ID="ddlSort"
+                    <asp:DropDownList
+                        ID="ddlSort"
                         runat="server">
-                        <asp:ListItem Text="Default Order" Value="Default" />
-                        <asp:ListItem Text="Recently Reserved" Value="BorrowDesc" />
-                        <asp:ListItem Text="Oldest Reserved" Value="BorrowAsc" />
-                        <asp:ListItem Text="Highest ID First" Value="IDDesc" />
-                        <asp:ListItem Text="Lowest ID First" Value="IDAsc" />
+
+                        <asp:ListItem
+                            Text="Default Order"
+                            Value="Default" />
+
+                        <asp:ListItem
+                            Text="Recently Reserved"
+                            Value="BorrowDesc" />
+
+                        <asp:ListItem
+                            Text="Oldest Reserved"
+                            Value="BorrowAsc" />
+
+                        <asp:ListItem
+                            Text="Highest ID First"
+                            Value="IDDesc" />
+
+                        <asp:ListItem
+                            Text="Lowest ID First"
+                            Value="IDAsc" />
+
                     </asp:DropDownList>
                 </div>
 
                 <div class="br-field">
-                    <asp:Label runat="server"
+                    <asp:Label
+                        runat="server"
                         AssociatedControlID="txtDateFrom"
                         Text="Reserved From" />
 
-                    <asp:TextBox ID="txtDateFrom"
+                    <asp:TextBox
+                        ID="txtDateFrom"
                         runat="server"
                         TextMode="Date" />
                 </div>
 
                 <div class="br-field">
-                    <asp:Label runat="server"
+                    <asp:Label
+                        runat="server"
                         AssociatedControlID="txtDateTo"
                         Text="Reserved To" />
 
-                    <asp:TextBox ID="txtDateTo"
+                    <asp:TextBox
+                        ID="txtDateTo"
                         runat="server"
                         TextMode="Date" />
                 </div>
 
                 <div class="br-filter-actions">
 
-                    <asp:Button ID="btnApply"
+                    <asp:Button
+                        ID="btnApply"
                         runat="server"
                         Text="Apply"
                         CssClass="br-btn br-btn-primary"
                         CausesValidation="false"
                         OnClick="btnApply_Click" />
 
-                    <asp:Button ID="btnClearFilters"
+                    <asp:Button
+                        ID="btnClearFilters"
                         runat="server"
                         Text="Clear Filters"
                         CssClass="br-btn"
@@ -345,14 +414,16 @@
 
             </asp:Panel>
 
-            <asp:Label ID="lblResultCount"
+            <asp:Label
+                ID="lblResultCount"
                 runat="server"
                 CssClass="br-muted"
                 Text="Showing borrowing history" />
 
             <div class="br-table-scroll">
 
-                <asp:GridView ID="gvHistory"
+                <asp:GridView
+                    ID="gvHistory"
                     runat="server"
                     AutoGenerateColumns="False"
                     GridLines="None"
@@ -417,7 +488,58 @@
 
                         <asp:TemplateField HeaderText="Cancellation Reason">
                             <ItemTemplate>
-                                <%#: Eval("CancellationReason") %>
+                                <%# Convert.ToString(Eval("DisplayStatus")) == "Cancelled"
+                                    ? Server.HtmlEncode(
+                                        Convert.ToString(Eval("CancellationReason")))
+                                    : "—" %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+
+                        <asp:TemplateField HeaderText="Lost Date">
+                            <ItemTemplate>
+                                <%# Convert.ToString(Eval("DisplayStatus")) == "Lost"
+                                    ? Server.HtmlEncode(
+                                        FormatHistoryDate(Eval("LostDate")))
+                                    : "—" %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Loss Reason">
+                            <ItemTemplate>
+                                <div class="br-loss-reason">
+                                    <%# Convert.ToString(Eval("DisplayStatus")) == "Lost"
+                                        ? Server.HtmlEncode(
+                                            Convert.ToString(Eval("LostReason")))
+                                        : "—" %>
+                                </div>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Replacement Fee (PHP)">
+                            <ItemTemplate>
+                                <span class="br-fee">
+                                    <%# Convert.ToString(Eval("DisplayStatus")) == "Lost"
+                                        && Eval("ReplacementFeeAmount") != DBNull.Value
+                                        ? Server.HtmlEncode(
+                                            Convert.ToDecimal(
+                                                Eval("ReplacementFeeAmount"))
+                                                .ToString("N2"))
+                                        : "—" %>
+                                </span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Marked Lost By">
+                            <ItemTemplate>
+                                <%# Convert.ToString(Eval("DisplayStatus")) == "Lost"
+                                    ? Server.HtmlEncode(
+                                        string.IsNullOrWhiteSpace(
+                                            Convert.ToString(Eval("MarkedLostByName")))
+                                            ? "Unknown librarian"
+                                            : Convert.ToString(
+                                                Eval("MarkedLostByName")))
+                                    : "—" %>
                             </ItemTemplate>
                         </asp:TemplateField>
 
@@ -427,21 +549,31 @@
 
             </div>
 
+            <p class="br-loss-note">
+                Replacement Fee shows the amount charged for
+                a lost book. It does not indicate whether the
+                customer has paid. Payment tracking will be
+                handled in the Transactions module.
+            </p>
+
             <div class="br-pager">
 
-                <asp:Button ID="btnPrevious"
+                <asp:Button
+                    ID="btnPrevious"
                     runat="server"
                     Text="← Previous"
                     CssClass="br-btn"
                     CausesValidation="false"
                     OnClick="btnPrevious_Click" />
 
-                <asp:Label ID="lblPageInfo"
+                <asp:Label
+                    ID="lblPageInfo"
                     runat="server"
                     Text="Page 1 of 1"
                     CssClass="br-muted" />
 
-                <asp:Button ID="btnNext"
+                <asp:Button
+                    ID="btnNext"
                     runat="server"
                     Text="Next →"
                     CssClass="br-btn"

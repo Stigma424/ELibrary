@@ -1,4 +1,5 @@
-﻿<%@ Page Title="My Transactions"
+﻿
+<%@ Page Title="My Transactions"
     Language="C#"
     MasterPageFile="~/Site.Master"
     AutoEventWireup="true"
@@ -29,7 +30,7 @@
         }
 
         .el-records-panel {
-            background: #ffffff;
+            background: #fff;
             border: 1px solid #e0e8f1;
             border-radius: 15px;
             padding: 26px;
@@ -43,7 +44,7 @@
 
         .el-tx-summary {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0,1fr));
+            grid-template-columns: repeat(4,minmax(0,1fr));
             gap: 14px;
             margin: 22px 0 28px;
         }
@@ -53,7 +54,6 @@
             border: 1px solid #dce5f0;
             border-radius: 14px;
             padding: 20px;
-            box-shadow: 0 3px 12px rgba(20,45,75,.04);
             min-width: 0;
         }
 
@@ -119,11 +119,6 @@
             font: inherit;
         }
 
-        .el-tx-input:focus {
-            outline: 2px solid #9cc5ef;
-            outline-offset: 1px;
-        }
-
         .el-tx-button {
             min-height: 42px;
             border: 1px solid #bed0e2;
@@ -133,10 +128,6 @@
             color: #1c4169;
             font-weight: 650;
             cursor: pointer;
-        }
-
-        .el-tx-button:hover {
-            background: #eaf2fa;
         }
 
         .el-tx-results {
@@ -174,17 +165,6 @@
             color: #8d6100;
         }
 
-        .el-tx-status-unknown {
-            background: #eef2f6;
-            color: #506176;
-        }
-
-        .el-tx-empty {
-            padding: 18px;
-            text-align: center;
-            color: #65758a;
-        }
-
         .el-records-table-scroll {
             width: 100%;
             overflow-x: auto;
@@ -218,10 +198,6 @@
             line-height: 1.65;
         }
 
-        .el-records-table tr:last-child td {
-            border-bottom: none;
-        }
-
         .el-records-book-cell {
             display: flex;
             flex-direction: column;
@@ -251,6 +227,34 @@
             text-decoration: none;
         }
 
+        .el-tx-view {
+            border: 1px solid #cbddef;
+            background: #eaf1f9;
+            color: #235680;
+            border-radius: 7px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .el-tx-payment-panel {
+            border: 1px solid #dce5ee;
+            border-radius: 12px;
+            background: #fbfdff;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .el-tx-payment-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
         .el-records-panel-footer {
             margin-top: 20px;
             padding-top: 16px;
@@ -264,7 +268,7 @@
             margin: 24px 0 15px;
         }
 
-        @media (max-width: 1080px) {
+        @media(max-width:1080px) {
             .el-tx-summary {
                 grid-template-columns: repeat(2,minmax(0,1fr));
             }
@@ -274,29 +278,17 @@
             }
         }
 
-        @media (max-width: 768px) {
+        @media(max-width:600px) {
             .el-records-page {
-                padding: 16px 14px 32px;
+                padding: 12px 10px 25px;
             }
 
             .el-records-panel {
-                padding: 17px;
-                margin: 18px 0;
+                padding: 12px;
             }
 
-            .el-tx-filter-panel {
-                padding: 15px;
-            }
-
-            .el-records-table th,
-            .el-records-table td {
-                padding: 13px 14px !important;
-            }
-        }
-
-        @media (max-width: 600px) {
             .el-tx-summary {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2,minmax(0,1fr));
                 gap: 9px;
             }
 
@@ -317,27 +309,11 @@
                 flex-direction: column;
             }
         }
-
-        @media (max-width: 480px) {
-            .el-records-page {
-                padding: 12px 10px 25px;
-            }
-
-            .el-records-panel {
-                padding: 12px;
-            }
-
-            .el-records-table th,
-            .el-records-table td {
-                padding: 12px !important;
-            }
-        }
     </style>
 
     <div class="el-records-page">
 
         <div class="el-records-heading">
-
             <div>
                 <span class="el-section-eyebrow">
                     PAYMENT RECORDS
@@ -355,7 +331,6 @@
                class="el-records-primary-link">
                 Browse Books →
             </a>
-
         </div>
 
         <!-- SUMMARY CARDS -->
@@ -436,8 +411,6 @@
                 </div>
             </div>
 
-            <!-- FILTERS -->
-
             <div class="el-tx-filter-panel">
 
                 <asp:Panel
@@ -448,7 +421,6 @@
                     <div class="el-tx-filter-grid">
 
                         <div class="el-tx-field">
-
                             <label for="<%= txtSearch.ClientID %>">
                                 Search Transactions
                             </label>
@@ -457,12 +429,11 @@
                                 ID="txtSearch"
                                 runat="server"
                                 CssClass="el-tx-input"
+                                MaxLength="255"
                                 placeholder="Receipt number, book, or fee type..." />
-
                         </div>
 
                         <div class="el-tx-field">
-
                             <label for="<%= ddlStatus.ClientID %>">
                                 Payment Status
                             </label>
@@ -472,28 +443,15 @@
                                 runat="server"
                                 CssClass="el-tx-input">
 
-                                <asp:ListItem
-                                    Text="All Statuses"
-                                    Value="All" />
-
-                                <asp:ListItem
-                                    Text="Paid"
-                                    Value="Paid" />
-
-                                <asp:ListItem
-                                    Text="Unpaid"
-                                    Value="Unpaid" />
-
-                                <asp:ListItem
-                                    Text="Partially Paid"
-                                    Value="Partial" />
+                                <asp:ListItem Text="All Statuses" Value="All" />
+                                <asp:ListItem Text="Paid" Value="Paid" />
+                                <asp:ListItem Text="Unpaid" Value="Unpaid" />
+                                <asp:ListItem Text="Partially Paid" Value="Partial" />
 
                             </asp:DropDownList>
-
                         </div>
 
                         <div class="el-tx-field">
-
                             <label for="<%= ddlMethod.ClientID %>">
                                 Payment Method
                             </label>
@@ -503,36 +461,17 @@
                                 runat="server"
                                 CssClass="el-tx-input">
 
-                                <asp:ListItem
-                                    Text="All Methods"
-                                    Value="All" />
-
-                                <asp:ListItem
-                                    Text="Cash"
-                                    Value="Cash" />
-
-                                <asp:ListItem
-                                    Text="GCash"
-                                    Value="GCash" />
-
-                                <asp:ListItem
-                                    Text="Card"
-                                    Value="Card" />
-
-                                <asp:ListItem
-                                    Text="Bank Transfer"
-                                    Value="Bank Transfer" />
-
-                                <asp:ListItem
-                                    Text="Not Set"
-                                    Value="Not Set" />
+                                <asp:ListItem Text="All Methods" Value="All" />
+                                <asp:ListItem Text="Cash" Value="Cash" />
+                                <asp:ListItem Text="GCash" Value="GCash" />
+                                <asp:ListItem Text="Card" Value="Card" />
+                                <asp:ListItem Text="Bank Transfer" Value="Bank Transfer" />
+                                <asp:ListItem Text="Not Set" Value="Not Set" />
 
                             </asp:DropDownList>
-
                         </div>
 
                         <div class="el-tx-field">
-
                             <label for="<%= ddlSort.ClientID %>">
                                 Sort By
                             </label>
@@ -542,33 +481,24 @@
                                 runat="server"
                                 CssClass="el-tx-input">
 
-                                <asp:ListItem
-                                    Text="Newest First"
-                                    Value="Newest" />
-
-                                <asp:ListItem
-                                    Text="Oldest First"
-                                    Value="Oldest" />
+                                <asp:ListItem Text="Newest First" Value="Newest" />
+                                <asp:ListItem Text="Oldest First" Value="Oldest" />
 
                             </asp:DropDownList>
-
                         </div>
 
                         <div class="el-tx-field">
-
                             <asp:Button
                                 ID="btnSearch"
                                 runat="server"
                                 Text="Apply Filters"
                                 CssClass="btn btn-primary"
                                 OnClick="btnSearch_Click" />
-
                         </div>
 
                     </div>
 
-                    <div style="margin-top: 10px;">
-
+                    <div style="margin-top:10px;">
                         <asp:Button
                             ID="btnClear"
                             runat="server"
@@ -576,17 +506,13 @@
                             CssClass="el-tx-button"
                             OnClick="btnClear_Click"
                             CausesValidation="false" />
-
                     </div>
 
                 </asp:Panel>
 
             </div>
 
-            <!-- RESULTS -->
-
             <div class="el-tx-results">
-
                 <span>
                     <asp:Label
                         ID="lblResultCount"
@@ -597,10 +523,7 @@
                 <span>
                     Payment status is based on the remaining balance.
                 </span>
-
             </div>
-
-            <!-- TABLE -->
 
             <div class="el-records-table-scroll">
 
@@ -686,11 +609,106 @@
                             HeaderText="Transaction Date"
                             DataFormatString="{0:MMM dd, yyyy hh:mm tt}" />
 
+                        <asp:TemplateField HeaderText="Payment Details">
+                            <ItemTemplate>
+
+                                <asp:Button
+                                    ID="btnViewPayments"
+                                    runat="server"
+                                    Text="View Payments"
+                                    CssClass="el-tx-view"
+                                    CommandName="ViewPayments"
+                                    CommandArgument='<%# Eval("ReceiptID") %>'
+                                    CausesValidation="false"
+                                    OnCommand="btnViewPayments_Command" />
+
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
                     </Columns>
 
                 </asp:GridView>
 
             </div>
+
+            <!-- CUSTOMER INDIVIDUAL PAYMENT HISTORY -->
+
+            <asp:Panel
+                ID="pnlPaymentHistory"
+                runat="server"
+                Visible="false"
+                CssClass="el-tx-payment-panel">
+
+                <div class="el-tx-payment-head">
+                    <div>
+                        <h3>Individual Payment History</h3>
+
+                        <asp:Label
+                            ID="lblSelectedReceipt"
+                            runat="server" />
+                    </div>
+
+                    <asp:Button
+                        ID="btnClosePaymentHistory"
+                        runat="server"
+                        Text="Close"
+                        CssClass="el-tx-button"
+                        CausesValidation="false"
+                        OnClick="btnClosePaymentHistory_Click" />
+                </div>
+
+                <asp:Label
+                    ID="lblPaymentHistoryMessage"
+                    runat="server"
+                    CssClass="el-records-message" />
+
+                <div class="el-records-table-scroll">
+
+                    <asp:GridView
+                        ID="gvPaymentHistory"
+                        runat="server"
+                        AutoGenerateColumns="False"
+                        GridLines="None"
+                        CssClass="el-records-table"
+                        EmptyDataText="No individual payments recorded for this receipt.">
+
+                        <Columns>
+
+                            <asp:BoundField
+                                DataField="PaymentID"
+                                HeaderText="Payment ID" />
+
+                            <asp:BoundField
+                                DataField="AmountPaid"
+                                HeaderText="Amount Paid"
+                                DataFormatString="₱{0:N2}" />
+
+                            <asp:BoundField
+                                DataField="BalanceBefore"
+                                HeaderText="Balance Before"
+                                DataFormatString="₱{0:N2}" />
+
+                            <asp:BoundField
+                                DataField="BalanceAfter"
+                                HeaderText="Balance After"
+                                DataFormatString="₱{0:N2}" />
+
+                            <asp:BoundField
+                                DataField="PaymentMethod"
+                                HeaderText="Payment Method" />
+
+                            <asp:BoundField
+                                DataField="PaymentDate"
+                                HeaderText="Payment Date"
+                                DataFormatString="{0:MMM dd, yyyy hh:mm tt}" />
+
+                        </Columns>
+
+                    </asp:GridView>
+
+                </div>
+
+            </asp:Panel>
 
             <div class="el-records-panel-footer">
                 <span>
@@ -700,8 +718,6 @@
             </div>
 
         </section>
-
-        <!-- BOTTOM ACTIONS -->
 
         <div class="el-records-bottom-actions">
 

@@ -1,4 +1,5 @@
-﻿<%@ Page Title="Manage Transactions"
+﻿
+<%@ Page Title="Manage Transactions"
     Language="C#"
     MasterPageFile="~/Site.Master"
     AutoEventWireup="true"
@@ -83,7 +84,7 @@
             display: grid;
             grid-template-columns:
                 minmax(200px,2fr)
-                repeat(2,minmax(140px,1fr))
+                repeat(3,minmax(135px,1fr))
                 auto;
             gap: 12px;
             align-items: end;
@@ -118,17 +119,11 @@
             font-size: 13px;
         }
 
-        .el-tx-field input:focus,
-        .el-tx-field select:focus {
-            outline: none;
-            border-color: #2f6ba0;
-            box-shadow: 0 0 0 3px rgba(47,107,160,.12);
-        }
-
         .el-tx-filter-actions {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .el-tx-btn {
@@ -145,10 +140,6 @@
             font-weight: 650;
             cursor: pointer;
             white-space: nowrap;
-        }
-
-        .el-tx-btn:hover {
-            background: #f1f6fb;
         }
 
         .el-tx-btn-primary {
@@ -177,7 +168,6 @@
         .el-tx-table-wrap {
             width: 100%;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         .el-tx-table {
@@ -220,8 +210,15 @@
             cursor: pointer;
         }
 
-        .el-tx-pay:hover {
-            background: #d5efdf;
+        .el-tx-view {
+            background: #eaf1f9;
+            color: #235680;
+            border: 1px solid #cbddef;
+            border-radius: 7px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 750;
+            cursor: pointer;
         }
 
         .el-tx-message {
@@ -247,10 +244,23 @@
             color: #61748e;
         }
 
+        .el-tx-payment-panel {
+            border: 1px solid #dce5ee;
+            border-radius: 10px;
+            background: #fbfdff;
+            padding: 18px;
+            margin-top: 20px;
+        }
+
+        .el-tx-payment-title {
+            font-size: 16px;
+            font-weight: 750;
+            margin: 0;
+        }
+
         @media(max-width:1100px) {
             .el-tx-filters {
-                grid-template-columns:
-                    repeat(2,minmax(0,1fr));
+                grid-template-columns: repeat(2,minmax(0,1fr));
             }
 
             .el-tx-filter-actions {
@@ -274,7 +284,6 @@
 
             .el-tx-filter-actions {
                 grid-column: auto;
-                flex-wrap: wrap;
             }
         }
     </style>
@@ -305,9 +314,7 @@
             EnableViewState="false"
             CssClass="el-tx-message" />
 
-        <!-- ===================================== -->
         <!-- TRANSACTION HISTORY -->
-        <!-- ===================================== -->
 
         <section class="el-tx-panel">
 
@@ -329,7 +336,6 @@
                 CssClass="el-tx-filters">
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="txtHistorySearch"
@@ -341,11 +347,9 @@
                         MaxLength="255"
                         placeholder="Search receipt, customer, book..."
                         autocomplete="off" />
-
                 </div>
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="ddlHistoryFee"
@@ -354,17 +358,13 @@
                     <asp:DropDownList
                         ID="ddlHistoryFee"
                         runat="server">
-
                         <asp:ListItem
                             Text="All Fee Types"
                             Value="" />
-
                     </asp:DropDownList>
-
                 </div>
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="ddlHistoryMethod"
@@ -374,32 +374,16 @@
                         ID="ddlHistoryMethod"
                         runat="server">
 
-                        <asp:ListItem
-                            Text="All Methods"
-                            Value="" />
-
-                        <asp:ListItem
-                            Text="Cash"
-                            Value="Cash" />
-
-                        <asp:ListItem
-                            Text="GCash"
-                            Value="GCash" />
-
-                        <asp:ListItem
-                            Text="Card"
-                            Value="Card" />
-
-                        <asp:ListItem
-                            Text="Bank Transfer"
-                            Value="Bank Transfer" />
+                        <asp:ListItem Text="All Methods" Value="" />
+                        <asp:ListItem Text="Cash" Value="Cash" />
+                        <asp:ListItem Text="GCash" Value="GCash" />
+                        <asp:ListItem Text="Card" Value="Card" />
+                        <asp:ListItem Text="Bank Transfer" Value="Bank Transfer" />
 
                     </asp:DropDownList>
-
                 </div>
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="ddlHistorySort"
@@ -409,36 +393,15 @@
                         ID="ddlHistorySort"
                         runat="server">
 
-                        <asp:ListItem
-                            Text="Default Order"
-                            Value="Default" />
-
-                        <asp:ListItem
-                            Text="Newest First"
-                            Value="DateDesc" />
-
-                        <asp:ListItem
-                            Text="Oldest First"
-                            Value="DateAsc" />
-
-                        <asp:ListItem
-                            Text="Highest Balance"
-                            Value="BalanceDesc" />
-
-                        <asp:ListItem
-                            Text="Lowest Balance"
-                            Value="BalanceAsc" />
-
-                        <asp:ListItem
-                            Text="Highest Payment"
-                            Value="PaidDesc" />
-
-                        <asp:ListItem
-                            Text="Highest ID First"
-                            Value="IDDesc" />
+                        <asp:ListItem Text="Default Order" Value="Default" />
+                        <asp:ListItem Text="Newest First" Value="DateDesc" />
+                        <asp:ListItem Text="Oldest First" Value="DateAsc" />
+                        <asp:ListItem Text="Highest Balance" Value="BalanceDesc" />
+                        <asp:ListItem Text="Lowest Balance" Value="BalanceAsc" />
+                        <asp:ListItem Text="Highest Payment" Value="PaidDesc" />
+                        <asp:ListItem Text="Highest ID First" Value="IDDesc" />
 
                     </asp:DropDownList>
-
                 </div>
 
                 <div class="el-tx-filter-actions">
@@ -524,6 +487,22 @@
                             HeaderText="Transaction Date"
                             DataFormatString="{0:MM/dd/yyyy hh:mm tt}" />
 
+                        <asp:TemplateField HeaderText="Payment Details">
+                            <ItemTemplate>
+
+                                <asp:Button
+                                    ID="btnViewHistory"
+                                    runat="server"
+                                    Text="View Payments"
+                                    CssClass="el-tx-view"
+                                    CommandName="ViewPayments"
+                                    CommandArgument='<%# Eval("ReceiptID") %>'
+                                    CausesValidation="false"
+                                    OnCommand="btnViewHistory_Command" />
+
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
                     </Columns>
 
                 </asp:GridView>
@@ -556,20 +535,102 @@
 
             </div>
 
+            <!-- ADMIN INDIVIDUAL PAYMENT HISTORY -->
+
+            <asp:Panel
+                ID="pnlPaymentHistory"
+                runat="server"
+                Visible="false"
+                CssClass="el-tx-payment-panel">
+
+                <div class="el-tx-panel-head">
+                    <div>
+                        <h3 class="el-tx-payment-title">
+                            Individual Payment History
+                        </h3>
+
+                        <asp:Label
+                            ID="lblSelectedReceipt"
+                            runat="server"
+                            CssClass="el-tx-count" />
+                    </div>
+
+                    <asp:Button
+                        ID="btnClosePaymentHistory"
+                        runat="server"
+                        Text="Close"
+                        CssClass="el-tx-btn"
+                        CausesValidation="false"
+                        OnClick="btnClosePaymentHistory_Click" />
+                </div>
+
+                <asp:Label
+                    ID="lblPaymentHistoryMessage"
+                    runat="server"
+                    CssClass="el-tx-count" />
+
+                <div class="el-tx-table-wrap">
+
+                    <asp:GridView
+                        ID="gvPaymentHistory"
+                        runat="server"
+                        AutoGenerateColumns="False"
+                        GridLines="None"
+                        CssClass="el-tx-table"
+                        EmptyDataText="No individual payments recorded for this receipt.">
+
+                        <Columns>
+
+                            <asp:BoundField
+                                DataField="PaymentID"
+                                HeaderText="Payment ID" />
+
+                            <asp:BoundField
+                                DataField="AmountPaid"
+                                HeaderText="Payment Amount"
+                                DataFormatString="₱{0:N2}" />
+
+                            <asp:BoundField
+                                DataField="BalanceBefore"
+                                HeaderText="Balance Before"
+                                DataFormatString="₱{0:N2}" />
+
+                            <asp:BoundField
+                                DataField="BalanceAfter"
+                                HeaderText="Balance After"
+                                DataFormatString="₱{0:N2}" />
+
+                            <asp:BoundField
+                                DataField="PaymentMethod"
+                                HeaderText="Payment Method" />
+
+                            <asp:BoundField
+                                DataField="ProcessedBy"
+                                HeaderText="Processed By" />
+
+                            <asp:BoundField
+                                DataField="PaymentDate"
+                                HeaderText="Payment Date"
+                                DataFormatString="{0:MM/dd/yyyy hh:mm tt}" />
+
+                        </Columns>
+
+                    </asp:GridView>
+
+                </div>
+
+            </asp:Panel>
+
         </section>
 
-        <!-- ===================================== -->
         <!-- UNPAID FEES -->
-        <!-- ===================================== -->
 
         <section class="el-tx-panel">
 
             <div class="el-tx-panel-head">
                 <div>
                     <h2>Unpaid Fees</h2>
-                    <p>
-                        Track outstanding balances and record payments.
-                    </p>
+                    <p>Track outstanding balances and record payments.</p>
                 </div>
 
                 <span class="el-tx-tag warning">
@@ -584,7 +645,6 @@
                 CssClass="el-tx-filters">
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="txtUnpaidSearch"
@@ -596,11 +656,9 @@
                         MaxLength="255"
                         placeholder="Search receipt, customer, book..."
                         autocomplete="off" />
-
                 </div>
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="ddlUnpaidFee"
@@ -615,11 +673,9 @@
                             Value="" />
 
                     </asp:DropDownList>
-
                 </div>
 
                 <div class="el-tx-field">
-
                     <asp:Label
                         runat="server"
                         AssociatedControlID="ddlUnpaidSort"
@@ -629,32 +685,14 @@
                         ID="ddlUnpaidSort"
                         runat="server">
 
-                        <asp:ListItem
-                            Text="Default Order"
-                            Value="Default" />
-
-                        <asp:ListItem
-                            Text="Highest Balance"
-                            Value="BalanceDesc" />
-
-                        <asp:ListItem
-                            Text="Lowest Balance"
-                            Value="BalanceAsc" />
-
-                        <asp:ListItem
-                            Text="Newest First"
-                            Value="DateDesc" />
-
-                        <asp:ListItem
-                            Text="Oldest First"
-                            Value="DateAsc" />
-
-                        <asp:ListItem
-                            Text="Highest ID First"
-                            Value="IDDesc" />
+                        <asp:ListItem Text="Default Order" Value="Default" />
+                        <asp:ListItem Text="Highest Balance" Value="BalanceDesc" />
+                        <asp:ListItem Text="Lowest Balance" Value="BalanceAsc" />
+                        <asp:ListItem Text="Newest First" Value="DateDesc" />
+                        <asp:ListItem Text="Oldest First" Value="DateAsc" />
+                        <asp:ListItem Text="Highest ID First" Value="IDDesc" />
 
                     </asp:DropDownList>
-
                 </div>
 
                 <div class="el-tx-filter-actions">

@@ -78,15 +78,6 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.HyperLink navManageGenres;
 
         /// <summary>
-        /// navManageUsers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink navManageUsers;
-
-        /// <summary>
         /// navManageBorrows control.
         /// </summary>
         /// <remarks>
@@ -130,6 +121,15 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink navTransactions;
+
+        /// <summary>
+        /// navManageUsers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navManageUsers;
 
         /// <summary>
         /// navArchivedBooks control.
