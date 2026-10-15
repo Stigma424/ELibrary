@@ -24,15 +24,6 @@ namespace ELibrary.Customer
         protected global::System.Web.UI.WebControls.Label lblTotalBorrows;
 
         /// <summary>
-        /// lblOverdueCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOverdueCount;
-
-        /// <summary>
         /// lblPendingCount control.
         /// </summary>
         /// <remarks>
@@ -42,6 +33,15 @@ namespace ELibrary.Customer
         protected global::System.Web.UI.WebControls.Label lblPendingCount;
 
         /// <summary>
+        /// lblOverdueCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOverdueCount;
+
+        /// <summary>
         /// lblReturnPendingCount control.
         /// </summary>
         /// <remarks>
@@ -49,15 +49,6 @@ namespace ELibrary.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblReturnPendingCount;
-
-        /// <summary>
-        /// lblMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// btnHistory control.
@@ -130,6 +121,15 @@ namespace ELibrary.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnClear;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// lblResults control.

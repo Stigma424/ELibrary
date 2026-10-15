@@ -15,6 +15,15 @@ namespace ELibrary.Admin.Users
     {
 
         /// <summary>
+        /// btnCreateUser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCreateUser;
+
+        /// <summary>
         /// lblMessage control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,33 @@ namespace ELibrary.Admin.Users
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnNext;
+
+        /// <summary>
+        /// pnlUserEditor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlUserEditor;
+
+        /// <summary>
+        /// lblEditorTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEditorTitle;
+
+        /// <summary>
+        /// lblEditorMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEditorMessage;
 
         /// <summary>
         /// hfUserID control.
@@ -267,6 +303,15 @@ namespace ELibrary.Admin.Users
         protected global::System.Web.UI.WebControls.Button btnClear;
 
         /// <summary>
+        /// btnCloseEditor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseEditor;
+
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
@@ -274,5 +319,14 @@ namespace ELibrary.Admin.Users
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSave;
+
+        /// <summary>
+        /// hfFocusTarget control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfFocusTarget;
     }
 }

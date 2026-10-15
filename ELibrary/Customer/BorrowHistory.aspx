@@ -7,466 +7,688 @@
     Inherits="ELibrary.Customer.BorrowHistory" %>
 
 <asp:Content ID="Content1"
+    ContentPlaceHolderID="head"
+    runat="server">
+
+<style>
+/* ==========================================
+   COASTAL MINIMAL - BORROWING HISTORY UI-C5A
+========================================== */
+
+.el-customer-mode .coast-history {
+    --h-ink:#123B4A;
+    --h-teal:#168A91;
+    --h-muted:#647F89;
+    --h-border:#DCE9EB;
+    display:flex;
+    flex-direction:column;
+    gap:23px;
+    width:100%;
+    min-width:0;
+    padding-bottom:35px;
+    color:var(--h-ink);
+}
+.el-customer-mode .coast-history * {
+    box-sizing:border-box;
+}
+.el-customer-mode .coast-history .h-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:32px 36px;
+    border:1px solid #D2E8E9;
+    border-radius:20px;
+    background:linear-gradient(115deg,#DDEFF0,#F5FAF8);
+}
+.el-customer-mode .coast-history .h-eyebrow {
+    display:block;
+    margin-bottom:10px;
+    color:#13787C;
+    font-size:10px;
+    font-weight:850;
+    letter-spacing:.13em;
+}
+.el-customer-mode .coast-history h1 {
+    margin:0 0 9px;
+    color:var(--h-ink);
+    font-size:clamp(28px,3.6vw,39px);
+    font-weight:850;
+}
+.el-customer-mode .coast-history .h-header p,
+.el-customer-mode .coast-history .h-panel-head p {
+    margin:0;
+    color:#52737D;
+    font-size:12px;
+    line-height:1.8;
+}
+.el-customer-mode .coast-history .h-button {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 16px;
+    min-height:41px;
+    border:1px solid #CFE3E4;
+    border-radius:9px;
+    background:white;
+    color:var(--h-ink);
+    font-size:12px;
+    font-weight:800;
+    text-decoration:none;
+    cursor:pointer;
+}
+.el-customer-mode .coast-history .h-button:hover {
+    background:#EAF6F6;
+    color:var(--h-ink);
+}
+.el-customer-mode .coast-history .h-button.primary {
+    background:var(--h-teal);
+    border-color:var(--h-teal);
+    color:white;
+}
+.el-customer-mode .coast-history .h-button.primary:hover {
+    background:#12757C;
+    color:white;
+}
+.el-customer-mode .coast-history .h-button:disabled {
+    opacity:.45;
+    cursor:default;
+}
+.el-customer-mode .coast-history .h-summary {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+}
+.el-customer-mode .coast-history .h-stat {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    min-width:0;
+    padding:20px;
+    background:white;
+    border:1px solid var(--h-border);
+    border-radius:14px;
+}
+.el-customer-mode .coast-history .h-stat-icon {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    border-radius:11px;
+    background:#EAF6F6;
+    color:#168A91;
+    font-size:20px;
+}
+.el-customer-mode .coast-history .h-stat-icon.green {
+    background:#E6F6EE;
+    color:#237C62;
+}
+.el-customer-mode .coast-history .h-stat-icon.grey {
+    background:#EDF2F4;
+    color:#647F89;
+}
+.el-customer-mode .coast-history .h-stat span {
+    color:var(--h-muted);
+    font-size:12px;
+    font-weight:700;
+}
+.el-customer-mode .coast-history .h-stat strong {
+    color:var(--h-ink);
+    font-size:30px;
+    font-weight:850;
+}
+.el-customer-mode .coast-history .h-panel {
+    padding:24px;
+    min-width:0;
+    background:white;
+    border:1px solid var(--h-border);
+    border-radius:15px;
+}
+.el-customer-mode .coast-history .h-panel-head {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:19px;
+}
+.el-customer-mode .coast-history .h-panel-head h2 {
+    margin:0 0 6px;
+    color:var(--h-ink);
+    font-size:21px;
+    font-weight:850;
+}
+.el-customer-mode .coast-history .h-filters {
+    display:grid;
+    grid-template-columns:minmax(185px,2fr) repeat(2,minmax(135px,1fr));
+    gap:14px;
+    padding:17px;
+    background:#F5FAFA;
+    border:1px solid var(--h-border);
+    border-radius:11px;
+}
+.el-customer-mode .coast-history .h-field {
+    min-width:0;
+}
+.el-customer-mode .coast-history .h-field label {
+    display:block;
+    margin-bottom:7px;
+    color:#375968;
+    font-size:12px;
+    font-weight:750;
+}
+.el-customer-mode .coast-history .h-input {
+    width:100%;
+    display:block;
+    min-height:42px;
+    padding:10px 12px;
+    border:1px solid #CFE1E4;
+    border-radius:9px;
+    background:white;
+    color:var(--h-ink);
+    font-size:12px;
+}
+.el-customer-mode .coast-history .h-input:focus {
+    outline:none;
+    border-color:var(--h-teal);
+    box-shadow:0 0 0 3px rgba(22,138,145,.12);
+}
+.el-customer-mode .coast-history .h-filter-actions {
+    grid-column:1/-1;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    flex-wrap:wrap;
+}
+.el-customer-mode .coast-history .h-helper {
+    color:var(--h-muted);
+    font-size:11px;
+}
+.el-customer-mode .coast-history .el-history-message {
+    display:block;
+    margin:15px 0;
+    font-size:12px;
+    color:#9E3E39;
+    line-height:1.7;
+}
+.el-customer-mode .coast-history .el-history-message:not(:empty) {
+    padding:13px 16px;
+    border:1px solid #F2D3CF;
+    border-left:4px solid #C34D46;
+    border-radius:9px;
+    background:#FFF0EF;
+}
+.el-customer-mode .coast-history .h-result-bar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:17px 0 13px;
+    color:var(--h-muted);
+    font-size:12px;
+}
+.el-customer-mode .coast-history .h-table-wrap {
+    overflow-x:auto;
+    width:100%;
+    border:1px solid var(--h-border);
+    border-radius:10px;
+}
+.el-customer-mode .coast-history .h-table {
+    width:100%;
+    min-width:710px;
+    border-collapse:collapse;
+    background:white;
+    font-size:12px;
+}
+.el-customer-mode .coast-history .h-table th {
+    padding:14px 12px;
+    border-bottom:1px solid var(--h-border);
+    background:#F5FAFA;
+    color:#496B75;
+    font-size:11px;
+    font-weight:800;
+    text-align:left;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-history .h-table td {
+    padding:15px 12px;
+    border-bottom:1px solid #EDF3F4;
+    color:#47616D;
+    vertical-align:middle;
+}
+.el-customer-mode .coast-history .h-table tr:hover td {
+    background:#F9FCFC;
+}
+.el-customer-mode .coast-history .h-record {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:160px;
+}
+.el-customer-mode .coast-history .h-record strong {
+    color:var(--h-ink);
+    font-size:12px;
+    overflow-wrap:anywhere;
+}
+.el-customer-mode .coast-history .h-record small {
+    color:var(--h-muted);
+    font-size:11px;
+}
+.el-customer-mode .coast-history .el-history-pill {
+    display:inline-flex;
+    padding:7px 11px;
+    border-radius:999px;
+    background:#EAF6F6;
+    color:#126E73;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-history .el-history-pill.returned {
+    background:#E6F6EE;
+    color:#237C62;
+}
+.el-customer-mode .coast-history .el-history-pill.cancelled {
+    background:#EDF2F4;
+    color:#59717C;
+}
+.el-customer-mode .coast-history .el-history-pill.lost {
+    background:#FCE9E7;
+    color:#A63D39;
+}
+.el-customer-mode .coast-history .h-details summary {
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 12px;
+    border:1px solid #CDE7E9;
+    border-radius:8px;
+    background:#EAF6F6;
+    color:#126E73;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+    list-style:none;
+}
+.el-customer-mode .coast-history .h-details summary::-webkit-details-marker {
+    display:none;
+}
+.el-customer-mode .coast-history .h-details summary::after {
+    content:"⌄";
+}
+.el-customer-mode .coast-history .h-details[open] summary::after {
+    content:"⌃";
+}
+.el-customer-mode .coast-history .h-detail-content {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    width:340px;
+    max-width:55vw;
+    margin-top:10px;
+    padding:15px;
+    border:1px solid var(--h-border);
+    border-radius:9px;
+    background:#F7FBFB;
+}
+.el-customer-mode .coast-history .h-detail-content div {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    min-width:0;
+}
+.el-customer-mode .coast-history .h-detail-content small {
+    color:var(--h-muted);
+    font-size:10px;
+}
+.el-customer-mode .coast-history .h-detail-content strong {
+    color:var(--h-ink);
+    font-size:12px;
+    overflow-wrap:anywhere;
+}
+.el-customer-mode .coast-history .h-pager {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+.el-customer-mode .coast-history .h-bottom {
+    color:#168A91;
+    font-size:12px;
+    font-weight:800;
+    text-decoration:none;
+}
+@media(max-width:850px) {
+    .el-customer-mode .coast-history .h-filters {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .el-customer-mode .coast-history .h-search {
+        grid-column:1/-1;
+    }
+}
+@media(max-width:600px) {
+    .el-customer-mode .coast-history .h-header {
+        padding:25px 20px;
+    }
+    .el-customer-mode .coast-history .h-summary {
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+    .el-customer-mode .coast-history .h-stat {
+        padding:15px;
+    }
+    .el-customer-mode .coast-history .h-panel {
+        padding:15px;
+    }
+    .el-customer-mode .coast-history .h-filters {
+        grid-template-columns:1fr;
+        padding:12px;
+    }
+    .el-customer-mode .coast-history .h-search {
+        grid-column:auto;
+    }
+    .el-customer-mode .coast-history .h-filter-actions .h-button {
+        flex:1;
+    }
+    .el-customer-mode .coast-history .h-detail-content {
+        max-width:270px;
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</asp:Content>
+
+<asp:Content ID="Content2"
     ContentPlaceHolderID="MainContent"
     runat="server">
 
-    <style>
-        .el-history-page {
-            max-width: 1450px;
-            margin: 0 auto;
-            padding: 24px 28px 45px;
-            color: #172d49;
-        }
+<div class="coast-history">
 
-        .el-history-page * {
-            box-sizing: border-box;
-        }
-
-        .el-history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .el-history-header h1 {
-            margin: 7px 0;
-            font-size: 28px;
-        }
-
-        .el-history-muted {
-            color: #61748e;
-            font-size: 13px;
-        }
-
-        .el-history-summary {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 15px;
-            margin: 24px 0;
-        }
-
-        .el-history-stat,
-        .el-history-panel {
-            background: #fff;
-            border: 1px solid #e0e8f1;
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: 0 4px 18px rgba(20,45,75,.04);
-        }
-
-        .el-history-stat span {
-            display: block;
-            font-size: 13px;
-            color: #61748e;
-            margin-bottom: 8px;
-        }
-
-        .el-history-stat strong {
-            font-size: 27px;
-            color: #1c4169;
-        }
-
-        .el-history-panel h2 {
-            margin: 0 0 6px;
-            font-size: 20px;
-        }
-
-        .el-history-filters {
-            display: grid;
-            grid-template-columns: minmax(200px,2fr) repeat(2,minmax(150px,1fr));
-            gap: 12px;
-            padding: 18px;
-            margin: 20px 0;
-            background: #f5f8fc;
-            border: 1px solid #dce5f0;
-            border-radius: 11px;
-        }
-
-        .el-history-field label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #354c69;
-        }
-
-        .el-history-input {
-            width: 100%;
-            min-height: 42px;
-            padding: 9px 12px;
-            border: 1px solid #d4e0ed;
-            border-radius: 8px;
-            background: white;
-            color: #172d49;
-            font: inherit;
-        }
-
-        .el-history-actions {
-            grid-column: 1 / -1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .el-history-btn {
-            min-height: 40px;
-            padding: 9px 16px;
-            border-radius: 8px;
-            border: 1px solid #1c4169;
-            background: #1c4169;
-            color: #fff;
-            font-weight: 650;
-            cursor: pointer;
-        }
-
-        .el-history-btn.secondary {
-            background: #fff;
-            color: #1c4169;
-            border-color: #bed0e2;
-        }
-
-        .el-history-btn:disabled {
-            opacity: .45;
-            cursor: default;
-        }
-
-        .el-history-table-wrap {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid #e3eaf2;
-            border-radius: 10px;
-        }
-
-        .el-history-table {
-            width: 100%;
-            min-width: 1050px;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .el-history-table th {
-            background: #f3f7fb;
-            color: #354c69;
-            text-align: left;
-            padding: 14px 12px;
-            white-space: nowrap;
-            border-bottom: 1px solid #dfe8f2;
-        }
-
-        .el-history-table td {
-            padding: 15px 12px;
-            vertical-align: middle;
-            border-bottom: 1px solid #edf1f6;
-        }
-
-        .el-history-book {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .el-history-book small {
-            color: #61748e;
-        }
-
-        .el-history-pill {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-            background: #e8eef7;
-            color: #365678;
-        }
-
-        .el-history-pill.returned {
-            background: #e6f7ec;
-            color: #237c4e;
-        }
-
-        .el-history-pill.cancelled {
-            background: #f0f2f5;
-            color: #657386;
-        }
-
-        .el-history-pill.lost {
-            background: #ffe6e6;
-            color: #a82e2e;
-        }
-
-        .el-history-pager {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .el-history-message {
-            display: block;
-            color: #b42318;
-            margin: 12px 0;
-        }
-
-        @media(max-width: 750px) {
-            .el-history-page {
-                padding: 15px 12px 30px;
-            }
-
-            .el-history-summary {
-                grid-template-columns: 1fr;
-            }
-
-            .el-history-filters {
-                grid-template-columns: 1fr;
-            }
-
-            .el-history-panel {
-                padding: 15px;
-            }
-        }
-    </style>
-
-    <div class="el-history-page">
-
-        <div class="el-history-header">
-            <div>
-                <span class="el-section-eyebrow">
-                    MY LIBRARY
-                </span>
-                <h1>Borrowing History</h1>
-                <p class="el-history-muted">
-                    Review completed borrowings and cancelled reservations.
-                </p>
-            </div>
-
-            <asp:Button
-                ID="btnCurrentBorrows"
-                runat="server"
-                Text="← Current Borrowings"
-                CssClass="el-history-btn secondary"
-                CausesValidation="false"
-                OnClick="btnCurrentBorrows_Click" />
+    <!-- INTRO -->
+    <header class="h-header">
+        <div>
+            <span class="h-eyebrow">YOUR READING JOURNEY</span>
+            <h1>Borrowing History</h1>
+            <p>Review your returned books, lost records,
+               and cancelled reservations.</p>
         </div>
 
-        <div class="el-history-summary">
+        <asp:Button
+            ID="btnCurrentBorrows"
+            runat="server"
+            Text="← Current Borrowings"
+            CssClass="h-button"
+            CausesValidation="false"
+            OnClick="btnCurrentBorrows_Click" />
+    </header>
 
-            <div class="el-history-stat">
+    <!-- COUNTERS -->
+    <section class="h-summary"
+        aria-label="Borrowing history summary">
+
+        <div class="h-stat">
+            <div class="h-stat-icon" aria-hidden="true">▤</div>
+            <div>
                 <span>History Records</span>
                 <strong>
                     <asp:Label ID="lblHistoryCount"
                         runat="server" Text="0" />
                 </strong>
             </div>
+        </div>
 
-            <div class="el-history-stat">
+        <div class="h-stat">
+            <div class="h-stat-icon green" aria-hidden="true">✓</div>
+            <div>
                 <span>Returned Records</span>
                 <strong>
                     <asp:Label ID="lblReturnedCount"
                         runat="server" Text="0" />
                 </strong>
             </div>
+        </div>
 
-            <div class="el-history-stat">
+        <div class="h-stat">
+            <div class="h-stat-icon grey" aria-hidden="true">×</div>
+            <div>
                 <span>Cancelled Reservations</span>
                 <strong>
                     <asp:Label ID="lblCancelledCount"
                         runat="server" Text="0" />
                 </strong>
             </div>
-
         </div>
 
+    </section>
+
+    <!-- HISTORY RECORDS -->
+    <section class="h-panel">
+
+        <div class="h-panel-head">
+            <div>
+                <h2>Your Borrowing Records</h2>
+                <p>Find a previous borrowing and review its dates.</p>
+            </div>
+        </div>
+
+        <!-- SERVER-SIDE FILTERS -->
+        <asp:Panel ID="pnlFilters"
+            runat="server"
+            DefaultButton="btnApply"
+            CssClass="h-filters">
+
+            <div class="h-field h-search">
+                <asp:Label runat="server"
+                    AssociatedControlID="txtSearch"
+                    Text="Search History" />
+
+                <asp:TextBox ID="txtSearch"
+                    runat="server"
+                    CssClass="h-input"
+                    MaxLength="255"
+                    autocomplete="off"
+                    placeholder="Book title, author or Borrow ID..." />
+            </div>
+
+            <div class="h-field">
+                <asp:Label runat="server"
+                    AssociatedControlID="ddlStatus"
+                    Text="Record Status" />
+
+                <asp:DropDownList ID="ddlStatus"
+                    runat="server" CssClass="h-input">
+
+                    <asp:ListItem Text="All Statuses" Value="All" />
+                    <asp:ListItem Text="Returned" Value="Returned" />
+                    <asp:ListItem Text="Lost" Value="Lost" />
+                    <asp:ListItem Text="Cancelled" Value="Cancelled" />
+
+                </asp:DropDownList>
+            </div>
+
+            <div class="h-field">
+                <asp:Label runat="server"
+                    AssociatedControlID="ddlSort"
+                    Text="Sort By" />
+
+                <asp:DropDownList ID="ddlSort"
+                    runat="server" CssClass="h-input">
+
+                    <asp:ListItem Text="Newest Reserved" Value="Newest" />
+                    <asp:ListItem Text="Oldest Reserved" Value="Oldest" />
+                    <asp:ListItem Text="Recently Returned" Value="RecentlyReturned" />
+                    <asp:ListItem Text="Book Title (A–Z)" Value="Title" />
+
+                </asp:DropDownList>
+            </div>
+
+            <div class="h-filter-actions">
+
+                <asp:Button ID="btnApply"
+                    runat="server"
+                    Text="Apply Filters"
+                    CssClass="h-button primary"
+                    CausesValidation="false"
+                    OnClick="btnApply_Click" />
+
+                <asp:Button ID="btnClear"
+                    runat="server"
+                    Text="Clear Filters"
+                    CssClass="h-button"
+                    CausesValidation="false"
+                    OnClick="btnClear_Click" />
+
+                <span class="h-helper">
+                    Press Enter or Apply to search.
+                </span>
+            </div>
+
+        </asp:Panel>
+
+        <!-- LOCAL FILTER ERROR -->
         <asp:Label ID="lblMessage"
             runat="server"
             EnableViewState="false"
-            CssClass="el-history-message" />
+            CssClass="el-history-message"
+            role="alert" />
 
-        <section class="el-history-panel">
-
-            <h2>Your Borrowing Records</h2>
-            <p class="el-history-muted">
-                Search by book, author, or borrowing ID.
-            </p>
-
-            <asp:Panel ID="pnlFilters"
+        <div class="h-result-bar">
+            <asp:Label ID="lblResults"
                 runat="server"
-                DefaultButton="btnApply"
-                CssClass="el-history-filters">
+                Text="Showing borrowing history" />
 
-                <div class="el-history-field">
-                    <asp:Label runat="server"
-                        AssociatedControlID="txtSearch"
-                        Text="Search History" />
+            <span>Open Details to see every date.</span>
+        </div>
 
-                    <asp:TextBox ID="txtSearch"
-                        runat="server"
-                        CssClass="el-history-input"
-                        MaxLength="255"
-                        placeholder="Title, author, or Borrow ID" />
-                </div>
+        <!-- SIMPLIFIED GRID -->
+        <div class="h-table-wrap">
 
-                <div class="el-history-field">
-                    <asp:Label runat="server"
-                        AssociatedControlID="ddlStatus"
-                        Text="Status" />
+            <asp:GridView ID="gvHistory"
+                runat="server"
+                AutoGenerateColumns="False"
+                GridLines="None"
+                CssClass="h-table"
+                EmptyDataText="No history matches your filters.">
 
-                    <asp:DropDownList ID="ddlStatus"
-                        runat="server"
-                        CssClass="el-history-input">
-                        <asp:ListItem Text="All Statuses" Value="All" />
-                        <asp:ListItem Text="Returned" Value="Returned" />
-                        <asp:ListItem Text="Lost" Value="Lost" />
-                        <asp:ListItem Text="Cancelled" Value="Cancelled" />
-                    </asp:DropDownList>
-                </div>
+                <Columns>
 
-                <div class="el-history-field">
-                    <asp:Label runat="server"
-                        AssociatedControlID="ddlSort"
-                        Text="Sort By" />
+                    <asp:TemplateField HeaderText="Borrow ID">
+                        <ItemTemplate>
+                            <strong>#<%#: Eval("BorrowLogID") %></strong>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
-                    <asp:DropDownList ID="ddlSort"
-                        runat="server"
-                        CssClass="el-history-input">
-                        <asp:ListItem Text="Newest Reserved" Value="Newest" />
-                        <asp:ListItem Text="Oldest Reserved" Value="Oldest" />
-                        <asp:ListItem Text="Recently Returned" Value="RecentlyReturned" />
-                        <asp:ListItem Text="Book Title (A-Z)" Value="Title" />
-                    </asp:DropDownList>
-                </div>
+                    <asp:TemplateField HeaderText="Book">
+                        <ItemTemplate>
+                            <div class="h-record">
+                                <strong><%#: Eval("Title") %></strong>
+                                <small>by <%#: Eval("Author") %></small>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
-                <div class="el-history-actions">
-                    <asp:Button ID="btnApply"
-                        runat="server"
-                        Text="Apply Filters"
-                        CssClass="el-history-btn"
-                        CausesValidation="false"
-                        OnClick="btnApply_Click" />
+                    <asp:TemplateField HeaderText="Reserved">
+                        <ItemTemplate>
+                            <%#: FormatHistoryDate(Eval("DateBorrowed")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
-                    <asp:Button ID="btnClear"
-                        runat="server"
-                        Text="Clear Filters"
-                        CssClass="el-history-btn secondary"
-                        CausesValidation="false"
-                        OnClick="btnClear_Click" />
+                    <asp:TemplateField HeaderText="Status">
+                        <ItemTemplate>
+                            <span class='<%# GetStatusClass(
+                                Eval("DisplayStatus")) %>'>
+                                <%#: Eval("DisplayStatus") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
-                    <span class="el-history-muted">
-                        Press Enter or Apply to search.
-                    </span>
-                </div>
+                    <asp:TemplateField HeaderText="More">
+                        <ItemTemplate>
 
-            </asp:Panel>
+                            <details class="h-details">
+                                <summary>View Details</summary>
 
-            <p class="el-history-muted">
-                <asp:Label ID="lblResults"
-                    runat="server"
-                    Text="Showing borrowing history" />
-            </p>
+                                <div class="h-detail-content">
 
-            <div class="el-history-table-wrap">
+                                    <div>
+                                        <small>Collected</small>
+                                        <strong>
+                                            <%#: FormatHistoryDate(
+                                                Eval("DateCollected")) %>
+                                        </strong>
+                                    </div>
 
-                <asp:GridView ID="gvHistory"
-                    runat="server"
-                    AutoGenerateColumns="False"
-                    GridLines="None"
-                    CssClass="el-history-table"
-                    EmptyDataText="No history matches your filters.">
+                                    <div>
+                                        <small>Due Date</small>
+                                        <strong>
+                                            <%#: FormatHistoryDate(
+                                                Eval("DueDate")) %>
+                                        </strong>
+                                    </div>
 
-                    <Columns>
+                                    <div>
+                                        <small>Returned</small>
+                                        <strong>
+                                            <%#: FormatHistoryDate(
+                                                Eval("DateReturned")) %>
+                                        </strong>
+                                    </div>
 
-                        <asp:TemplateField HeaderText="Borrow ID">
-                            <ItemTemplate>
-                                #<%#: Eval("BorrowLogID") %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                                    <div>
+                                        <small>Cancelled</small>
+                                        <strong>
+                                            <%#: FormatHistoryDate(
+                                                Eval("DateCancelled")) %>
+                                        </strong>
+                                    </div>
 
-                        <asp:TemplateField HeaderText="Book">
-                            <ItemTemplate>
-                                <div class="el-history-book">
-                                    <strong><%#: Eval("Title") %></strong>
-                                    <small><%#: Eval("Author") %></small>
                                 </div>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                            </details>
 
-                        <asp:TemplateField HeaderText="Reserved">
-                            <ItemTemplate>
-                                <%#: FormatHistoryDate(Eval("DateBorrowed")) %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
-                        <asp:TemplateField HeaderText="Collected">
-                            <ItemTemplate>
-                                <%#: FormatHistoryDate(Eval("DateCollected")) %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                </Columns>
 
-                        <asp:TemplateField HeaderText="Due Date">
-                            <ItemTemplate>
-                                <%#: FormatHistoryDate(Eval("DueDate")) %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+            </asp:GridView>
 
-                        <asp:TemplateField HeaderText="Returned">
-                            <ItemTemplate>
-                                <%#: FormatHistoryDate(Eval("DateReturned")) %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+        </div>
 
-                        <asp:TemplateField HeaderText="Cancelled">
-                            <ItemTemplate>
-                                <%#: FormatHistoryDate(Eval("DateCancelled")) %>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+        <div class="h-pager">
 
-                        <asp:TemplateField HeaderText="Status">
-                            <ItemTemplate>
-                                <span class='<%# GetStatusClass(Eval("DisplayStatus")) %>'>
-                                    <%#: Eval("DisplayStatus") %>
-                                </span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+            <asp:Button ID="btnPrevious"
+                runat="server"
+                Text="← Previous"
+                CssClass="h-button"
+                CausesValidation="false"
+                OnClick="btnPrevious_Click" />
 
-                    </Columns>
-                </asp:GridView>
+            <asp:Label ID="lblPageInfo"
+                runat="server"
+                Text="Page 1 of 1"
+                CssClass="h-helper" />
 
-            </div>
+            <asp:Button ID="btnNext"
+                runat="server"
+                Text="Next →"
+                CssClass="h-button"
+                CausesValidation="false"
+                OnClick="btnNext_Click" />
 
-            <div class="el-history-pager">
+        </div>
 
-                <asp:Button ID="btnPrevious"
-                    runat="server"
-                    Text="← Previous"
-                    CssClass="el-history-btn secondary"
-                    CausesValidation="false"
-                    OnClick="btnPrevious_Click" />
+    </section>
 
-                <asp:Label ID="lblPageInfo"
-                    runat="server"
-                    Text="Page 1 of 1"
-                    CssClass="el-history-muted" />
+    <a class="h-bottom"
+        href="<%= ResolveUrl("~/Customer/Books.aspx") %>">
+        ← Explore More Books
+    </a>
 
-                <asp:Button ID="btnNext"
-                    runat="server"
-                    Text="Next →"
-                    CssClass="el-history-btn secondary"
-                    CausesValidation="false"
-                    OnClick="btnNext_Click" />
+</div>
 
-            </div>
-
-        </section>
-
-        <p>
-            <a href="<%= ResolveUrl("~/Customer/Books.aspx") %>">
-                ← Explore More Books
-            </a>
-        </p>
-
-    </div>
 </asp:Content>

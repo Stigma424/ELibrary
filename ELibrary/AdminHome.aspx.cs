@@ -36,11 +36,13 @@ namespace ELibrary
                 using (SqlCommand cmd =
                     new SqlCommand("EDashboard_Admin", con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
 
                     con.Open();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
                     {
                         if (!reader.Read())
                         {
@@ -48,51 +50,92 @@ namespace ELibrary
                                 "The dashboard returned no statistics.");
                         }
 
-                        lblTotalBooks.Text =
-                            Convert.ToString(reader["TotalBooks"]);
-
-                        lblTotalCopies.Text =
-                            Convert.ToString(reader["TotalCopies"]);
-
-                        lblAvailableCopies.Text =
-                            Convert.ToString(reader["AvailableCopies"]);
-
-                        lblTotalCustomers.Text =
-                            Convert.ToString(reader["TotalCustomers"]);
+                        // ===================================
+                        // PRIMARY METRICS
+                        // ===================================
 
                         lblActiveBorrowings.Text =
-                            Convert.ToString(reader["ActiveBorrowings"]);
+                            Convert.ToString(
+                                reader["ActiveBorrowings"]);
 
                         lblOverdueBooks.Text =
-                            Convert.ToString(reader["OverdueBooks"]);
+                            Convert.ToString(
+                                reader["OverdueBooks"]);
 
-                        lblPendingReturns.Text =
-                            Convert.ToString(reader["PendingReturns"]);
-
-                        lblArchivedBooks.Text =
-                            Convert.ToString(reader["ArchivedBooks"]);
+                        lblPendingPickups.Text =
+                            Convert.ToString(
+                                reader["PendingPickups"]);
 
                         lblTotalUnpaidBalance.Text =
                             Convert.ToDecimal(
-                                reader["TotalUnpaidBalance"]).ToString("N2");
+                                reader["TotalUnpaidBalance"])
+                                .ToString("N2");
 
-                        lblPendingPickups.Text =
-                            Convert.ToString(reader["PendingPickups"]);
+                        // ===================================
+                        // ATTENTION REQUIRED
+                        // ===================================
+
+                        lblAttentionOverdue.Text =
+                            Convert.ToString(
+                                reader["OverdueBooks"]);
+
+                        lblAttentionPickups.Text =
+                            Convert.ToString(
+                                reader["PendingPickups"]);
+
+                        lblPendingReturns.Text =
+                            Convert.ToString(
+                                reader["PendingReturns"]);
+
+                        // ===================================
+                        // LIBRARY SNAPSHOT
+                        // ===================================
+
+                        lblTotalBooks.Text =
+                            Convert.ToString(
+                                reader["TotalBooks"]);
+
+                        lblTotalCopies.Text =
+                            Convert.ToString(
+                                reader["TotalCopies"]);
+
+                        lblAvailableCopies.Text =
+                            Convert.ToString(
+                                reader["AvailableCopies"]);
+
+                        lblTotalCustomers.Text =
+                            Convert.ToString(
+                                reader["TotalCustomers"]);
+
+                        // ===================================
+                        // SECONDARY STATISTICS
+                        // ===================================
 
                         lblCollectedLoans.Text =
-                            Convert.ToString(reader["CollectedLoans"]);
+                            Convert.ToString(
+                                reader["CollectedLoans"]);
 
                         lblCancelledReservations.Text =
-                            Convert.ToString(reader["CancelledReservations"]);
+                            Convert.ToString(
+                                reader["CancelledReservations"]);
+
+                        lblArchivedBooks.Text =
+                            Convert.ToString(
+                                reader["ArchivedBooks"]);
+
+                        lblSecondaryPendingReturns.Text =
+                            Convert.ToString(
+                                reader["PendingReturns"]);
 
                         lblMessage.Text = "";
+                        lblMessage.CssClass = "od-message";
                     }
                 }
             }
             catch (Exception ex)
             {
                 lblMessage.CssClass =
-                    "el-ad2-message text-danger";
+                    "od-message error";
 
                 lblMessage.Text =
                     "Unable to load dashboard: " +
@@ -101,8 +144,15 @@ namespace ELibrary
         }
 
         protected void btnRefresh_Click(
-            object sender, EventArgs e)
+            object sender,
+            EventArgs e)
         {
+            if (!AdminHelper.IsAdmin(Session))
+            {
+                Response.Redirect("~/Login.aspx");
+                return;
+            }
+
             LoadDashboard();
         }
     }

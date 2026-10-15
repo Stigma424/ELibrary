@@ -130,6 +130,7 @@
     <Content Include="Content\elibrary-ui.css" />
     <Content Include="Content\Images\default-avatar.svg" />
     <Content Include="Content\Images\default-book.svg" />
+    <Content Include="Content\oceal-teal-modules.css" />
     <Content Include="Content\ocean-teal-shell.css" />
     <Content Include="Content\Site.css" />
     <Content Include="CustomerHome.aspx" />
@@ -205,7 +206,7 @@
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
-    <Content Include="Site.Mobile.Master" />
+    <None Include="Site.Mobile.Master.disabled" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminHelper.cs" />
@@ -386,11 +387,11 @@
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="Site.Mobile.Master.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
+      <DependentUpon>Site.Mobile.Master.disabled</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
-      <DependentUpon>Site.Mobile.Master</DependentUpon>
+      <DependentUpon>Site.Mobile.Master.disabled</DependentUpon>
     </Compile>
     <Compile Include="TestDatabase.aspx.cs">
       <DependentUpon>TestDatabase.aspx</DependentUpon>

@@ -15,15 +15,6 @@ namespace ELibrary.Admin.Transactions
     {
 
         /// <summary>
-        /// lblMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
-
-        /// <summary>
         /// lblCustomer control.
         /// </summary>
         /// <remarks>
@@ -51,6 +42,15 @@ namespace ELibrary.Admin.Transactions
         protected global::System.Web.UI.WebControls.Label lblFeeType;
 
         /// <summary>
+        /// lblReceiptID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblReceiptID;
+
+        /// <summary>
         /// lblBalance control.
         /// </summary>
         /// <remarks>
@@ -58,6 +58,24 @@ namespace ELibrary.Admin.Transactions
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblBalance;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
+
+        /// <summary>
+        /// pnlPaymentFields control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPaymentFields;
 
         /// <summary>
         /// txtAmountPaid control.

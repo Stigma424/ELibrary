@@ -9,565 +9,733 @@
     ContentPlaceHolderID="head"
     runat="server">
 
-    <style>
-        .el-admin-borrowing {
-            color: #172b43;
-        }
+<style>
+/* ==============================================
+   INTERNSHIPELIB - OCEAN TEAL
+   ADMIN OVERDUE BOOKS
+============================================== */
 
-        .el-admin-borrowing .br-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 22px;
-        }
+.el-overdue-page {
+    --ov-primary: #123B4A;
+    --ov-accent: #168A91;
+    --ov-hover: #12757C;
+    --ov-muted: #647F89;
+    --ov-border: #DCE9EB;
+    --ov-soft: #F5FAFA;
+    --ov-danger: #B94E49;
+    --ov-warning: #A56B1D;
 
-        .el-admin-borrowing .br-eyebrow {
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: .12em;
-            color: #2f6ba0;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+    color: var(--ov-primary);
+}
 
-        .el-admin-borrowing h1 {
-            font-size: 29px;
-            font-weight: 750;
-            margin: 7px 0;
-        }
+.el-overdue-page *,
+.el-overdue-page *::before,
+.el-overdue-page *::after {
+    box-sizing: border-box;
+}
 
-        .el-admin-borrowing .br-header p,
-        .el-admin-borrowing .br-panel-head p {
-            color: #718096;
-            margin: 5px 0 0;
-        }
+.el-overdue-page .ov-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 4px 0;
+}
 
-        .el-admin-borrowing .br-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+.el-overdue-page .ov-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ov-accent);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .12em;
+}
 
-        .el-admin-borrowing .br-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 40px;
-            padding: 9px 15px;
-            border: 1px solid #dce5ee;
-            border-radius: 8px;
-            background: #fff;
-            color: #172b43;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 650;
-            cursor: pointer;
-        }
+.el-overdue-page .ov-header h1 {
+    margin: 0 0 7px;
+    color: var(--ov-primary);
+    font-size: 29px;
+    font-weight: 800;
+}
 
-        .el-admin-borrowing .br-btn:hover {
-            background: #f1f6fb;
-            text-decoration: none;
-        }
+.el-overdue-page .ov-header p {
+    margin: 0;
+    color: var(--ov-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
 
-        .el-admin-borrowing .br-btn-primary {
-            background: #2f6ba0;
-            color: #fff;
-            border-color: #2f6ba0;
-        }
+.el-overdue-page .ov-header-actions {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+}
 
-        .el-admin-borrowing .br-btn-primary:hover {
-            background: #235680;
-            color: #fff;
-        }
+.el-overdue-page .ov-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 15px;
+    border: 1px solid var(--ov-border);
+    border-radius: 9px;
+    background: #FFFFFF;
+    color: var(--ov-primary);
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
 
-        .el-admin-borrowing .br-btn:disabled {
-            opacity: .45;
-            cursor: default;
-        }
+.el-overdue-page .ov-btn:hover {
+    color: var(--ov-primary);
+    background: #EAF5F6;
+    border-color: #B4DADD;
+    text-decoration: none;
+}
 
-        .el-admin-borrowing .br-panel {
-            background: #fff;
-            border: 1px solid #e4ebf3;
-            border-radius: 13px;
-            padding: 20px;
-            margin-bottom: 18px;
-            box-shadow: 0 3px 14px rgba(23,43,67,.04);
-        }
+.el-overdue-page .ov-btn-primary {
+    color: #FFFFFF;
+    background: var(--ov-accent);
+    border-color: var(--ov-accent);
+}
 
-        .el-admin-borrowing .br-panel-head {
-            margin-bottom: 17px;
-        }
+.el-overdue-page .ov-btn-primary:hover {
+    color: #FFFFFF;
+    background: var(--ov-hover);
+    border-color: var(--ov-hover);
+}
 
-        .el-admin-borrowing .br-panel-head h2 {
-            font-size: 19px;
-            font-weight: 750;
-            margin: 0;
-        }
+.el-overdue-page .ov-btn:disabled {
+    opacity: .45;
+    cursor: default;
+}
 
-        .el-admin-borrowing .br-filters {
-            display: grid;
-            grid-template-columns:
-                minmax(200px,2fr)
-                minmax(150px,1fr)
-                minmax(150px,1fr)
-                auto;
-            gap: 12px;
-            align-items: end;
-            background: #f8fafc;
-            border: 1px solid #e4ebf3;
-            border-radius: 10px;
-            padding: 16px;
-        }
+.el-overdue-page .ov-panel {
+    min-width: 0;
+    padding: 23px;
+    background: #FFFFFF;
+    border: 1px solid var(--ov-border);
+    border-radius: 14px;
+    box-shadow: 0 3px 14px rgba(18,59,74,.035);
+}
 
-        .el-admin-borrowing .br-field {
-            min-width: 0;
-        }
+.el-overdue-page .ov-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 19px;
+}
 
-        .el-admin-borrowing .br-field label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: #43566b;
-            margin-bottom: 7px;
-        }
+.el-overdue-page .ov-panel-head h2 {
+    margin: 0 0 6px;
+    color: var(--ov-primary);
+    font-size: 18px;
+    font-weight: 800;
+}
 
-        .el-admin-borrowing .br-field input,
-        .el-admin-borrowing .br-field select {
-            display: block;
-            width: 100%;
-            min-height: 40px;
-            padding: 9px 11px;
-            border: 1px solid #dce5ee;
-            border-radius: 8px;
-            background: #fff;
-            color: #172b43;
-            font-size: 13px;
-        }
+.el-overdue-page .ov-panel-head p {
+    margin: 0;
+    color: var(--ov-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
 
-        .el-admin-borrowing .br-field input:focus,
-        .el-admin-borrowing .br-field select:focus {
-            outline: none;
-            border-color: #2f6ba0;
-            box-shadow: 0 0 0 3px rgba(47,107,160,.12);
-        }
+.el-overdue-page .ov-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: #FCE9E7;
+    color: #A63D39;
+    font-size: 11px;
+    font-weight: 750;
+}
 
-        .el-admin-borrowing .br-filter-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+.el-overdue-page .ov-filters {
+    display: grid;
+    grid-template-columns:
+        minmax(200px, 2fr)
+        repeat(2, minmax(140px, 1fr))
+        auto;
+    gap: 12px;
+    align-items: end;
+    padding: 16px;
+    background: var(--ov-soft);
+    border: 1px solid var(--ov-border);
+    border-radius: 11px;
+}
 
-        .el-admin-borrowing .br-filter-actions .br-btn {
-            white-space: nowrap;
-        }
+.el-overdue-page .ov-field {
+    min-width: 0;
+}
 
-        .el-admin-borrowing .br-count {
-            display: block;
-            font-size: 12px;
-            color: #718096;
-            margin: 12px 0;
-        }
+.el-overdue-page .ov-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #375968;
+    font-size: 12px;
+    font-weight: 700;
+}
 
-        .el-admin-borrowing .br-table-scroll {
-            width: 100%;
-            overflow-x: auto;
-        }
+.el-overdue-page .ov-field input,
+.el-overdue-page .ov-field select {
+    display: block;
+    width: 100%;
+    min-height: 41px;
+    padding: 9px 12px;
+    background: #FFFFFF;
+    border: 1px solid #CFE1E4;
+    border-radius: 8px;
+    color: var(--ov-primary);
+    font-size: 12px;
+}
 
-        .el-admin-borrowing .br-table {
-            width: 100%;
-            min-width: 950px;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
+.el-overdue-page .ov-field input:focus,
+.el-overdue-page .ov-field select:focus {
+    outline: none;
+    border-color: var(--ov-accent);
+    box-shadow: 0 0 0 3px rgba(22,138,145,.12);
+}
 
-        .el-admin-borrowing .br-table th {
-            background: #f4f7fb;
-            color: #52647a;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: .04em;
-            text-align: left;
-            white-space: nowrap;
-            padding: 13px 12px;
-            border-bottom: 1px solid #e4ebf3;
-        }
+.el-overdue-page .ov-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        .el-admin-borrowing .br-table td {
-            padding: 13px 12px;
-            border-bottom: 1px solid #edf1f5;
-            vertical-align: middle;
-        }
+.el-overdue-page .ov-result-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0 13px;
+    color: var(--ov-muted);
+    font-size: 12px;
+}
 
-        .el-admin-borrowing .br-table tr:hover td {
-            background: #f9fbfe;
-        }
+.el-overdue-page .ov-message {
+    display: block;
+    margin-bottom: 16px;
+    color: #9E3E39;
+    font-size: 12px;
+    line-height: 1.7;
+}
 
-        .el-admin-borrowing .br-pill {
-            display: inline-block;
-            padding: 5px 9px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 750;
-            background: #ffe6e6;
-            color: #a82e2e;
-            white-space: nowrap;
-        }
+.el-overdue-page .ov-message:empty {
+    display: none;
+}
 
-        .el-admin-borrowing .br-message {
-            display: block;
-            margin-bottom: 15px;
-            color: #bd4141;
-        }
+.el-overdue-page .ov-message.error {
+    padding: 13px 16px;
+    background: #FFF0EF;
+    border: 1px solid #F2D3CF;
+    border-left: 4px solid #C34D46;
+    border-radius: 8px;
+}
 
-        .el-admin-borrowing .br-message:empty {
-            display: none;
-        }
+.el-overdue-page .ov-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--ov-border);
+    border-radius: 10px;
+    -webkit-overflow-scrolling: touch;
+}
 
-        .el-admin-borrowing .br-note {
-            padding: 13px 15px;
-            border-radius: 9px;
-            background: #f1f6fb;
-            color: #43566b;
-            font-size: 13px;
-        }
+.el-overdue-page .ov-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    background: #FFFFFF;
+    font-size: 12px;
+}
 
-        .el-admin-borrowing .br-pager {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            padding: 18px 0 4px;
-        }
+.el-overdue-page .ov-table th {
+    padding: 14px 12px;
+    background: var(--ov-soft);
+    border-bottom: 1px solid var(--ov-border);
+    color: #496B75;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+}
 
-        .el-admin-borrowing .br-page-info {
-            color: #61748e;
-            font-size: 13px;
-        }
+.el-overdue-page .ov-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #EDF3F4;
+    color: #47616D;
+    vertical-align: middle;
+}
 
-        @media(max-width:1050px) {
-            .el-admin-borrowing .br-filters {
-                grid-template-columns: repeat(2,minmax(0,1fr));
-            }
-            .el-admin-borrowing .br-search {
-                grid-column: 1/-1;
-            }
-        }
+.el-overdue-page .ov-table tr:hover td {
+    background: #F9FCFC;
+}
 
-        @media(max-width:600px) {
-            .el-admin-borrowing h1 {
-                font-size: 24px;
-            }
-            .el-admin-borrowing .br-panel {
-                padding: 14px;
-            }
-            .el-admin-borrowing .br-filters {
-                grid-template-columns: 1fr;
-                padding: 12px;
-            }
-            .el-admin-borrowing .br-search {
-                grid-column: auto;
-            }
-            .el-admin-borrowing .br-links {
-                width: 100%;
-            }
-            .el-admin-borrowing .br-links .br-btn {
-                width: 100%;
-            }
-        }
-    </style>
+.el-overdue-page .ov-record {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 125px;
+}
+
+.el-overdue-page .ov-record strong {
+    color: var(--ov-primary);
+    font-size: 12px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.el-overdue-page .ov-record small {
+    color: var(--ov-muted);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+.el-overdue-page .ov-days {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #FFF2D9;
+    border-radius: 8px;
+    color: #96601B;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.el-overdue-page .ov-days.severe {
+    color: #A63D39;
+    background: #FCE9E7;
+}
+
+.el-overdue-page .ov-fee {
+    color: var(--ov-danger);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.el-overdue-page .ov-pill {
+    display: inline-block;
+    padding: 6px 10px;
+    color: #A63D39;
+    background: #FCE9E7;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.el-overdue-page .ov-pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 0 0;
+    color: var(--ov-muted);
+    font-size: 12px;
+}
+
+.el-overdue-page .ov-info {
+    padding: 16px 19px;
+    border: 1px solid #D2E7E8;
+    border-radius: 11px;
+    background: #EAF6F6;
+    color: #315D67;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.el-overdue-page .ov-info strong {
+    color: var(--ov-primary);
+}
+
+@media (max-width: 1200px) {
+    .el-overdue-page .ov-filters {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .el-overdue-page .ov-search {
+        grid-column: 1 / -1;
+    }
+
+    .el-overdue-page .ov-filter-actions {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 650px) {
+    .el-overdue-page .ov-header h1 {
+        font-size: 24px;
+    }
+
+    .el-overdue-page .ov-panel {
+        padding: 15px;
+    }
+
+    .el-overdue-page .ov-filters {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .el-overdue-page .ov-search,
+    .el-overdue-page .ov-filter-actions {
+        grid-column: auto;
+    }
+
+    .el-overdue-page .ov-header-actions {
+        width: 100%;
+    }
+
+    .el-overdue-page .ov-header-actions .ov-btn {
+        flex: 1;
+    }
+
+    .el-overdue-page .ov-filter-actions .ov-btn {
+        flex: 1;
+    }
+}
+</style>
+
 </asp:Content>
 
 <asp:Content ID="Content2"
     ContentPlaceHolderID="MainContent"
     runat="server">
 
-    <div class="el-admin-borrowing">
+<div class="el-overdue-page">
 
-        <div class="br-header">
+    <!-- PAGE HEADER -->
+    <header class="ov-header">
+        <div>
+            <span class="ov-eyebrow">
+                ADMINISTRATION / BORROWING MANAGEMENT
+            </span>
+
+            <h1>Overdue Books</h1>
+
+            <p>
+                Monitor overdue loans, identify outstanding
+                returns, and review estimated late fees.
+            </p>
+        </div>
+
+        <div class="ov-header-actions">
+            <asp:Button
+                ID="btnRefresh"
+                runat="server"
+                Text="↻ Refresh"
+                CssClass="ov-btn ov-btn-primary"
+                CausesValidation="false"
+                OnClick="btnRefresh_Click" />
+
+            <asp:HyperLink
+                ID="lnkManage"
+                runat="server"
+                NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
+                CssClass="ov-btn"
+                Text="Manage Borrowings" />
+
+            <asp:HyperLink
+                ID="lnkHistory"
+                runat="server"
+                NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
+                CssClass="ov-btn"
+                Text="Borrowing History" />
+        </div>
+    </header>
+
+    <!-- OVERDUE RESULTS -->
+    <section class="ov-panel">
+
+        <div class="ov-panel-head">
             <div>
-                <span class="br-eyebrow">
-                    ADMINISTRATION / BORROWING
-                </span>
-
-                <h1>Overdue Books</h1>
-
+                <h2>Overdue Records</h2>
                 <p>
-                    Track overdue loans and estimated late fees.
+                    Filter loans by overdue duration,
+                    customer, or book information.
                 </p>
             </div>
 
-            <div class="br-links">
-
-                <asp:Button
-                    ID="btnRefresh"
-                    runat="server"
-                    Text="Refresh"
-                    CssClass="br-btn br-btn-primary"
-                    CausesValidation="false"
-                    OnClick="btnRefresh_Click" />
-
-                <asp:HyperLink
-                    ID="lnkManage"
-                    runat="server"
-                    NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                    CssClass="br-btn"
-                    Text="Manage Borrowings" />
-
-                <asp:HyperLink
-                    ID="lnkHistory"
-                    runat="server"
-                    NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
-                    CssClass="br-btn"
-                    Text="Borrowing History" />
-
-            </div>
+            <span class="ov-tag">
+                Past-Due Loans
+            </span>
         </div>
 
+        <!-- FILTERS -->
+        <asp:Panel
+            ID="pnlFilters"
+            runat="server"
+            DefaultButton="btnApply"
+            CssClass="ov-filters">
+
+            <div class="ov-field ov-search">
+                <asp:Label
+                    runat="server"
+                    AssociatedControlID="txtSearch"
+                    Text="Search Overdue Books" />
+
+                <asp:TextBox
+                    ID="txtSearch"
+                    runat="server"
+                    MaxLength="255"
+                    autocomplete="off"
+                    placeholder="Borrow ID, customer, email, book..." />
+            </div>
+
+            <div class="ov-field">
+                <asp:Label
+                    runat="server"
+                    AssociatedControlID="ddlDuration"
+                    Text="Days Overdue" />
+
+                <asp:DropDownList
+                    ID="ddlDuration"
+                    runat="server">
+
+                    <asp:ListItem
+                        Text="All Durations"
+                        Value="All" />
+
+                    <asp:ListItem
+                        Text="1–7 Days"
+                        Value="1-7" />
+
+                    <asp:ListItem
+                        Text="8–14 Days"
+                        Value="8-14" />
+
+                    <asp:ListItem
+                        Text="15–30 Days"
+                        Value="15-30" />
+
+                    <asp:ListItem
+                        Text="31+ Days"
+                        Value="31+" />
+                </asp:DropDownList>
+            </div>
+
+            <div class="ov-field">
+                <asp:Label
+                    runat="server"
+                    AssociatedControlID="ddlSort"
+                    Text="Sort By" />
+
+                <asp:DropDownList
+                    ID="ddlSort"
+                    runat="server">
+
+                    <asp:ListItem
+                        Text="Default Order"
+                        Value="Default" />
+
+                    <asp:ListItem
+                        Text="Most Overdue First"
+                        Value="DaysDesc" />
+
+                    <asp:ListItem
+                        Text="Least Overdue First"
+                        Value="DaysAsc" />
+
+                    <asp:ListItem
+                        Text="Due Date (Earliest)"
+                        Value="DueAsc" />
+
+                    <asp:ListItem
+                        Text="Due Date (Latest)"
+                        Value="DueDesc" />
+
+                    <asp:ListItem
+                        Text="Highest ID First"
+                        Value="IDDesc" />
+                </asp:DropDownList>
+            </div>
+
+            <div class="ov-filter-actions">
+                <asp:Button
+                    ID="btnApply"
+                    runat="server"
+                    Text="Apply"
+                    CssClass="ov-btn ov-btn-primary"
+                    CausesValidation="false"
+                    OnClick="btnApply_Click" />
+
+                <asp:Button
+                    ID="btnClearFilters"
+                    runat="server"
+                    Text="Clear"
+                    CssClass="ov-btn"
+                    CausesValidation="false"
+                    OnClick="btnClearFilters_Click" />
+            </div>
+
+        </asp:Panel>
+
+        <!-- LOCAL ERRORS -->
         <asp:Label
             ID="lblMessage"
             runat="server"
             EnableViewState="false"
-            CssClass="br-message" />
+            CssClass="ov-message error"
+            role="alert" />
 
-        <section class="br-panel">
-
-            <div class="br-panel-head">
-                <h2>Overdue Records</h2>
-                <p>
-                    Identify books that have passed their due date.
-                </p>
-            </div>
-
-            <!-- SEARCH AND FILTER -->
-            <asp:Panel
-                ID="pnlFilters"
-                runat="server"
-                DefaultButton="btnApply"
-                CssClass="br-filters">
-
-                <div class="br-field br-search">
-
-                    <asp:Label
-                        runat="server"
-                        AssociatedControlID="txtSearch"
-                        Text="Search Overdue Books" />
-
-                    <asp:TextBox
-                        ID="txtSearch"
-                        runat="server"
-                        MaxLength="255"
-                        placeholder="Search ID, customer, email, book..."
-                        autocomplete="off" />
-
-                </div>
-
-                <div class="br-field">
-
-                    <asp:Label
-                        runat="server"
-                        AssociatedControlID="ddlDuration"
-                        Text="Days Overdue" />
-
-                    <asp:DropDownList
-                        ID="ddlDuration"
-                        runat="server">
-
-                        <asp:ListItem
-                            Text="All Durations"
-                            Value="All" />
-
-                        <asp:ListItem
-                            Text="1–7 Days"
-                            Value="1-7" />
-
-                        <asp:ListItem
-                            Text="8–14 Days"
-                            Value="8-14" />
-
-                        <asp:ListItem
-                            Text="15–30 Days"
-                            Value="15-30" />
-
-                        <asp:ListItem
-                            Text="31+ Days"
-                            Value="31+" />
-
-                    </asp:DropDownList>
-
-                </div>
-
-                <div class="br-field">
-
-                    <asp:Label
-                        runat="server"
-                        AssociatedControlID="ddlSort"
-                        Text="Sort By" />
-
-                    <asp:DropDownList
-                        ID="ddlSort"
-                        runat="server">
-
-                        <asp:ListItem
-                            Text="Default Order"
-                            Value="Default" />
-
-                        <asp:ListItem
-                            Text="Most Overdue First"
-                            Value="DaysDesc" />
-
-                        <asp:ListItem
-                            Text="Least Overdue First"
-                            Value="DaysAsc" />
-
-                        <asp:ListItem
-                            Text="Due Date (Earliest)"
-                            Value="DueAsc" />
-
-                        <asp:ListItem
-                            Text="Due Date (Latest)"
-                            Value="DueDesc" />
-
-                        <asp:ListItem
-                            Text="Highest ID First"
-                            Value="IDDesc" />
-
-                    </asp:DropDownList>
-
-                </div>
-
-                <div class="br-filter-actions">
-
-                    <asp:Button
-                        ID="btnApply"
-                        runat="server"
-                        Text="Apply"
-                        CssClass="br-btn br-btn-primary"
-                        CausesValidation="false"
-                        OnClick="btnApply_Click" />
-
-                    <asp:Button
-                        ID="btnClearFilters"
-                        runat="server"
-                        Text="Clear Filters"
-                        CssClass="br-btn"
-                        CausesValidation="false"
-                        OnClick="btnClearFilters_Click" />
-
-                </div>
-
-            </asp:Panel>
-
-            <p class="br-count">
-                Press Enter or click Apply to search and filter.
-            </p>
-
+        <div class="ov-result-bar">
             <asp:Label
                 ID="lblResultCount"
                 runat="server"
-                CssClass="br-count"
                 Text="Showing overdue records" />
 
-            <!-- TABLE -->
-            <div class="br-table-scroll">
-
-                <asp:GridView
-                    ID="gvOverdue"
-                    runat="server"
-                    AutoGenerateColumns="False"
-                    GridLines="None"
-                    CssClass="br-table"
-                    EmptyDataText="No overdue records match your filters.">
-
-                    <Columns>
-
-                        <asp:BoundField
-                            DataField="BorrowLogID"
-                            HeaderText="Borrow ID" />
-
-                        <asp:BoundField
-                            DataField="FullName"
-                            HeaderText="Customer" />
-
-                        <asp:BoundField
-                            DataField="Email"
-                            HeaderText="Email" />
-
-                        <asp:BoundField
-                            DataField="Title"
-                            HeaderText="Book" />
-
-                        <asp:BoundField
-                            DataField="Author"
-                            HeaderText="Author" />
-
-                        <asp:BoundField
-                            DataField="DateBorrowed"
-                            HeaderText="Date Borrowed"
-                            DataFormatString="{0:MM/dd/yyyy}" />
-
-                        <asp:BoundField
-                            DataField="DueDate"
-                            HeaderText="Due Date"
-                            DataFormatString="{0:MM/dd/yyyy}" />
-
-                        <asp:BoundField
-                            DataField="DaysOverdue"
-                            HeaderText="Days Overdue" />
-
-                        <asp:BoundField
-                            DataField="EstimatedLateFee"
-                            HeaderText="Estimated Late Fee"
-                            DataFormatString="₱{0:N2}" />
-
-                        <asp:TemplateField HeaderText="Status">
-                            <ItemTemplate>
-                                <span class="br-pill">
-                                    <%#: Eval("Status") %>
-                                </span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                    </Columns>
-
-                </asp:GridView>
-
-            </div>
-
-            <!-- PAGINATION -->
-            <div class="br-pager">
-
-                <asp:Button
-                    ID="btnPrevious"
-                    runat="server"
-                    Text="← Previous"
-                    CssClass="br-btn"
-                    CausesValidation="false"
-                    OnClick="btnPrevious_Click" />
-
-                <asp:Label
-                    ID="lblPageInfo"
-                    runat="server"
-                    CssClass="br-page-info"
-                    Text="Page 1 of 1" />
-
-                <asp:Button
-                    ID="btnNext"
-                    runat="server"
-                    Text="Next →"
-                    CssClass="br-btn"
-                    CausesValidation="false"
-                    OnClick="btnNext_Click" />
-
-            </div>
-
-        </section>
-
-        <div class="br-note">
-            Estimated late fee:
-            <strong>₱10.00 per overdue day.</strong>
-            Actual charges are determined by the borrowing system.
+            <span>
+                Press Enter or Apply to search and filter.
+            </span>
         </div>
 
-    </div>
+        <!-- COMPACT TABLE -->
+        <div class="ov-table-wrap">
+            <asp:GridView
+                ID="gvOverdue"
+                runat="server"
+                AutoGenerateColumns="False"
+                GridLines="None"
+                CssClass="ov-table"
+                EmptyDataText="No overdue records match your filters.">
+
+                <Columns>
+
+                    <asp:BoundField
+                        DataField="BorrowLogID"
+                        HeaderText="Borrow ID" />
+
+                    <asp:TemplateField HeaderText="Customer">
+                        <ItemTemplate>
+                            <div class="ov-record">
+                                <strong>
+                                    <%#: Eval("FullName") %>
+                                </strong>
+                                <small>
+                                    <%#: Eval("Email") %>
+                                </small>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Book">
+                        <ItemTemplate>
+                            <div class="ov-record">
+                                <strong>
+                                    <%#: Eval("Title") %>
+                                </strong>
+                                <small>
+                                    <%#: Eval("Author") %>
+                                </small>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Borrowed / Due">
+                        <ItemTemplate>
+                            <div class="ov-record">
+                                <small>
+                                    Borrowed:
+                                    <%# Eval("DateBorrowed") == DBNull.Value
+                                        ? "—"
+                                        : Convert.ToDateTime(
+                                            Eval("DateBorrowed"))
+                                            .ToString("MMM dd, yyyy") %>
+                                </small>
+
+                                <strong>
+                                    Due:
+                                    <%# Eval("DueDate") == DBNull.Value
+                                        ? "—"
+                                        : Convert.ToDateTime(
+                                            Eval("DueDate"))
+                                            .ToString("MMM dd, yyyy") %>
+                                </strong>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Overdue">
+                        <ItemTemplate>
+                            <span class='<%#
+                                Convert.ToInt32(Eval("DaysOverdue")) >= 8
+                                    ? "ov-days severe"
+                                    : "ov-days" %>'>
+
+                                <%#: Eval("DaysOverdue") %>
+                                day(s)
+
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Estimated Fee">
+                        <ItemTemplate>
+                            <strong class="ov-fee">
+                                ₱<%# Convert.ToDecimal(
+                                    Eval("EstimatedLateFee"))
+                                    .ToString("N2") %>
+                            </strong>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Status">
+                        <ItemTemplate>
+                            <span class="ov-pill">
+                                <%#: Eval("Status") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
+            </asp:GridView>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="ov-pager">
+            <asp:Button
+                ID="btnPrevious"
+                runat="server"
+                Text="← Previous"
+                CssClass="ov-btn"
+                CausesValidation="false"
+                OnClick="btnPrevious_Click" />
+
+            <asp:Label
+                ID="lblPageInfo"
+                runat="server"
+                Text="Page 1 of 1" />
+
+            <asp:Button
+                ID="btnNext"
+                runat="server"
+                Text="Next →"
+                CssClass="ov-btn"
+                CausesValidation="false"
+                OnClick="btnNext_Click" />
+        </div>
+
+    </section>
+
+    <!-- POLICY EXPLANATION -->
+    <aside class="ov-info">
+        <strong>Late-fee information:</strong>
+        The displayed amount is an estimate provided by
+        the borrowing system. Actual fees are determined
+        by the applicable borrowing and return procedures.
+        Use Manage Borrowings to process returned books.
+    </aside>
+
+</div>
 
 </asp:Content>

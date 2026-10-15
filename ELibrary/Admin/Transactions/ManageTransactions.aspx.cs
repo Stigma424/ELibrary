@@ -36,6 +36,10 @@ namespace ELibrary.Admin.Transactions
             }
         }
 
+        // ==========================================
+        // HISTORY SEARCH STATE
+        // ==========================================
+
         private string HistorySearch
         {
             get { return (string)(ViewState["HistorySearch"] ?? ""); }
@@ -72,6 +76,10 @@ namespace ELibrary.Admin.Transactions
             set { ViewState["HistoryTotalPages"] = value; }
         }
 
+        // ==========================================
+        // UNPAID SEARCH STATE
+        // ==========================================
+
         private string UnpaidSearch
         {
             get { return (string)(ViewState["UnpaidSearch"] ?? ""); }
@@ -102,15 +110,24 @@ namespace ELibrary.Admin.Transactions
             set { ViewState["UnpaidTotalPages"] = value; }
         }
 
+        // ==========================================
+        // SELECTED RECEIPT
+        // ==========================================
+
         private int SelectedReceiptID
         {
             get { return (int)(ViewState["SelectedReceiptID"] ?? 0); }
             set { ViewState["SelectedReceiptID"] = value; }
         }
 
+        // ==========================================
+        // PAGE LOAD
+        // ==========================================
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!AdminHelper.IsAdmin(Session) || AdminUserID <= 0)
+            if (!AdminHelper.IsAdmin(Session) ||
+                AdminUserID <= 0)
             {
                 Response.Redirect("~/Login.aspx");
                 return;
@@ -122,7 +139,62 @@ namespace ELibrary.Admin.Transactions
                 LoadTransactions();
                 LoadUnpaidFees();
             }
+
+            hfFocusTarget.Value = "";
         }
+
+        // ==========================================
+        // LOCAL MESSAGES
+        // ==========================================
+
+        private enum MessageArea
+        {
+            Transactions,
+            Unpaid,
+            PaymentDetails
+        }
+
+        private void ShowMessage(
+            string message,
+            MessageArea area)
+        {
+            Label label;
+            string target;
+
+            switch (area)
+            {
+                case MessageArea.Unpaid:
+                    label = lblUnpaidMessage;
+                    target = "unpaidFees";
+                    break;
+
+                case MessageArea.PaymentDetails:
+                    label = lblPaymentDetailsMessage;
+                    target = "pnlPaymentHistory";
+                    break;
+
+                default:
+                    label = lblMessage;
+                    target = "transactionHistory";
+                    break;
+            }
+
+            label.Text = Server.HtmlEncode(message);
+            label.CssClass = "fn-message error";
+            hfFocusTarget.Value = target;
+        }
+
+        private void FocusSection(string target)
+        {
+            if (string.IsNullOrEmpty(hfFocusTarget.Value))
+            {
+                hfFocusTarget.Value = target;
+            }
+        }
+
+        // ==========================================
+        // FEE TYPE FILTER OPTIONS
+        // ==========================================
 
         private void LoadFeeTypes()
         {
@@ -139,7 +211,8 @@ namespace ELibrary.Admin.Transactions
                           WHERE FeeType IS NOT NULL
                             AND LTRIM(RTRIM(FeeType)) <> ''
                           ORDER BY FeeType;", con))
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -158,7 +231,8 @@ namespace ELibrary.Admin.Transactions
                             AND FeeType IS NOT NULL
                             AND LTRIM(RTRIM(FeeType)) <> ''
                           ORDER BY FeeType;", con))
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -174,9 +248,15 @@ namespace ELibrary.Admin.Transactions
             catch (Exception ex)
             {
                 ShowMessage(
-                    "Unable to load fee types: " + ex.Message);
+                    "Unable to load fee types: " +
+                    ex.Message,
+                    MessageArea.Transactions);
             }
         }
+
+        // ==========================================
+        // LOAD TRANSACTION HISTORY
+        // ==========================================
 
         private void LoadTransactions()
         {
@@ -190,30 +270,37 @@ namespace ELibrary.Admin.Transactions
                     new SqlCommand(
                         "EReceipt_WebAdminSearch", con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
 
                     cmd.Parameters.Add(
-                        "@Search", SqlDbType.VarChar, 255).Value =
+                        "@Search",
+                        SqlDbType.VarChar, 255).Value =
                         DbValue(HistorySearch);
 
                     cmd.Parameters.Add(
-                        "@FeeType", SqlDbType.VarChar, 50).Value =
+                        "@FeeType",
+                        SqlDbType.VarChar, 50).Value =
                         DbValue(HistoryFee);
 
                     cmd.Parameters.Add(
-                        "@PaymentMethod", SqlDbType.VarChar, 30).Value =
+                        "@PaymentMethod",
+                        SqlDbType.VarChar, 30).Value =
                         DbValue(HistoryMethod);
 
                     cmd.Parameters.Add(
-                        "@Sort", SqlDbType.VarChar, 20).Value =
+                        "@Sort",
+                        SqlDbType.VarChar, 20).Value =
                         HistorySort;
 
                     cmd.Parameters.Add(
-                        "@PageNumber", SqlDbType.Int).Value =
+                        "@PageNumber",
+                        SqlDbType.Int).Value =
                         HistoryPage;
 
                     cmd.Parameters.Add(
-                        "@PageSize", SqlDbType.Int).Value =
+                        "@PageSize",
+                        SqlDbType.Int).Value =
                         PageSize;
 
                     using (SqlDataAdapter da =
@@ -224,12 +311,15 @@ namespace ELibrary.Admin.Transactions
                 }
 
                 if (ds.Tables.Count < 2)
+                {
                     throw new InvalidOperationException(
                         "Transaction search returned incomplete data.");
+                }
 
                 int count = ReadFilteredCount(ds);
 
-                HistoryTotalPages = CalculateTotalPages(count);
+                HistoryTotalPages =
+                    CalculateTotalPages(count);
 
                 if (HistoryPage > HistoryTotalPages)
                 {
@@ -238,18 +328,21 @@ namespace ELibrary.Admin.Transactions
                     return;
                 }
 
-                gvTransactions.DataSource = ds.Tables[1];
+                gvTransactions.DataSource =
+                    ds.Tables[1];
+
                 gvTransactions.DataBind();
 
                 lblHistoryCount.Text =
                     BuildCountText(
-                        count, HistoryPage, "transactions");
-
-                lblHistoryPage.Text =
-                    string.Format(
-                        "Page {0} of {1}",
+                        count,
                         HistoryPage,
-                        HistoryTotalPages);
+                        "transactions");
+
+                lblHistoryPage.Text = string.Format(
+                    "Page {0} of {1}",
+                    HistoryPage,
+                    HistoryTotalPages);
 
                 btnHistoryPrevious.Visible =
                     HistoryTotalPages > 1;
@@ -265,10 +358,25 @@ namespace ELibrary.Admin.Transactions
             }
             catch (Exception ex)
             {
+                gvTransactions.DataSource = null;
+                gvTransactions.DataBind();
+
+                lblHistoryCount.Text =
+                    "Unable to load transactions.";
+
+                btnHistoryPrevious.Visible = false;
+                btnHistoryNext.Visible = false;
+
                 ShowMessage(
-                    "Unable to load transactions: " + ex.Message);
+                    "Unable to load transactions: " +
+                    ex.Message,
+                    MessageArea.Transactions);
             }
         }
+
+        // ==========================================
+        // LOAD UNPAID FEES
+        // ==========================================
 
         private void LoadUnpaidFees()
         {
@@ -282,26 +390,32 @@ namespace ELibrary.Admin.Transactions
                     new SqlCommand(
                         "EReceipt_WebAdminUnpaidSearch", con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
 
                     cmd.Parameters.Add(
-                        "@Search", SqlDbType.VarChar, 255).Value =
+                        "@Search",
+                        SqlDbType.VarChar, 255).Value =
                         DbValue(UnpaidSearch);
 
                     cmd.Parameters.Add(
-                        "@FeeType", SqlDbType.VarChar, 50).Value =
+                        "@FeeType",
+                        SqlDbType.VarChar, 50).Value =
                         DbValue(UnpaidFee);
 
                     cmd.Parameters.Add(
-                        "@Sort", SqlDbType.VarChar, 20).Value =
+                        "@Sort",
+                        SqlDbType.VarChar, 20).Value =
                         UnpaidSort;
 
                     cmd.Parameters.Add(
-                        "@PageNumber", SqlDbType.Int).Value =
+                        "@PageNumber",
+                        SqlDbType.Int).Value =
                         UnpaidPage;
 
                     cmd.Parameters.Add(
-                        "@PageSize", SqlDbType.Int).Value =
+                        "@PageSize",
+                        SqlDbType.Int).Value =
                         PageSize;
 
                     using (SqlDataAdapter da =
@@ -312,12 +426,15 @@ namespace ELibrary.Admin.Transactions
                 }
 
                 if (ds.Tables.Count < 2)
+                {
                     throw new InvalidOperationException(
                         "Unpaid fee search returned incomplete data.");
+                }
 
                 int count = ReadFilteredCount(ds);
 
-                UnpaidTotalPages = CalculateTotalPages(count);
+                UnpaidTotalPages =
+                    CalculateTotalPages(count);
 
                 if (UnpaidPage > UnpaidTotalPages)
                 {
@@ -331,13 +448,14 @@ namespace ELibrary.Admin.Transactions
 
                 lblUnpaidCount.Text =
                     BuildCountText(
-                        count, UnpaidPage, "unpaid fees");
-
-                lblUnpaidPage.Text =
-                    string.Format(
-                        "Page {0} of {1}",
+                        count,
                         UnpaidPage,
-                        UnpaidTotalPages);
+                        "unpaid fees");
+
+                lblUnpaidPage.Text = string.Format(
+                    "Page {0} of {1}",
+                    UnpaidPage,
+                    UnpaidTotalPages);
 
                 btnUnpaidPrevious.Visible =
                     UnpaidTotalPages > 1;
@@ -353,12 +471,25 @@ namespace ELibrary.Admin.Transactions
             }
             catch (Exception ex)
             {
+                gvUnpaid.DataSource = null;
+                gvUnpaid.DataBind();
+
+                lblUnpaidCount.Text =
+                    "Unable to load unpaid fees.";
+
+                btnUnpaidPrevious.Visible = false;
+                btnUnpaidNext.Visible = false;
+
                 ShowMessage(
-                    "Unable to load unpaid fees: " + ex.Message);
+                    "Unable to load unpaid fees: " +
+                    ex.Message,
+                    MessageArea.Unpaid);
             }
         }
 
-        // NEW: Load individual payments for one receipt.
+        // ==========================================
+        // INDIVIDUAL PAYMENT HISTORY
+        // ==========================================
 
         private void LoadPaymentHistory()
         {
@@ -378,14 +509,17 @@ namespace ELibrary.Admin.Transactions
                     "EReceiptPaymentHistory_WebAdminByReceipt",
                     con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
 
                     cmd.Parameters.Add(
-                        "@ReceiptID", SqlDbType.Int).Value =
+                        "@ReceiptID",
+                        SqlDbType.Int).Value =
                         SelectedReceiptID;
 
                     cmd.Parameters.Add(
-                        "@AdminUserID", SqlDbType.Int).Value =
+                        "@AdminUserID",
+                        SqlDbType.Int).Value =
                         AdminUserID;
 
                     using (SqlDataAdapter da =
@@ -412,11 +546,20 @@ namespace ELibrary.Admin.Transactions
             }
             catch (Exception ex)
             {
-                SelectedReceiptID = 0;
-                pnlPaymentHistory.Visible = false;
+                gvPaymentHistory.DataSource = null;
+                gvPaymentHistory.DataBind();
+
+                lblSelectedReceipt.Text =
+                    "Receipt ID: " + SelectedReceiptID;
+
+                lblPaymentHistoryMessage.Text = "";
+
+                pnlPaymentHistory.Visible = true;
 
                 ShowMessage(
-                    "Unable to load payment history: " + ex.Message);
+                    "Unable to load payment history: " +
+                    ex.Message,
+                    MessageArea.PaymentDetails);
             }
         }
 
@@ -425,7 +568,9 @@ namespace ELibrary.Admin.Transactions
             CommandEventArgs e)
         {
             if (e.CommandName != "ViewPayments")
+            {
                 return;
+            }
 
             int receiptID;
 
@@ -433,7 +578,9 @@ namespace ELibrary.Admin.Transactions
                 Convert.ToString(e.CommandArgument),
                 out receiptID) || receiptID <= 0)
             {
-                ShowMessage("Invalid receipt ID.");
+                ShowMessage(
+                    "Invalid receipt ID.",
+                    MessageArea.Transactions);
                 return;
             }
 
@@ -442,6 +589,8 @@ namespace ELibrary.Admin.Transactions
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("pnlPaymentHistory");
         }
 
         protected void btnClosePaymentHistory_Click(
@@ -453,7 +602,13 @@ namespace ELibrary.Admin.Transactions
 
             LoadTransactions();
             LoadUnpaidFees();
+
+            FocusSection("transactionHistory");
         }
+
+        // ==========================================
+        // TRANSACTION SEARCH EVENTS
+        // ==========================================
 
         protected void btnHistoryApply_Click(
             object sender,
@@ -462,14 +617,22 @@ namespace ELibrary.Admin.Transactions
             HistorySearch =
                 (txtHistorySearch.Text ?? "").Trim();
 
-            HistoryFee = ddlHistoryFee.SelectedValue;
-            HistoryMethod = ddlHistoryMethod.SelectedValue;
-            HistorySort = ddlHistorySort.SelectedValue;
+            HistoryFee =
+                ddlHistoryFee.SelectedValue;
+
+            HistoryMethod =
+                ddlHistoryMethod.SelectedValue;
+
+            HistorySort =
+                ddlHistorySort.SelectedValue;
+
             HistoryPage = 1;
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("transactionHistory");
         }
 
         protected void btnHistoryClear_Click(
@@ -477,6 +640,7 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             txtHistorySearch.Text = "";
+
             ddlHistoryFee.SelectedValue = "";
             ddlHistoryMethod.SelectedValue = "";
             ddlHistorySort.SelectedValue = "Default";
@@ -485,11 +649,14 @@ namespace ELibrary.Admin.Transactions
             HistoryFee = "";
             HistoryMethod = "";
             HistorySort = "Default";
+
             HistoryPage = 1;
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("transactionHistory");
         }
 
         protected void btnHistoryPrevious_Click(
@@ -497,11 +664,15 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (HistoryPage > 1)
+            {
                 HistoryPage--;
+            }
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("transactionHistory");
         }
 
         protected void btnHistoryNext_Click(
@@ -509,12 +680,20 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (HistoryPage < HistoryTotalPages)
+            {
                 HistoryPage++;
+            }
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("transactionHistory");
         }
+
+        // ==========================================
+        // UNPAID SEARCH EVENTS
+        // ==========================================
 
         protected void btnUnpaidApply_Click(
             object sender,
@@ -523,13 +702,19 @@ namespace ELibrary.Admin.Transactions
             UnpaidSearch =
                 (txtUnpaidSearch.Text ?? "").Trim();
 
-            UnpaidFee = ddlUnpaidFee.SelectedValue;
-            UnpaidSort = ddlUnpaidSort.SelectedValue;
+            UnpaidFee =
+                ddlUnpaidFee.SelectedValue;
+
+            UnpaidSort =
+                ddlUnpaidSort.SelectedValue;
+
             UnpaidPage = 1;
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("unpaidFees");
         }
 
         protected void btnUnpaidClear_Click(
@@ -537,17 +722,21 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             txtUnpaidSearch.Text = "";
+
             ddlUnpaidFee.SelectedValue = "";
             ddlUnpaidSort.SelectedValue = "Default";
 
             UnpaidSearch = "";
             UnpaidFee = "";
             UnpaidSort = "Default";
+
             UnpaidPage = 1;
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("unpaidFees");
         }
 
         protected void btnUnpaidPrevious_Click(
@@ -555,11 +744,15 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (UnpaidPage > 1)
+            {
                 UnpaidPage--;
+            }
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("unpaidFees");
         }
 
         protected void btnUnpaidNext_Click(
@@ -567,21 +760,32 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (UnpaidPage < UnpaidTotalPages)
+            {
                 UnpaidPage++;
+            }
 
             LoadTransactions();
             LoadUnpaidFees();
             LoadPaymentHistory();
+
+            FocusSection("unpaidFees");
         }
+
+        // ==========================================
+        // RECORD PAYMENT NAVIGATION
+        // ==========================================
 
         protected void btnPay_Command(
             object sender,
             CommandEventArgs e)
         {
             if (e.CommandName != "PayFee")
+            {
                 return;
+            }
 
-            if (!AdminHelper.IsAdmin(Session))
+            if (!AdminHelper.IsAdmin(Session) ||
+                AdminUserID <= 0)
             {
                 Response.Redirect("~/Login.aspx");
                 return;
@@ -593,7 +797,9 @@ namespace ELibrary.Admin.Transactions
                 Convert.ToString(e.CommandArgument),
                 out receiptID) || receiptID <= 0)
             {
-                ShowMessage("Invalid receipt ID.");
+                ShowMessage(
+                    "Invalid receipt ID.",
+                    MessageArea.Unpaid);
                 return;
             }
 
@@ -601,6 +807,10 @@ namespace ELibrary.Admin.Transactions
                 "~/Admin/Transactions/PayTransactions.aspx?ReceiptID="
                 + receiptID);
         }
+
+        // ==========================================
+        // UTILITY METHODS
+        // ==========================================
 
         private object DbValue(string value)
         {
@@ -612,7 +822,9 @@ namespace ELibrary.Admin.Transactions
         private int ReadFilteredCount(DataSet ds)
         {
             if (ds.Tables[0].Rows.Count == 0)
+            {
                 return 0;
+            }
 
             return Convert.ToInt32(
                 ds.Tables[0].Rows[0]["FilteredCount"]);
@@ -645,12 +857,6 @@ namespace ELibrary.Admin.Transactions
                 last,
                 count,
                 recordType);
-        }
-
-        private void ShowMessage(string message)
-        {
-            lblMessage.CssClass = "el-tx-message";
-            lblMessage.Text = Server.HtmlEncode(message);
         }
     }
 }

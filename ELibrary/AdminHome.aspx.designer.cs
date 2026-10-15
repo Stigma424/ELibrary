@@ -33,6 +33,69 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
+        /// lblActiveBorrowings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblActiveBorrowings;
+
+        /// <summary>
+        /// lblOverdueBooks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOverdueBooks;
+
+        /// <summary>
+        /// lblPendingPickups control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPendingPickups;
+
+        /// <summary>
+        /// lblTotalUnpaidBalance control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotalUnpaidBalance;
+
+        /// <summary>
+        /// lblAttentionOverdue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAttentionOverdue;
+
+        /// <summary>
+        /// lblAttentionPickups control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAttentionPickups;
+
+        /// <summary>
+        /// lblPendingReturns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPendingReturns;
+
+        /// <summary>
         /// lblTotalBooks control.
         /// </summary>
         /// <remarks>
@@ -69,42 +132,6 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblTotalCustomers;
 
         /// <summary>
-        /// lblPendingPickups control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPendingPickups;
-
-        /// <summary>
-        /// lblActiveBorrowings control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblActiveBorrowings;
-
-        /// <summary>
-        /// lblOverdueBooks control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOverdueBooks;
-
-        /// <summary>
-        /// lblPendingReturns control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPendingReturns;
-
-        /// <summary>
         /// lblCollectedLoans control.
         /// </summary>
         /// <remarks>
@@ -132,12 +159,12 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblArchivedBooks;
 
         /// <summary>
-        /// lblTotalUnpaidBalance control.
+        /// lblSecondaryPendingReturns control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalUnpaidBalance;
+        protected global::System.Web.UI.WebControls.Label lblSecondaryPendingReturns;
     }
 }

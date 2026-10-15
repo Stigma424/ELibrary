@@ -15,15 +15,6 @@ namespace ELibrary.Admin.Borrowing
     {
 
         /// <summary>
-        /// lblMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
-
-        /// <summary>
         /// pnlCustomerSearch control.
         /// </summary>
         /// <remarks>
@@ -49,6 +40,15 @@ namespace ELibrary.Admin.Borrowing
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSearchCustomer;
+
+        /// <summary>
+        /// lblCustomerMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCustomerMessage;
 
         /// <summary>
         /// pnlCustomerResults control.
@@ -123,6 +123,15 @@ namespace ELibrary.Admin.Borrowing
         protected global::System.Web.UI.WebControls.Button btnSearchBook;
 
         /// <summary>
+        /// lblBookMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblBookMessage;
+
+        /// <summary>
         /// pnlBookResults control.
         /// </summary>
         /// <remarks>
@@ -168,6 +177,15 @@ namespace ELibrary.Admin.Borrowing
         protected global::System.Web.UI.WebControls.Label lblSelectedBook;
 
         /// <summary>
+        /// lblVerifyMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblVerifyMessage;
+
+        /// <summary>
         /// btnVerify control.
         /// </summary>
         /// <remarks>
@@ -193,6 +211,15 @@ namespace ELibrary.Admin.Borrowing
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlPreview;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// lblCustomer control.
@@ -229,5 +256,32 @@ namespace ELibrary.Admin.Borrowing
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnConfirm;
+
+        /// <summary>
+        /// pnlCompleted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCompleted;
+
+        /// <summary>
+        /// lblCompletedMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCompletedMessage;
+
+        /// <summary>
+        /// hfFocusTarget control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfFocusTarget;
     }
 }

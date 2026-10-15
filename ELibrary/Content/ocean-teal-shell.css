@@ -1,9 +1,9 @@
 ﻿
-/* =============================================
-   INTERNSHIPELIB
-   OCEAN TEAL SHARED DESIGN SYSTEM
-   UI-1A: MASTER LAYOUT AND NAVIGATION
-============================================= */
+/* ====================================================
+   INTERNSHIPELIB — OCEAN TEAL DESIGN SYSTEM
+   UI-1A + UI-1B
+   Shared shell, navigation, and module styling
+==================================================== */
 
 :root {
     --el-primary: #123B4A;
@@ -18,7 +18,11 @@
     --el-border: #DCE9EB;
     --el-sidebar-width: 260px;
     --el-header-height: 72px;
-    --el-ocean-shadow: 0 4px 18px rgba(18, 59, 74, .055);
+    --ocean-accent-hover: #12757C;
+    --ocean-surface-soft: #F5FAFA;
+    --ocean-border: #DCE9EB;
+    --ocean-shadow: 0 4px 18px rgba(18,59,74,.055);
+    --ocean-radius: 13px;
 }
 
 html {
@@ -26,9 +30,9 @@ html {
 }
 
 body,
-.el-customer-mode,
-.el-admin-mode,
-.el-guest-mode {
+body.el-admin-mode,
+body.el-customer-mode,
+body.el-guest-mode {
     background: var(--el-background);
     color: var(--el-text);
     font-family: "Segoe UI", Arial, sans-serif;
@@ -50,25 +54,25 @@ textarea {
         outline-offset: 3px;
     }
 
-/* =============================================
-   ADMIN SIDEBAR
-============================================= */
+/* ====================================================
+   ADMIN BRAND AND SIDEBAR
+==================================================== */
 
 .el-admin-mode .el-ocean-sidebar {
     width: var(--el-sidebar-width);
     background: var(--el-sidebar);
-    border-right: 1px solid rgba(255, 255, 255, .08);
-    box-shadow: 6px 0 24px rgba(18, 59, 74, .06);
+    border-right: 1px solid rgba(255,255,255,.08);
+    box-shadow: 6px 0 24px rgba(18,59,74,.06);
 }
 
 .el-admin-mode .el-ocean-brand {
     min-height: var(--el-header-height);
     padding: 14px 16px;
-    background: #103542;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
+    background: #103542;
 }
 
 .el-ocean-brand-link {
@@ -76,12 +80,12 @@ textarea {
     align-items: center;
     gap: 11px;
     min-width: 0;
-    color: #fff;
+    color: #FFFFFF;
     text-decoration: none;
 }
 
     .el-ocean-brand-link:hover {
-        color: #fff;
+        color: #FFFFFF;
     }
 
 .el-ocean-brand .el-brand-logo {
@@ -89,7 +93,7 @@ textarea {
     height: 42px;
     flex-shrink: 0;
     background: var(--el-accent);
-    color: #fff;
+    color: #FFFFFF;
     border-radius: 12px;
     font-size: 14px;
     font-weight: 800;
@@ -103,18 +107,18 @@ textarea {
 }
 
 .el-ocean-brand .el-brand-name {
-    color: #fff;
     font-size: 17px;
     font-weight: 750;
     letter-spacing: -.3px;
+    color: #FFFFFF;
     overflow-wrap: anywhere;
 }
 
 .el-ocean-brand .el-brand-caption {
+    margin: 0;
     color: #B3CCD0;
     font-size: 10px;
     line-height: 1.4;
-    margin: 0;
 }
 
 .el-ocean-sidebar-close {
@@ -122,12 +126,13 @@ textarea {
     flex-shrink: 0;
     width: 34px;
     height: 34px;
-    border: 1px solid rgba(255, 255, 255, .18);
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,.18);
     border-radius: 9px;
     background: transparent;
-    color: #fff;
+    color: #FFFFFF;
     font-size: 25px;
-    line-height: 1;
     cursor: pointer;
 }
 
@@ -151,21 +156,21 @@ textarea {
     padding: 11px 14px;
     border-radius: 9px;
     color: #D8E9EB;
-    text-decoration: none;
     font-size: 13px;
     font-weight: 550;
     line-height: 1.5;
+    text-decoration: none;
     transition: background .2s ease, color .2s ease;
 }
 
     .el-admin-mode .el-menu-link:hover {
         background: var(--el-sidebar-hover);
-        color: #fff;
+        color: #FFFFFF;
     }
 
     .el-admin-mode .el-menu-link.active {
         background: var(--el-accent);
-        color: #fff;
+        color: #FFFFFF;
         font-weight: 750;
         box-shadow: inset 3px 0 0 var(--el-highlight);
     }
@@ -191,9 +196,9 @@ textarea {
 
     .el-admin-mode .el-menu-group-toggle:hover,
     .el-admin-mode .el-menu-group-toggle.is-expanded {
-        background: rgba(255, 255, 255, .075);
-        border-color: rgba(255, 255, 255, .07);
-        color: #fff;
+        background: rgba(255,255,255,.075);
+        border-color: rgba(255,255,255,.07);
+        color: #FFFFFF;
     }
 
 .el-admin-mode .el-menu-chevron {
@@ -224,7 +229,7 @@ textarea {
 
 .el-admin-mode .el-sidebar-footer {
     padding: 13px 0 15px;
-    border-top: 1px solid rgba(255, 255, 255, .12);
+    border-top: 1px solid rgba(255,255,255,.12);
     background: #103542;
 }
 
@@ -241,18 +246,18 @@ textarea {
 }
 
     .el-admin-mode .el-signout:hover {
-        background: rgba(197, 68, 68, .2);
-        color: #fff;
+        background: rgba(197,68,68,.2);
+        color: #FFFFFF;
     }
 
-/* =============================================
+/* ====================================================
    ADMIN TOPBAR
-============================================= */
+==================================================== */
 
 .el-admin-mode .el-ocean-admin-header {
-    background: #fff;
+    background: #FFFFFF;
     border-bottom: 1px solid var(--el-border);
-    box-shadow: 0 2px 10px rgba(18, 59, 74, .025);
+    box-shadow: 0 2px 10px rgba(18,59,74,.025);
     padding: 0 28px;
     gap: 16px;
 }
@@ -307,17 +312,17 @@ textarea {
     width: 39px;
     height: 39px;
     padding: 0;
-    background: #EAF5F6;
     border: 1px solid #D7E9EB;
     border-radius: 10px;
+    background: #EAF5F6;
     color: var(--el-primary);
     font-size: 20px;
     cursor: pointer;
 }
 
-/* =============================================
-   SHARED CONTENT LAYOUT
-============================================= */
+/* ====================================================
+   CONTENT AND TOOLBAR
+==================================================== */
 
 .el-admin-mode .el-main {
     min-width: 0;
@@ -342,29 +347,29 @@ textarea {
     min-width: 0;
 }
 
-.el-admin-mode .el-toolbar-caption {
+.el-admin-mode .el-toolbar-caption,
+.el-admin-mode .el-footer {
     color: var(--el-muted);
 }
 
 .el-admin-mode .el-footer {
     background: var(--el-background);
     border-top: 1px solid var(--el-border);
-    color: var(--el-muted);
 }
 
-/* =============================================
-   PUBLIC / GUEST HEADER
-============================================= */
+/* ====================================================
+   GUEST NAVIGATION
+==================================================== */
 
 .el-guest-mode .el-ocean-public-header,
 .el-customer-mode .el-ocean-public-header {
     background: var(--el-primary);
-    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
 .el-guest-mode .el-public-brand,
 .el-customer-mode .el-public-brand {
-    color: #fff;
+    color: #FFFFFF;
     font-weight: 800;
     letter-spacing: -.5px;
 }
@@ -380,22 +385,22 @@ textarea {
 }
 
     .el-guest-mode .el-public-nav a:hover {
-        background: rgba(255, 255, 255, .10);
-        color: #fff;
+        background: rgba(255,255,255,.10);
+        color: #FFFFFF;
     }
 
     .el-guest-mode .el-public-nav a:last-child {
         background: var(--el-accent);
-        color: #fff;
+        color: #FFFFFF;
     }
 
         .el-guest-mode .el-public-nav a:last-child:hover {
-            background: #12757C;
+            background: var(--ocean-accent-hover);
         }
 
-/* =============================================
+/* ====================================================
    CUSTOMER NAVIGATION
-============================================= */
+==================================================== */
 
 .el-customer-mode .el-ocean-public-header {
     min-height: 76px;
@@ -405,17 +410,16 @@ textarea {
 .el-customer-mode .el-customer-nav-link {
     color: #D5E9EC;
     border-radius: 9px;
-    transition: color .2s ease, background .2s ease;
 }
 
     .el-customer-mode .el-customer-nav-link:hover {
-        color: #fff;
         background: #1C5964;
+        color: #FFFFFF;
     }
 
     .el-customer-mode .el-customer-nav-link.active {
         background: var(--el-accent);
-        color: #fff;
+        color: #FFFFFF;
     }
 
 .el-customer-mode .el-customer-logout {
@@ -423,18 +427,18 @@ textarea {
 }
 
 .el-customer-mode .el-customer-menu-toggle {
-    color: #fff;
+    background: rgba(255,255,255,.06);
     border-color: #477A82;
-    background: rgba(255, 255, 255, .06);
+    color: #FFFFFF;
 }
 
 .el-customer-mode .el-customer-avatar-link .el-avatar-image {
     border-color: #7EB5BB;
 }
 
-/* =============================================
-   SHARED BUTTONS AND FORM CONTROLS
-============================================= */
+/* ====================================================
+   SHARED BUTTONS
+==================================================== */
 
 .btn-primary,
 .el-admin-mode .btn-primary,
@@ -442,16 +446,16 @@ textarea {
 .el-guest-mode .btn-primary {
     background-color: var(--el-accent);
     border-color: var(--el-accent);
-    color: #fff;
+    color: #FFFFFF;
 }
 
     .btn-primary:hover,
     .el-admin-mode .btn-primary:hover,
     .el-customer-mode .btn-primary:hover,
     .el-guest-mode .btn-primary:hover {
-        background-color: #12757C;
-        border-color: #12757C;
-        color: #fff;
+        background-color: var(--ocean-accent-hover);
+        border-color: var(--ocean-accent-hover);
+        color: #FFFFFF;
     }
 
 .btn-outline-primary {
@@ -462,21 +466,25 @@ textarea {
     .btn-outline-primary:hover {
         background: var(--el-accent);
         border-color: var(--el-accent);
-        color: #fff;
+        color: #FFFFFF;
     }
 
 .form-control:focus,
 .form-select:focus {
     border-color: var(--el-accent);
-    box-shadow: 0 0 0 3px rgba(22, 138, 145, .13);
+    box-shadow: 0 0 0 3px rgba(22,138,145,.13);
 }
+
+/* ====================================================
+   SHARED CARDS AND DASHBOARD
+==================================================== */
 
 .el-dashboard-card,
 .el-dashboard-panel,
 .el-admin-mode .content-card,
 .el-customer-mode .content-card {
     border-color: var(--el-border);
-    box-shadow: var(--el-ocean-shadow);
+    box-shadow: var(--ocean-shadow);
 }
 
 .el-page-title {
@@ -488,9 +496,27 @@ textarea {
     color: var(--el-muted);
 }
 
-/* =============================================
-   COMMON THEME ELEMENTS
-============================================= */
+.el-admin-mode .el-dashboard-card,
+.el-admin-mode .el-dashboard-panel {
+    background: #FFFFFF;
+    border: 1px solid var(--ocean-border);
+    border-radius: var(--ocean-radius);
+}
+
+.el-admin-mode .el-metric-icon {
+    background: #E4F5F5;
+    color: var(--el-accent);
+}
+
+/* ====================================================
+   CUSTOMER HERO AND CARDS
+==================================================== */
+
+.el-customer-mode .el-customer-hero,
+.el-customer-mode .el-catalog-intro,
+.el-customer-mode .el-profile-v2-summary-banner {
+    background: linear-gradient( 115deg, var(--el-primary) 0%, var(--el-accent) 100% );
+}
 
 .el-customer-mode .el-section-eyebrow,
 .el-customer-mode .el-catalog-v2-category,
@@ -500,49 +526,191 @@ textarea {
     color: var(--el-accent);
 }
 
+.el-customer-mode .el-customer-book-card,
+.el-customer-mode .el-catalog-book-card,
+.el-customer-mode .el-catalog-v2-card,
+.el-customer-mode .el-customer-stat,
+.el-customer-mode .el-records-panel,
+.el-customer-mode .el-profile-v2-main {
+    border-color: var(--ocean-border);
+}
+
 .el-customer-mode .el-records-primary-link,
 .el-customer-mode .el-catalog-v2-details,
 .el-customer-mode .el-catalog-details-btn,
 .el-customer-mode .el-book-borrow-btn,
-.el-customer-mode .el-profile-v2-save-btn {
+.el-customer-mode .el-profile-v2-save-btn,
+.el-customer-mode .el-records-return-btn {
     background: var(--el-accent);
     border-color: var(--el-accent);
-    color: #fff;
+    color: #FFFFFF;
 }
 
     .el-customer-mode .el-records-primary-link:hover,
     .el-customer-mode .el-catalog-v2-details:hover,
     .el-customer-mode .el-catalog-details-btn:hover,
     .el-customer-mode .el-book-borrow-btn:hover,
-    .el-customer-mode .el-profile-v2-save-btn:hover {
-        background: #12757C;
-        border-color: #12757C;
-        color: #fff;
+    .el-customer-mode .el-profile-v2-save-btn:hover,
+    .el-customer-mode .el-records-return-btn:hover {
+        background: var(--ocean-accent-hover);
+        border-color: var(--ocean-accent-hover);
+        color: #FFFFFF;
     }
 
-.el-customer-mode .el-customer-hero,
-.el-customer-mode .el-catalog-intro,
-.el-customer-mode .el-profile-v2-summary-banner {
-    background: linear-gradient( 115deg, var(--el-primary) 0%, var(--el-accent) 100% );
+.el-customer-mode .el-profile-v2-account-type {
+    background: #E4F5F5;
+    color: #106B70;
 }
+
+/* ====================================================
+   ADMIN CATALOG AND USERS
+==================================================== */
 
 .el-admin-mode .el-ac-btn-primary,
 .el-admin-mode .el-au-btn-primary {
     background: var(--el-accent);
     border-color: var(--el-accent);
-    color: #fff;
+    color: #FFFFFF;
 }
 
     .el-admin-mode .el-ac-btn-primary:hover,
     .el-admin-mode .el-au-btn-primary:hover {
-        background: #12757C;
-        border-color: #12757C;
-        color: #fff;
+        background: var(--ocean-accent-hover);
+        border-color: var(--ocean-accent-hover);
+        color: #FFFFFF;
     }
 
-/* =============================================
-   RESPONSIVE SIDEBAR BACKDROP
-============================================= */
+.el-admin-mode .el-admin-catalog .el-ac-panel,
+.el-admin-mode .el-admin-users .el-au-panel {
+    background: #FFFFFF;
+    border-color: var(--ocean-border);
+}
+
+.el-admin-mode .el-admin-catalog .el-ac-table th,
+.el-admin-mode .el-admin-users .el-au-table th {
+    background: var(--ocean-surface-soft);
+    color: #496B75;
+}
+
+.el-admin-mode .el-admin-catalog .el-ac-table-action,
+.el-admin-mode .el-admin-users .el-au-action {
+    background: #EAF6F6;
+    border-color: #CDE7E9;
+    color: #106B70;
+}
+
+    .el-admin-mode .el-admin-catalog .el-ac-table-action:hover,
+    .el-admin-mode .el-admin-users .el-au-action:hover {
+        background: #DDF0F1;
+        color: #0F6065;
+    }
+
+/* ====================================================
+   ADMIN DASHBOARD
+==================================================== */
+
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-stat-card,
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-insight-card,
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-quick-panel {
+    background: #FFFFFF;
+    border-color: var(--ocean-border);
+}
+
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-stat-icon,
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-insight-icon,
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-action-icon {
+    background: #E4F5F5;
+    color: #106B70;
+}
+
+.el-admin-mode .el-admin-dashboard-v2 .el-ad2-action {
+    background: var(--ocean-surface-soft);
+    border-color: var(--ocean-border);
+    color: var(--el-text);
+}
+
+    .el-admin-mode .el-admin-dashboard-v2 .el-ad2-action:hover {
+        background: #E4F3F4;
+        border-color: #B5DDDF;
+        color: #106B70;
+    }
+
+/* ====================================================
+   ADMIN TRANSACTION PAGE
+==================================================== */
+
+.el-admin-mode .el-tx-panel {
+    border-color: var(--ocean-border);
+    box-shadow: var(--ocean-shadow);
+}
+
+.el-admin-mode .el-tx-eyebrow {
+    color: var(--el-accent);
+}
+
+.el-admin-mode .el-tx-filters {
+    background: var(--ocean-surface-soft);
+    border-color: var(--ocean-border);
+}
+
+.el-admin-mode .el-tx-btn-primary {
+    background: var(--el-accent);
+    border-color: var(--el-accent);
+    color: #FFFFFF;
+}
+
+    .el-admin-mode .el-tx-btn-primary:hover {
+        background: var(--ocean-accent-hover);
+        border-color: var(--ocean-accent-hover);
+        color: #FFFFFF;
+    }
+
+.el-admin-mode .el-tx-table th {
+    background: var(--ocean-surface-soft);
+    color: #496B75;
+}
+
+.el-admin-mode .el-tx-view {
+    background: #E4F5F5;
+    border-color: #CDE7E9;
+    color: #106B70;
+}
+
+/* ====================================================
+   COMMON TABLE AND INPUT PRESENTATION
+==================================================== */
+
+.el-admin-mode .table,
+.el-customer-mode .table {
+    background: #FFFFFF;
+}
+
+    .el-admin-mode .table th,
+    .el-customer-mode .table th {
+        background: var(--ocean-surface-soft);
+        color: #496B75;
+        border-color: var(--ocean-border);
+    }
+
+.el-admin-mode .form-control,
+.el-admin-mode .form-select,
+.el-customer-mode .form-control,
+.el-customer-mode .form-select {
+    border-color: #CFE1E4;
+    color: var(--el-text);
+}
+
+    .el-admin-mode .form-control:focus,
+    .el-admin-mode .form-select:focus,
+    .el-customer-mode .form-control:focus,
+    .el-customer-mode .form-select:focus {
+        border-color: var(--el-accent);
+        box-shadow: 0 0 0 3px rgba(22,138,145,.13);
+    }
+
+/* ====================================================
+   MOBILE SIDEBAR AND BACKDROP
+==================================================== */
 
 .el-shell-backdrop {
     display: none;
@@ -555,7 +723,7 @@ textarea {
         transform: translateX(-100%);
         transition: transform .25s ease;
         z-index: 1300;
-        box-shadow: 8px 0 35px rgba(0, 0, 0, .2);
+        box-shadow: 8px 0 35px rgba(0,0,0,.2);
     }
 
     .el-admin-mode.el-sidebar-open .el-ocean-sidebar {
@@ -567,7 +735,7 @@ textarea {
         position: fixed;
         inset: 0;
         z-index: 1250;
-        background: rgba(9, 30, 38, .58);
+        background: rgba(9,30,38,.58);
     }
 
     .el-ocean-menu-button {
@@ -576,8 +744,6 @@ textarea {
 
     .el-ocean-sidebar-close {
         display: inline-flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .el-admin-mode .el-ocean-admin-header {
@@ -605,13 +771,13 @@ textarea {
     .el-customer-mode .el-customer-nav {
         background: var(--el-primary);
         border-color: #477A82;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, .2);
-    }
-
-    .el-customer-mode .el-customer-nav-link {
-        padding: 13px 15px;
+        box-shadow: 0 15px 35px rgba(0,0,0,.2);
     }
 }
+
+/* ====================================================
+   SMALL MOBILE SCREENS
+==================================================== */
 
 @media (max-width: 576px) {
 
@@ -629,10 +795,7 @@ textarea {
         font-size: 13px;
     }
 
-    .el-admin-mode .el-header-title span {
-        display: none;
-    }
-
+    .el-admin-mode .el-header-title span,
     .el-admin-mode .el-header-link {
         display: none;
     }
@@ -668,6 +831,10 @@ textarea {
         font-size: 20px;
     }
 }
+
+/* ====================================================
+   ACCESSIBILITY
+==================================================== */
 
 @media (prefers-reduced-motion: reduce) {
 

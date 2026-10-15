@@ -7,738 +7,859 @@
     Inherits="ELibrary.Customer.MyTransactions" %>
 
 <asp:Content ID="Content1"
+    ContentPlaceHolderID="head"
+    runat="server">
+
+<style>
+/* ==========================================
+   COASTAL MINIMAL - MY TRANSACTIONS UI-C5B
+========================================== */
+
+.el-customer-mode .coast-transactions {
+    --t-ink:#123B4A;
+    --t-teal:#168A91;
+    --t-muted:#647F89;
+    --t-border:#DCE9EB;
+    display:flex;
+    flex-direction:column;
+    gap:23px;
+    min-width:0;
+    width:100%;
+    padding-bottom:35px;
+    color:var(--t-ink);
+}
+.el-customer-mode .coast-transactions * {
+    box-sizing:border-box;
+}
+.el-customer-mode .coast-transactions .t-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    flex-wrap:wrap;
+    padding:32px 36px;
+    border:1px solid #D2E8E9;
+    border-radius:20px;
+    background:linear-gradient(115deg,#DDEFF0,#F5FAF8);
+}
+.el-customer-mode .coast-transactions .t-eyebrow {
+    display:block;
+    margin-bottom:10px;
+    color:#13787C;
+    font-size:10px;
+    font-weight:850;
+    letter-spacing:.13em;
+}
+.el-customer-mode .coast-transactions h1 {
+    margin:0 0 9px;
+    color:var(--t-ink);
+    font-size:clamp(28px,3.6vw,39px);
+    font-weight:850;
+}
+.el-customer-mode .coast-transactions .t-header p,
+.el-customer-mode .coast-transactions .t-panel-head p {
+    margin:0;
+    color:#52737D;
+    font-size:12px;
+    line-height:1.8;
+}
+.el-customer-mode .coast-transactions .t-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:41px;
+    padding:10px 16px;
+    border:1px solid #CFE3E4;
+    border-radius:9px;
+    background:white;
+    color:var(--t-ink);
+    font-size:12px;
+    font-weight:800;
+    text-decoration:none;
+    cursor:pointer;
+}
+.el-customer-mode .coast-transactions .t-btn:hover {
+    background:#EAF6F6;
+    color:var(--t-ink);
+    text-decoration:none;
+}
+.el-customer-mode .coast-transactions .t-btn.primary {
+    background:var(--t-teal);
+    border-color:var(--t-teal);
+    color:white;
+}
+.el-customer-mode .coast-transactions .t-btn.primary:hover {
+    background:#12757C;
+    color:white;
+}
+.el-customer-mode .coast-transactions .t-summary {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+}
+.el-customer-mode .coast-transactions .t-stat {
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:20px;
+    background:white;
+    border:1px solid var(--t-border);
+    border-radius:14px;
+}
+.el-customer-mode .coast-transactions .t-stat.highlight {
+    background:linear-gradient(115deg,#E4F4F4,#F4FAF9);
+    border-color:#C5E4E5;
+}
+.el-customer-mode .coast-transactions .t-stat-icon {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    border-radius:11px;
+    background:#EAF6F6;
+    color:#168A91;
+    font-size:20px;
+}
+.el-customer-mode .coast-transactions .t-stat-icon.warm {
+    background:#FFF2DF;
+    color:#A56B1D;
+}
+.el-customer-mode .coast-transactions .t-stat-label {
+    color:var(--t-muted);
+    font-size:12px;
+    font-weight:700;
+    line-height:1.5;
+}
+.el-customer-mode .coast-transactions .t-stat-value {
+    color:var(--t-ink);
+    font-size:clamp(20px,2.5vw,29px);
+    font-weight:850;
+    overflow-wrap:anywhere;
+}
+.el-customer-mode .coast-transactions .t-panel {
+    padding:24px;
+    min-width:0;
+    background:white;
+    border:1px solid var(--t-border);
+    border-radius:15px;
+}
+.el-customer-mode .coast-transactions .t-panel-head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:19px;
+}
+.el-customer-mode .coast-transactions .t-panel-head h2 {
+    margin:0 0 6px;
+    color:var(--t-ink);
+    font-size:21px;
+    font-weight:850;
+}
+.el-customer-mode .coast-transactions .t-filters {
+    padding:17px;
+    border:1px solid var(--t-border);
+    border-radius:11px;
+    background:#F5FAFA;
+}
+.el-customer-mode .coast-transactions .t-filter-grid {
+    display:grid;
+    grid-template-columns:minmax(190px,2fr) repeat(3,minmax(125px,1fr));
+    gap:13px;
+}
+.el-customer-mode .coast-transactions .t-field {
+    min-width:0;
+}
+.el-customer-mode .coast-transactions .t-field label {
+    display:block;
+    margin-bottom:7px;
+    color:#375968;
+    font-size:12px;
+    font-weight:750;
+}
+.el-customer-mode .coast-transactions .t-input {
+    display:block;
+    width:100%;
+    min-height:42px;
+    padding:10px 12px;
+    border:1px solid #CFE1E4;
+    border-radius:9px;
+    background:white;
+    color:var(--t-ink);
+    font-size:12px;
+}
+.el-customer-mode .coast-transactions .t-input:focus {
+    outline:none;
+    border-color:var(--t-teal);
+    box-shadow:0 0 0 3px rgba(22,138,145,.12);
+}
+.el-customer-mode .coast-transactions .t-actions {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:9px;
+    margin-top:15px;
+}
+.el-customer-mode .coast-transactions .t-help {
+    color:var(--t-muted);
+    font-size:11px;
+}
+.el-customer-mode .coast-transactions .el-records-message {
+    display:block;
+    margin:15px 0;
+    font-size:12px;
+    line-height:1.75;
+}
+.el-customer-mode .coast-transactions .el-records-message:empty {
+    display:none;
+}
+.el-customer-mode .coast-transactions .el-records-message.error:not(:empty) {
+    padding:13px 16px;
+    border:1px solid #F2D3CF;
+    border-left:4px solid #C34D46;
+    border-radius:9px;
+    background:#FFF0EF;
+    color:#9E3E39;
+}
+.el-customer-mode .coast-transactions .t-results {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:17px 0 13px;
+    color:var(--t-muted);
+    font-size:12px;
+}
+.el-customer-mode .coast-transactions .t-table-wrap {
+    width:100%;
+    overflow-x:auto;
+    border:1px solid var(--t-border);
+    border-radius:10px;
+}
+.el-customer-mode .coast-transactions .t-table {
+    width:100%;
+    min-width:950px;
+    border-collapse:collapse;
+    background:white;
+    font-size:12px;
+}
+.el-customer-mode .coast-transactions .t-table th {
+    padding:14px 12px;
+    border-bottom:1px solid var(--t-border);
+    background:#F5FAFA;
+    color:#496B75;
+    font-size:11px;
+    font-weight:800;
+    text-align:left;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-transactions .t-table td {
+    padding:15px 12px;
+    border-bottom:1px solid #EDF3F4;
+    color:#47616D;
+    vertical-align:middle;
+}
+.el-customer-mode .coast-transactions .t-table tr:hover td {
+    background:#F9FCFC;
+}
+.el-customer-mode .coast-transactions .t-record {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    min-width:135px;
+}
+.el-customer-mode .coast-transactions .t-record strong {
+    color:var(--t-ink);
+    font-size:12px;
+    overflow-wrap:anywhere;
+}
+.el-customer-mode .coast-transactions .t-record small {
+    color:var(--t-muted);
+    font-size:11px;
+}
+.el-customer-mode .coast-transactions .t-money {
+    color:var(--t-ink);
+    font-weight:850;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-transactions .el-records-balance-unpaid {
+    color:#A56B1D;
+    font-weight:850;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-transactions .el-records-balance-paid {
+    color:#237C62;
+    font-weight:850;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-transactions .el-tx-status {
+    display:inline-flex;
+    align-items:center;
+    padding:7px 11px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-transactions .el-tx-status-paid {
+    color:#237C62;
+    background:#E6F6EE;
+}
+.el-customer-mode .coast-transactions .el-tx-status-unpaid {
+    color:#A63D39;
+    background:#FCE9E7;
+}
+.el-customer-mode .coast-transactions .el-tx-status-partial {
+    color:#986519;
+    background:#FFF2D9;
+}
+.el-customer-mode .coast-transactions .t-view {
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    min-height:35px;
+    padding:8px 12px;
+    border:1px solid #CDE7E9;
+    border-radius:8px;
+    background:#EAF6F6;
+    color:#126E73;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+}
+.el-customer-mode .coast-transactions .t-view:hover {
+    background:#DDF0F1;
+    color:#0F6065;
+}
+.el-customer-mode .coast-transactions .t-pager td {
+    padding:14px;
+    text-align:center;
+}
+.el-customer-mode .coast-transactions .t-pager table {
+    margin:0 auto;
+}
+.el-customer-mode .coast-transactions .t-pager a,
+.el-customer-mode .coast-transactions .t-pager span {
+    display:inline-block;
+    margin:3px;
+    padding:7px 11px;
+    border:1px solid #CFE3E4;
+    border-radius:8px;
+    color:#126E73;
+    text-decoration:none;
+}
+.el-customer-mode .coast-transactions .t-pager span {
+    color:white;
+    background:#168A91;
+    border-color:#168A91;
+}
+.el-customer-mode .coast-transactions .t-payment-panel {
+    margin-top:23px;
+    padding:20px;
+    background:#F7FBFB;
+    border:1px solid #CDE4E6;
+    border-radius:12px;
+    scroll-margin-top:110px;
+}
+.el-customer-mode .coast-transactions .t-payment-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:17px;
+}
+.el-customer-mode .coast-transactions .t-payment-header h3 {
+    margin:0 0 5px;
+    font-size:17px;
+    font-weight:850;
+    color:var(--t-ink);
+}
+.el-customer-mode .coast-transactions .t-payment-caption {
+    color:var(--t-muted);
+    font-size:11px;
+}
+.el-customer-mode .coast-transactions .t-footer {
+    margin-top:17px;
+    padding-top:16px;
+    border-top:1px solid #EDF3F4;
+    color:var(--t-muted);
+    font-size:11px;
+    line-height:1.8;
+}
+.el-customer-mode .coast-transactions .t-bottom-links {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+@media(max-width:1100px) {
+    .el-customer-mode .coast-transactions .t-summary {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .el-customer-mode .coast-transactions .t-filter-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+@media(max-width:600px) {
+    .el-customer-mode .coast-transactions .t-header {
+        padding:25px 20px;
+    }
+    .el-customer-mode .coast-transactions .t-stat {
+        padding:15px;
+    }
+    .el-customer-mode .coast-transactions .t-summary {
+        gap:10px;
+    }
+    .el-customer-mode .coast-transactions .t-panel {
+        padding:15px;
+    }
+    .el-customer-mode .coast-transactions .t-filters {
+        padding:12px;
+    }
+    .el-customer-mode .coast-transactions .t-filter-grid {
+        grid-template-columns:1fr;
+    }
+    .el-customer-mode .coast-transactions .t-actions .t-btn {
+        flex:1;
+    }
+    .el-customer-mode .coast-transactions .t-payment-panel {
+        padding:12px;
+    }
+}
+</style>
+</asp:Content>
+
+<asp:Content ID="Content2"
     ContentPlaceHolderID="MainContent"
     runat="server">
 
-    <style>
-        .el-records-page {
-            width: 100%;
-            max-width: 1450px;
-            margin: 0 auto;
-            padding: 24px 28px 45px;
-            box-sizing: border-box;
-        }
+<div class="coast-transactions">
 
-        .el-records-page *,
-        .el-records-page *::before,
-        .el-records-page *::after {
-            box-sizing: border-box;
-        }
+    <!-- HEADER -->
+    <header class="t-header">
+        <div>
+            <span class="t-eyebrow">PAYMENTS &amp; FEES</span>
+            <h1>My Transactions</h1>
+            <p>Track library fees, outstanding balances,
+               and recorded payments.</p>
+        </div>
 
-        .el-records-heading {
-            margin-bottom: 26px;
-        }
+        <a class="t-btn primary"
+            href="<%= ResolveUrl("~/Customer/Books.aspx") %>">
+            Browse Books →
+        </a>
+    </header>
 
-        .el-records-panel {
-            background: #fff;
-            border: 1px solid #e0e8f1;
-            border-radius: 15px;
-            padding: 26px;
-            margin: 24px 0;
-            box-shadow: 0 4px 18px rgba(20,45,75,.04);
-        }
+    <!-- OVERVIEW -->
+    <section class="t-summary"
+        aria-label="Transaction summary">
 
-        .el-records-panel-heading {
-            margin-bottom: 22px;
-        }
+        <div class="t-stat highlight">
+            <div class="t-stat-icon warm"
+                aria-hidden="true">₱</div>
+            <span class="t-stat-label">Outstanding Balance</span>
+            <strong class="t-stat-value">
+                ₱<asp:Label ID="lblOutstandingBalance"
+                    runat="server" Text="0.00" />
+            </strong>
+        </div>
 
-        .el-tx-summary {
-            display: grid;
-            grid-template-columns: repeat(4,minmax(0,1fr));
-            gap: 14px;
-            margin: 22px 0 28px;
-        }
+        <div class="t-stat">
+            <div class="t-stat-icon"
+                aria-hidden="true">✓</div>
+            <span class="t-stat-label">Total Payments Recorded</span>
+            <strong class="t-stat-value">
+                ₱<asp:Label ID="lblTotalPaid"
+                    runat="server" Text="0.00" />
+            </strong>
+        </div>
 
-        .el-tx-card {
-            background: #fff;
-            border: 1px solid #dce5f0;
-            border-radius: 14px;
-            padding: 20px;
-            min-width: 0;
-        }
+        <div class="t-stat">
+            <div class="t-stat-icon warm"
+                aria-hidden="true">◷</div>
+            <span class="t-stat-label">
+                Unpaid / Partial Transactions
+            </span>
+            <strong class="t-stat-value">
+                <asp:Label ID="lblUnpaidCount"
+                    runat="server" Text="0" />
+            </strong>
+        </div>
 
-        .el-tx-card .el-tx-label {
-            display: block;
-            color: #61748e;
-            font-size: .85rem;
-            margin-bottom: 9px;
-            line-height: 1.5;
-        }
+        <div class="t-stat">
+            <div class="t-stat-icon"
+                aria-hidden="true">▤</div>
+            <span class="t-stat-label">Total Transactions</span>
+            <strong class="t-stat-value">
+                <asp:Label ID="lblTransactionCount"
+                    runat="server" Text="0" />
+            </strong>
+        </div>
 
-        .el-tx-card strong {
-            display: block;
-            color: #142b49;
-            font-size: 1.5rem;
-            overflow-wrap: anywhere;
-        }
+    </section>
 
-        .el-tx-card .el-tx-icon {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
+    <!-- TRANSACTION LIST -->
+    <section class="t-panel">
 
-        .el-tx-filter-panel {
-            background: #f5f8fc;
-            border: 1px solid #dde7f1;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 18px 0 24px;
-        }
-
-        .el-tx-filter-grid {
-            display: grid;
-            grid-template-columns:
-                minmax(190px,2fr)
-                repeat(3,minmax(135px,1fr))
-                auto;
-            gap: 12px;
-            align-items: end;
-        }
-
-        .el-tx-field {
-            min-width: 0;
-        }
-
-        .el-tx-field label {
-            display: block;
-            color: #354c69;
-            font-size: .86rem;
-            font-weight: 650;
-            margin-bottom: 7px;
-        }
-
-        .el-tx-input {
-            display: block;
-            width: 100%;
-            min-height: 42px;
-            border: 1px solid #d4e0ed;
-            border-radius: 9px;
-            background: #fff;
-            color: #172d49;
-            padding: 9px 12px;
-            font: inherit;
-        }
-
-        .el-tx-button {
-            min-height: 42px;
-            border: 1px solid #bed0e2;
-            background: #fff;
-            border-radius: 9px;
-            padding: 9px 15px;
-            color: #1c4169;
-            font-weight: 650;
-            cursor: pointer;
-        }
-
-        .el-tx-results {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            color: #61748e;
-            font-size: .88rem;
-            margin: 18px 0;
-            padding: 0 2px;
-        }
-
-        .el-tx-status {
-            display: inline-block;
-            border-radius: 999px;
-            padding: 5px 10px;
-            font-size: .76rem;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .el-tx-status-paid {
-            background: #e6f6ed;
-            color: #177345;
-        }
-
-        .el-tx-status-unpaid {
-            background: #fff0ed;
-            color: #a53e2b;
-        }
-
-        .el-tx-status-partial {
-            background: #fff5d9;
-            color: #8d6100;
-        }
-
-        .el-records-table-scroll {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid #e3eaf2;
-            border-radius: 11px;
-            background: #fff;
-        }
-
-        .el-records-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-        }
-
-        .el-records-table th {
-            padding: 16px 18px !important;
-            background: #f3f7fb;
-            color: #354c69;
-            font-size: 12px;
-            font-weight: 750;
-            text-align: left;
-            white-space: nowrap;
-            border-bottom: 1px solid #dfe8f2;
-        }
-
-        .el-records-table td {
-            padding: 17px 18px !important;
-            vertical-align: middle;
-            border-bottom: 1px solid #edf1f6;
-            font-size: 13px;
-            line-height: 1.65;
-        }
-
-        .el-records-book-cell {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .el-tx-pager {
-            margin-top: 14px;
-        }
-
-        .el-tx-pager td {
-            padding: 14px !important;
-            text-align: center;
-        }
-
-        .el-tx-pager table {
-            margin: 0 auto;
-        }
-
-        .el-tx-pager a,
-        .el-tx-pager span {
-            display: inline-block;
-            padding: 6px 10px;
-            margin: 2px;
-            border: 1px solid #d5e0eb;
-            border-radius: 7px;
-            text-decoration: none;
-        }
-
-        .el-tx-view {
-            border: 1px solid #cbddef;
-            background: #eaf1f9;
-            color: #235680;
-            border-radius: 7px;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .el-tx-payment-panel {
-            border: 1px solid #dce5ee;
-            border-radius: 12px;
-            background: #fbfdff;
-            padding: 20px;
-            margin-top: 24px;
-        }
-
-        .el-tx-payment-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .el-records-panel-footer {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid #e9eef4;
-        }
-
-        .el-records-bottom-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 24px 0 15px;
-        }
-
-        @media(max-width:1080px) {
-            .el-tx-summary {
-                grid-template-columns: repeat(2,minmax(0,1fr));
-            }
-
-            .el-tx-filter-grid {
-                grid-template-columns: repeat(2,minmax(0,1fr));
-            }
-        }
-
-        @media(max-width:600px) {
-            .el-records-page {
-                padding: 12px 10px 25px;
-            }
-
-            .el-records-panel {
-                padding: 12px;
-            }
-
-            .el-tx-summary {
-                grid-template-columns: repeat(2,minmax(0,1fr));
-                gap: 9px;
-            }
-
-            .el-tx-card {
-                padding: 13px;
-            }
-
-            .el-tx-card strong {
-                font-size: 1.12rem;
-            }
-
-            .el-tx-filter-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .el-tx-results {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-    </style>
-
-    <div class="el-records-page">
-
-        <div class="el-records-heading">
+        <div class="t-panel-head">
             <div>
-                <span class="el-section-eyebrow">
-                    PAYMENT RECORDS
-                </span>
-
-                <h1>My Transactions</h1>
-
-                <p>
-                    View your borrowing fees, payments,
-                    and transaction history.
-                </p>
+                <h2>Transaction History</h2>
+                <p>Review payment status, fees, and
+                   individual receipt payments.</p>
             </div>
-
-            <a href="<%= ResolveUrl("~/Customer/Books.aspx") %>"
-               class="el-records-primary-link">
-                Browse Books →
-            </a>
         </div>
 
-        <!-- SUMMARY CARDS -->
+        <!-- FILTERS -->
+        <div class="t-filters">
 
-        <div class="el-tx-summary">
+            <asp:Panel ID="pnlFilters"
+                runat="server"
+                DefaultButton="btnSearch">
 
-            <div class="el-tx-card">
-                <div class="el-tx-icon">💰</div>
-                <span class="el-tx-label">
-                    Outstanding Balance
-                </span>
-                <strong>
-                    ₱<asp:Label
-                        ID="lblOutstandingBalance"
+                <div class="t-filter-grid">
+
+                    <div class="t-field">
+                        <asp:Label runat="server"
+                            AssociatedControlID="txtSearch"
+                            Text="Search Transactions" />
+
+                        <asp:TextBox ID="txtSearch"
+                            runat="server"
+                            CssClass="t-input"
+                            MaxLength="255"
+                            autocomplete="off"
+                            placeholder="Receipt, book or fee..." />
+                    </div>
+
+                    <div class="t-field">
+                        <asp:Label runat="server"
+                            AssociatedControlID="ddlStatus"
+                            Text="Payment Status" />
+
+                        <asp:DropDownList ID="ddlStatus"
+                            runat="server"
+                            CssClass="t-input">
+
+                            <asp:ListItem Text="All Statuses" Value="All" />
+                            <asp:ListItem Text="Paid" Value="Paid" />
+                            <asp:ListItem Text="Unpaid" Value="Unpaid" />
+                            <asp:ListItem Text="Partially Paid" Value="Partial" />
+
+                        </asp:DropDownList>
+                    </div>
+
+                    <div class="t-field">
+                        <asp:Label runat="server"
+                            AssociatedControlID="ddlMethod"
+                            Text="Payment Method" />
+
+                        <asp:DropDownList ID="ddlMethod"
+                            runat="server"
+                            CssClass="t-input">
+
+                            <asp:ListItem Text="All Methods" Value="All" />
+                            <asp:ListItem Text="Cash" Value="Cash" />
+                            <asp:ListItem Text="GCash" Value="GCash" />
+                            <asp:ListItem Text="Card" Value="Card" />
+                            <asp:ListItem Text="Bank Transfer" Value="Bank Transfer" />
+                            <asp:ListItem Text="Not Set" Value="Not Set" />
+
+                        </asp:DropDownList>
+                    </div>
+
+                    <div class="t-field">
+                        <asp:Label runat="server"
+                            AssociatedControlID="ddlSort"
+                            Text="Sort By" />
+
+                        <asp:DropDownList ID="ddlSort"
+                            runat="server"
+                            CssClass="t-input">
+
+                            <asp:ListItem Text="Newest First" Value="Newest" />
+                            <asp:ListItem Text="Oldest First" Value="Oldest" />
+
+                        </asp:DropDownList>
+                    </div>
+
+                </div>
+
+                <div class="t-actions">
+
+                    <asp:Button ID="btnSearch"
                         runat="server"
-                        Text="0.00" />
-                </strong>
-            </div>
+                        Text="Apply Filters"
+                        CssClass="t-btn primary"
+                        CausesValidation="false"
+                        OnClick="btnSearch_Click" />
 
-            <div class="el-tx-card">
-                <div class="el-tx-icon">💳</div>
-                <span class="el-tx-label">
-                    Total Payments Recorded
-                </span>
-                <strong>
-                    ₱<asp:Label
-                        ID="lblTotalPaid"
+                    <asp:Button ID="btnClear"
                         runat="server"
-                        Text="0.00" />
-                </strong>
-            </div>
+                        Text="Clear Filters"
+                        CssClass="t-btn"
+                        CausesValidation="false"
+                        OnClick="btnClear_Click" />
 
-            <div class="el-tx-card">
-                <div class="el-tx-icon">⏳</div>
-                <span class="el-tx-label">
-                    Unpaid / Partial Transactions
-                </span>
-                <strong>
-                    <asp:Label
-                        ID="lblUnpaidCount"
-                        runat="server"
-                        Text="0" />
-                </strong>
-            </div>
+                    <span class="t-help">
+                        Press Enter or Apply to search.
+                    </span>
 
-            <div class="el-tx-card">
-                <div class="el-tx-icon">🧾</div>
-                <span class="el-tx-label">
-                    Total Transactions
-                </span>
-                <strong>
-                    <asp:Label
-                        ID="lblTransactionCount"
-                        runat="server"
-                        Text="0" />
-                </strong>
-            </div>
+                </div>
+
+            </asp:Panel>
 
         </div>
 
-        <asp:Label
-            ID="lblMessage"
+        <!-- LOCAL ERRORS -->
+        <asp:Label ID="lblMessage"
             runat="server"
             EnableViewState="false"
-            CssClass="el-records-message" />
+            CssClass="el-records-message"
+            role="alert" />
 
-        <!-- TRANSACTION HISTORY -->
+        <div class="t-results">
+            <asp:Label ID="lblResultCount"
+                runat="server"
+                Text="Showing transactions" />
 
-        <section class="el-records-panel">
+            <span>Payment status reflects the remaining balance.</span>
+        </div>
 
-            <div class="el-records-panel-heading">
+        <!-- TRANSACTION TABLE -->
+        <div class="t-table-wrap">
+
+            <asp:GridView ID="gvTransactions"
+                runat="server"
+                AutoGenerateColumns="False"
+                GridLines="None"
+                CssClass="t-table"
+                EmptyDataText="No transactions match your filters."
+                AllowPaging="true"
+                PageSize="10"
+                OnPageIndexChanging="gvTransactions_PageIndexChanging">
+
+                <PagerStyle CssClass="t-pager" />
+
+                <Columns>
+
+                    <asp:TemplateField HeaderText="Receipt">
+                        <ItemTemplate>
+                            <div class="t-record">
+                                <strong>
+                                    <%#: Eval("ReceiptNo") %>
+                                </strong>
+                                <small>
+                                    ID: <%#: Eval("ReceiptID") %>
+                                </small>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Book / Fee">
+                        <ItemTemplate>
+                            <div class="t-record">
+                                <strong>
+                                    <%#: Eval("Title") %>
+                                </strong>
+                                <small>
+                                    <%#: Eval("FeeType") %>
+                                </small>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Amount Paid">
+                        <ItemTemplate>
+                            <span class="t-money">
+                                ₱<%# Eval("AmountPaid","{0:N2}") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Balance">
+                        <ItemTemplate>
+                            <span class='<%# GetBalanceClass(
+                                Eval("Balance")) %>'>
+                                ₱<%# Eval("Balance","{0:N2}") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Status">
+                        <ItemTemplate>
+                            <span class='<%# GetPaymentStatusClass(
+                                Eval("Balance"),
+                                Eval("AmountPaid")) %>'>
+
+                                <%#: GetPaymentStatus(
+                                    Eval("Balance"),
+                                    Eval("AmountPaid")) %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Method / Date">
+                        <ItemTemplate>
+                            <div class="t-record">
+                                <strong>
+                                    <%#: Eval("PaymentMethod") == DBNull.Value
+                                        ? "—"
+                                        : Eval("PaymentMethod") %>
+                                </strong>
+                                <small>
+                                    <%# Eval("TransactionDate") == DBNull.Value
+                                        ? "—"
+                                        : Convert.ToDateTime(
+                                            Eval("TransactionDate"))
+                                            .ToString("MMM dd, yyyy") %>
+                                </small>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Details">
+                        <ItemTemplate>
+                            <asp:Button ID="btnViewPayments"
+                                runat="server"
+                                Text="View Payments"
+                                CssClass="t-view"
+                                CommandName="ViewPayments"
+                                CommandArgument='<%# Eval("ReceiptID") %>'
+                                CausesValidation="false"
+                                OnCommand="btnViewPayments_Command" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
+
+            </asp:GridView>
+
+        </div>
+
+        <!-- INDIVIDUAL PAYMENT HISTORY -->
+        <asp:Panel ID="pnlPaymentHistory"
+            runat="server"
+            Visible="false"
+            ClientIDMode="Static"
+            CssClass="t-payment-panel">
+
+            <div class="t-payment-header">
                 <div>
-                    <h2>Transaction History</h2>
-                    <p>
-                        Search and review your recorded library
-                        payments and remaining balances.
-                    </p>
-                </div>
-            </div>
+                    <h3>Individual Payment History</h3>
 
-            <div class="el-tx-filter-panel">
-
-                <asp:Panel
-                    ID="pnlFilters"
-                    runat="server"
-                    DefaultButton="btnSearch">
-
-                    <div class="el-tx-filter-grid">
-
-                        <div class="el-tx-field">
-                            <label for="<%= txtSearch.ClientID %>">
-                                Search Transactions
-                            </label>
-
-                            <asp:TextBox
-                                ID="txtSearch"
-                                runat="server"
-                                CssClass="el-tx-input"
-                                MaxLength="255"
-                                placeholder="Receipt number, book, or fee type..." />
-                        </div>
-
-                        <div class="el-tx-field">
-                            <label for="<%= ddlStatus.ClientID %>">
-                                Payment Status
-                            </label>
-
-                            <asp:DropDownList
-                                ID="ddlStatus"
-                                runat="server"
-                                CssClass="el-tx-input">
-
-                                <asp:ListItem Text="All Statuses" Value="All" />
-                                <asp:ListItem Text="Paid" Value="Paid" />
-                                <asp:ListItem Text="Unpaid" Value="Unpaid" />
-                                <asp:ListItem Text="Partially Paid" Value="Partial" />
-
-                            </asp:DropDownList>
-                        </div>
-
-                        <div class="el-tx-field">
-                            <label for="<%= ddlMethod.ClientID %>">
-                                Payment Method
-                            </label>
-
-                            <asp:DropDownList
-                                ID="ddlMethod"
-                                runat="server"
-                                CssClass="el-tx-input">
-
-                                <asp:ListItem Text="All Methods" Value="All" />
-                                <asp:ListItem Text="Cash" Value="Cash" />
-                                <asp:ListItem Text="GCash" Value="GCash" />
-                                <asp:ListItem Text="Card" Value="Card" />
-                                <asp:ListItem Text="Bank Transfer" Value="Bank Transfer" />
-                                <asp:ListItem Text="Not Set" Value="Not Set" />
-
-                            </asp:DropDownList>
-                        </div>
-
-                        <div class="el-tx-field">
-                            <label for="<%= ddlSort.ClientID %>">
-                                Sort By
-                            </label>
-
-                            <asp:DropDownList
-                                ID="ddlSort"
-                                runat="server"
-                                CssClass="el-tx-input">
-
-                                <asp:ListItem Text="Newest First" Value="Newest" />
-                                <asp:ListItem Text="Oldest First" Value="Oldest" />
-
-                            </asp:DropDownList>
-                        </div>
-
-                        <div class="el-tx-field">
-                            <asp:Button
-                                ID="btnSearch"
-                                runat="server"
-                                Text="Apply Filters"
-                                CssClass="btn btn-primary"
-                                OnClick="btnSearch_Click" />
-                        </div>
-
-                    </div>
-
-                    <div style="margin-top:10px;">
-                        <asp:Button
-                            ID="btnClear"
-                            runat="server"
-                            Text="Clear Filters"
-                            CssClass="el-tx-button"
-                            OnClick="btnClear_Click"
-                            CausesValidation="false" />
-                    </div>
-
-                </asp:Panel>
-
-            </div>
-
-            <div class="el-tx-results">
-                <span>
-                    <asp:Label
-                        ID="lblResultCount"
+                    <asp:Label ID="lblSelectedReceipt"
                         runat="server"
-                        Text="Showing 0 of 0 transactions" />
-                </span>
+                        CssClass="t-payment-caption" />
+                </div>
 
-                <span>
-                    Payment status is based on the remaining balance.
-                </span>
+                <asp:Button ID="btnClosePaymentHistory"
+                    runat="server"
+                    Text="Close Details"
+                    CssClass="t-btn"
+                    CausesValidation="false"
+                    OnClick="btnClosePaymentHistory_Click" />
             </div>
 
-            <div class="el-records-table-scroll">
+            <asp:Label ID="lblPaymentHistoryMessage"
+                runat="server"
+                CssClass="t-payment-caption" />
 
-                <asp:GridView
-                    ID="gvTransactions"
+            <div class="t-table-wrap">
+
+                <asp:GridView ID="gvPaymentHistory"
                     runat="server"
                     AutoGenerateColumns="False"
-                    CssClass="el-records-table"
                     GridLines="None"
-                    EmptyDataText="No transactions match your search or filters."
-                    AllowPaging="true"
-                    PageSize="10"
-                    OnPageIndexChanging="gvTransactions_PageIndexChanging">
-
-                    <PagerStyle CssClass="el-tx-pager" />
+                    CssClass="t-table"
+                    EmptyDataText="No payments recorded for this receipt.">
 
                     <Columns>
 
-                        <asp:TemplateField HeaderText="Receipt">
-                            <ItemTemplate>
-                                <div class="el-records-book-cell">
-                                    <strong>
-                                        <%#: Eval("ReceiptNo") %>
-                                    </strong>
-                                    <small>
-                                        ID: <%#: Eval("ReceiptID") %>
-                                    </small>
-                                </div>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField
+                            DataField="PaymentID"
+                            HeaderText="Payment ID" />
 
-                        <asp:TemplateField HeaderText="Book">
-                            <ItemTemplate>
-                                <strong class="el-records-book-title">
-                                    <%#: Eval("Title") %>
-                                </strong>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField
+                            DataField="AmountPaid"
+                            HeaderText="Amount Paid"
+                            DataFormatString="₱{0:N2}" />
 
-                        <asp:TemplateField HeaderText="Fee Type">
-                            <ItemTemplate>
-                                <span class="el-records-fee-type">
-                                    <%#: Eval("FeeType") %>
-                                </span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField
+                            DataField="BalanceBefore"
+                            HeaderText="Balance Before"
+                            DataFormatString="₱{0:N2}" />
 
-                        <asp:TemplateField HeaderText="Amount Paid">
-                            <ItemTemplate>
-                                <span class="el-records-money">
-                                    ₱<%# Eval("AmountPaid", "{0:N2}") %>
-                                </span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                        <asp:TemplateField HeaderText="Remaining Balance">
-                            <ItemTemplate>
-                                <span class='<%# GetBalanceClass(Eval("Balance")) %>'>
-                                    ₱<%# Eval("Balance", "{0:N2}") %>
-                                </span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                        <asp:TemplateField HeaderText="Status">
-                            <ItemTemplate>
-                                <span class='<%# GetPaymentStatusClass(
-                                    Eval("Balance"),
-                                    Eval("AmountPaid")) %>'>
-                                    <%#: GetPaymentStatus(
-                                        Eval("Balance"),
-                                        Eval("AmountPaid")) %>
-                                </span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField
+                            DataField="BalanceAfter"
+                            HeaderText="Balance After"
+                            DataFormatString="₱{0:N2}" />
 
                         <asp:BoundField
                             DataField="PaymentMethod"
-                            HeaderText="Payment Method"
-                            NullDisplayText="—" />
+                            HeaderText="Payment Method" />
 
                         <asp:BoundField
-                            DataField="TransactionDate"
-                            HeaderText="Transaction Date"
+                            DataField="PaymentDate"
+                            HeaderText="Payment Date"
                             DataFormatString="{0:MMM dd, yyyy hh:mm tt}" />
-
-                        <asp:TemplateField HeaderText="Payment Details">
-                            <ItemTemplate>
-
-                                <asp:Button
-                                    ID="btnViewPayments"
-                                    runat="server"
-                                    Text="View Payments"
-                                    CssClass="el-tx-view"
-                                    CommandName="ViewPayments"
-                                    CommandArgument='<%# Eval("ReceiptID") %>'
-                                    CausesValidation="false"
-                                    OnCommand="btnViewPayments_Command" />
-
-                            </ItemTemplate>
-                        </asp:TemplateField>
 
                     </Columns>
 
                 </asp:GridView>
 
             </div>
+        </asp:Panel>
 
-            <!-- CUSTOMER INDIVIDUAL PAYMENT HISTORY -->
-
-            <asp:Panel
-                ID="pnlPaymentHistory"
-                runat="server"
-                Visible="false"
-                CssClass="el-tx-payment-panel">
-
-                <div class="el-tx-payment-head">
-                    <div>
-                        <h3>Individual Payment History</h3>
-
-                        <asp:Label
-                            ID="lblSelectedReceipt"
-                            runat="server" />
-                    </div>
-
-                    <asp:Button
-                        ID="btnClosePaymentHistory"
-                        runat="server"
-                        Text="Close"
-                        CssClass="el-tx-button"
-                        CausesValidation="false"
-                        OnClick="btnClosePaymentHistory_Click" />
-                </div>
-
-                <asp:Label
-                    ID="lblPaymentHistoryMessage"
-                    runat="server"
-                    CssClass="el-records-message" />
-
-                <div class="el-records-table-scroll">
-
-                    <asp:GridView
-                        ID="gvPaymentHistory"
-                        runat="server"
-                        AutoGenerateColumns="False"
-                        GridLines="None"
-                        CssClass="el-records-table"
-                        EmptyDataText="No individual payments recorded for this receipt.">
-
-                        <Columns>
-
-                            <asp:BoundField
-                                DataField="PaymentID"
-                                HeaderText="Payment ID" />
-
-                            <asp:BoundField
-                                DataField="AmountPaid"
-                                HeaderText="Amount Paid"
-                                DataFormatString="₱{0:N2}" />
-
-                            <asp:BoundField
-                                DataField="BalanceBefore"
-                                HeaderText="Balance Before"
-                                DataFormatString="₱{0:N2}" />
-
-                            <asp:BoundField
-                                DataField="BalanceAfter"
-                                HeaderText="Balance After"
-                                DataFormatString="₱{0:N2}" />
-
-                            <asp:BoundField
-                                DataField="PaymentMethod"
-                                HeaderText="Payment Method" />
-
-                            <asp:BoundField
-                                DataField="PaymentDate"
-                                HeaderText="Payment Date"
-                                DataFormatString="{0:MMM dd, yyyy hh:mm tt}" />
-
-                        </Columns>
-
-                    </asp:GridView>
-
-                </div>
-
-            </asp:Panel>
-
-            <div class="el-records-panel-footer">
-                <span>
-                    These records reflect transactions stored
-                    in the library system.
-                </span>
-            </div>
-
-        </section>
-
-        <div class="el-records-bottom-actions">
-
-            <asp:HyperLink
-                ID="lnkBooks"
-                runat="server"
-                NavigateUrl="~/Customer/Books.aspx"
-                CssClass="btn btn-primary">
-                Browse Books
-            </asp:HyperLink>
-
-            <asp:HyperLink
-                ID="lnkBorrows"
-                runat="server"
-                NavigateUrl="~/Customer/MyBorrows.aspx"
-                CssClass="btn btn-outline-secondary">
-                My Borrowings
-            </asp:HyperLink>
-
+        <div class="t-footer">
+            Transaction amounts and payment histories are
+            retrieved from library records. If a balance
+            remains unpaid, coordinate with the librarian
+            regarding payment arrangements.
         </div>
 
+    </section>
+
+    <!-- NAVIGATION -->
+    <div class="t-bottom-links">
+
+        <asp:HyperLink ID="lnkBooks"
+            runat="server"
+            NavigateUrl="~/Customer/Books.aspx"
+            CssClass="t-btn primary"
+            Text="Browse Books" />
+
+        <asp:HyperLink ID="lnkBorrows"
+            runat="server"
+            NavigateUrl="~/Customer/MyBorrows.aspx"
+            CssClass="t-btn"
+            Text="My Borrowings" />
+
     </div>
+
+</div>
+
+<script type="text/javascript">
+(function () {
+    var panel = document.getElementById("pnlPaymentHistory");
+    if (!panel) return;
+
+    var trigger = document.activeElement;
+    if (trigger && trigger.id &&
+        trigger.id.indexOf("btnViewPayments") !== -1) {
+
+        panel.scrollIntoView({
+            behavior: window.matchMedia(
+                "(prefers-reduced-motion: reduce)").matches
+                ? "auto" : "smooth",
+            block: "start"
+        });
+    }
+})();
+</script>
 
 </asp:Content>

@@ -16,61 +16,42 @@ namespace ELibrary.Admin.Books
                 .ConnectionStrings["ElibraryConnection"]
                 .ConnectionString;
 
-        // ==========================================
-        // APPLIED FILTERS
-        // ==========================================
-
-        private string AppliedSearch
+        private bool EditorOpen
         {
             get
             {
-                return (string)(ViewState["AppliedSearch"] ?? "");
+                return (bool)(ViewState["GenreEditorOpen"] ?? false);
             }
             set
             {
-                ViewState["AppliedSearch"] = value;
+                ViewState["GenreEditorOpen"] = value;
+                pnlGenreEditor.Visible = value;
             }
+        }
+
+        private string AppliedSearch
+        {
+            get { return (string)(ViewState["AppliedSearch"] ?? ""); }
+            set { ViewState["AppliedSearch"] = value; }
         }
 
         private string AppliedSort
         {
-            get
-            {
-                return (string)(ViewState["AppliedSort"] ?? "Default");
-            }
-            set
-            {
-                ViewState["AppliedSort"] = value;
-            }
+            get { return (string)(ViewState["AppliedSort"] ?? "Default"); }
+            set { ViewState["AppliedSort"] = value; }
         }
 
         private int CurrentPage
         {
-            get
-            {
-                return (int)(ViewState["CurrentPage"] ?? 1);
-            }
-            set
-            {
-                ViewState["CurrentPage"] = value;
-            }
+            get { return (int)(ViewState["CurrentPage"] ?? 1); }
+            set { ViewState["CurrentPage"] = value; }
         }
 
         private int TotalPages
         {
-            get
-            {
-                return (int)(ViewState["TotalPages"] ?? 1);
-            }
-            set
-            {
-                ViewState["TotalPages"] = value;
-            }
+            get { return (int)(ViewState["TotalPages"] ?? 1); }
+            set { ViewState["TotalPages"] = value; }
         }
-
-        // ==========================================
-        // PAGE LOAD
-        // ==========================================
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -82,12 +63,47 @@ namespace ELibrary.Admin.Books
 
             if (!IsPostBack)
             {
+                ClearForm();
+                EditorOpen = false;
                 LoadGenres();
             }
+            else
+            {
+                pnlGenreEditor.Visible = EditorOpen;
+            }
+
+            hfFocusTarget.Value = "";
+        }
+
+        private void ShowListMessage(string message, bool success)
+        {
+            lblListMessage.Text = Server.HtmlEncode(message);
+            lblListMessage.CssClass = success
+                ? "gn-message success"
+                : "gn-message error";
+
+            hfFocusTarget.Value = "genreCatalog";
+        }
+
+        private void ShowEditorMessage(string message, bool success)
+        {
+            EditorOpen = true;
+
+            lblEditorMessage.Text = Server.HtmlEncode(message);
+            lblEditorMessage.CssClass = success
+                ? "gn-message success"
+                : "gn-message error";
+
+            hfFocusTarget.Value = "pnlGenreEditor";
+        }
+
+        private void FocusSection(string sectionID)
+        {
+            hfFocusTarget.Value = sectionID;
         }
 
         // ==========================================
-        // LOAD GENRES
+        // SERVER-SIDE SEARCH AND PAGINATION
         // ==========================================
 
         private void LoadGenres()
@@ -132,13 +148,11 @@ namespace ELibrary.Admin.Books
                     "Genre search returned incomplete data.");
             }
 
-            int filteredCount = 0;
-
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                filteredCount = Convert.ToInt32(
-                    ds.Tables[0].Rows[0]["FilteredCount"]);
-            }
+            int filteredCount =
+                ds.Tables[0].Rows.Count > 0
+                ? Convert.ToInt32(
+                    ds.Tables[0].Rows[0]["FilteredCount"])
+                : 0;
 
             TotalPages = Math.Max(
                 1,
@@ -157,7 +171,7 @@ namespace ELibrary.Admin.Books
 
             int first = filteredCount == 0
                 ? 0
-                : ((CurrentPage - 1) * PageSize) + 1;
+                : (CurrentPage - 1) * PageSize + 1;
 
             int last = Math.Min(
                 CurrentPage * PageSize,
@@ -165,49 +179,17 @@ namespace ELibrary.Admin.Books
 
             lblResultCount.Text = string.Format(
                 "Showing {0}–{1} of {2} genres",
-                first,
-                last,
-                filteredCount);
+                first, last, filteredCount);
 
             lblPageInfo.Text = string.Format(
                 "Page {0} of {1}",
-                CurrentPage,
-                TotalPages);
+                CurrentPage, TotalPages);
 
             btnPrevious.Visible = TotalPages > 1;
             btnNext.Visible = TotalPages > 1;
 
             btnPrevious.Enabled = CurrentPage > 1;
             btnNext.Enabled = CurrentPage < TotalPages;
-        }
-
-        // ==========================================
-        // SEARCH / FILTER
-        // ==========================================
-
-        protected void btnApply_Click(
-            object sender,
-            EventArgs e)
-        {
-            AppliedSearch = (txtSearch.Text ?? "").Trim();
-            AppliedSort = ddlSort.SelectedValue;
-
-            CurrentPage = 1;
-            RefreshGenres();
-        }
-
-        protected void btnClearFilters_Click(
-            object sender,
-            EventArgs e)
-        {
-            txtSearch.Text = "";
-            ddlSort.SelectedValue = "Default";
-
-            AppliedSearch = "";
-            AppliedSort = "Default";
-
-            CurrentPage = 1;
-            RefreshGenres();
         }
 
         private void RefreshGenres()
@@ -218,204 +200,97 @@ namespace ELibrary.Admin.Books
             }
             catch (Exception)
             {
-                ShowMessage(
-                    "Unable to load genres.",
+                ShowListMessage(
+                    "Unable to load the genre catalog.",
                     false);
             }
         }
 
-        // ==========================================
-        // PAGINATION
-        // ==========================================
+        protected void btnApply_Click(object sender, EventArgs e)
+        {
+            AppliedSearch = (txtSearch.Text ?? "").Trim();
+            AppliedSort = ddlSort.SelectedValue;
+            CurrentPage = 1;
 
-        protected void btnPrevious_Click(
-            object sender,
-            EventArgs e)
+            RefreshGenres();
+
+            if (string.IsNullOrEmpty(hfFocusTarget.Value))
+                FocusSection("genreCatalog");
+        }
+
+        protected void btnClearFilters_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = "";
+            ddlSort.SelectedValue = "Default";
+
+            AppliedSearch = "";
+            AppliedSort = "Default";
+            CurrentPage = 1;
+
+            RefreshGenres();
+
+            if (string.IsNullOrEmpty(hfFocusTarget.Value))
+                FocusSection("genreCatalog");
+        }
+
+        protected void btnPrevious_Click(object sender, EventArgs e)
         {
             if (CurrentPage > 1)
             {
                 CurrentPage--;
                 RefreshGenres();
             }
+
+            if (string.IsNullOrEmpty(hfFocusTarget.Value))
+                FocusSection("genreCatalog");
         }
 
-        protected void btnNext_Click(
-            object sender,
-            EventArgs e)
+        protected void btnNext_Click(object sender, EventArgs e)
         {
             if (CurrentPage < TotalPages)
             {
                 CurrentPage++;
                 RefreshGenres();
             }
+
+            if (string.IsNullOrEmpty(hfFocusTarget.Value))
+                FocusSection("genreCatalog");
         }
 
         // ==========================================
-        // SAVE GENRE
+        // EDITOR
         // ==========================================
 
-        protected void btnSave_Click(
-            object sender,
-            EventArgs e)
+        protected void btnCreateGenre_Click(object sender, EventArgs e)
         {
-            string genreName =
-                txtGenreName.Text.Trim();
-
-            string genreDesc =
-                txtGenreDesc.Text.Trim();
-
-            int genreID;
-
-            if (!int.TryParse(hfGenreID.Value, out genreID)
-                || genreID < 0)
-            {
-                ShowMessage("Invalid genre ID.", false);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(genreName))
-            {
-                ShowMessage("Genre name is required.", false);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(genreDesc))
-            {
-                ShowMessage(
-                    "Genre description is required.", false);
-                return;
-            }
-
-            if (genreName.Length > 100 ||
-                genreDesc.Length > 255)
-            {
-                ShowMessage(
-                    "Genre name or description is too long.",
-                    false);
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection con =
-                    new SqlConnection(connectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EGenre_WebValidate", con))
-                {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
-                    cmd.Parameters.Add(
-                        "@GenreID",
-                        SqlDbType.Int).Value =
-                        genreID == 0
-                            ? (object)DBNull.Value
-                            : genreID;
-
-                    cmd.Parameters.Add(
-                        "@GenreName",
-                        SqlDbType.VarChar,
-                        100).Value = genreName;
-
-                    con.Open();
-
-                    object result = cmd.ExecuteScalar();
-
-                    if (result != null &&
-                        result != DBNull.Value &&
-                        Convert.ToInt32(result) == 0)
-                    {
-                        ShowMessage(
-                            "This genre already exists.", false);
-                        return;
-                    }
-                }
-
-                using (SqlConnection con =
-                    new SqlConnection(connectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EGenre_WebSave", con))
-                {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
-                    cmd.Parameters.Add(
-                        "@GenreID",
-                        SqlDbType.Int).Value =
-                        genreID == 0
-                            ? (object)DBNull.Value
-                            : genreID;
-
-                    cmd.Parameters.Add(
-                        "@GenreName",
-                        SqlDbType.VarChar,
-                        100).Value = genreName;
-
-                    cmd.Parameters.Add(
-                        "@GenreDesc",
-                        SqlDbType.VarChar,
-                        255).Value = genreDesc;
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
-
-                ClearForm();
-                RefreshGenres();
-
-                ShowMessage(
-                    genreID == 0
-                        ? "Genre added successfully."
-                        : "Genre updated successfully.",
-                    true);
-            }
-            catch (Exception ex)
-            {
-                ShowMessage(
-                    "Unable to save genre: " + ex.Message,
-                    false);
-            }
+            ClearForm();
+            EditorOpen = true;
+            FocusSection("pnlGenreEditor");
         }
 
-        // ==========================================
-        // EDIT / DELETE COMMANDS
-        // ==========================================
-
-        protected void gvGenres_RowCommand(
-            object sender,
-            GridViewCommandEventArgs e)
+        protected void btnCloseEditor_Click(object sender, EventArgs e)
         {
-            if (e.CommandName != "EditGenre" &&
-                e.CommandName != "DeleteGenre")
-            {
-                return;
-            }
-
-            int genreID;
-
-            if (!int.TryParse(
-                Convert.ToString(e.CommandArgument),
-                out genreID))
-            {
-                ShowMessage("Invalid genre ID.", false);
-                return;
-            }
-
-            if (e.CommandName == "EditGenre")
-            {
-                LoadGenre(genreID);
-            }
-            else
-            {
-                DeleteGenre(genreID);
-            }
+            ClearForm();
+            EditorOpen = false;
+            FocusSection("genreCatalog");
         }
 
-        // ==========================================
-        // LOAD ONE GENRE FOR EDITING
-        // ==========================================
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            ClearForm();
+            EditorOpen = true;
+            lblEditorMessage.Text = "";
+            FocusSection("pnlGenreEditor");
+        }
+
+        private void ClearForm()
+        {
+            hfGenreID.Value = "0";
+            txtGenreName.Text = "";
+            txtGenreDesc.Text = "";
+            btnSave.Text = "Save Genre";
+            lblEditorTitle.Text = "Add New Genre";
+        }
 
         private void LoadGenre(int genreID)
         {
@@ -426,12 +301,11 @@ namespace ELibrary.Admin.Books
                 using (SqlCommand cmd =
                     new SqlCommand("EGenre_WebOne", con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.Add(
-                        "@GenreID",
-                        SqlDbType.Int).Value = genreID;
+                        "@GenreID", SqlDbType.Int).Value =
+                        genreID;
 
                     con.Open();
 
@@ -440,8 +314,9 @@ namespace ELibrary.Admin.Books
                     {
                         if (!reader.Read())
                         {
-                            ShowMessage(
-                                "Genre not found.", false);
+                            ShowListMessage(
+                                "The selected genre was not found.",
+                                false);
                             return;
                         }
 
@@ -455,20 +330,173 @@ namespace ELibrary.Admin.Books
                             Convert.ToString(reader["GenreDesc"]);
 
                         btnSave.Text = "Update Genre";
+                        lblEditorTitle.Text = "Edit Genre";
+
+                        EditorOpen = true;
+                        FocusSection("pnlGenreEditor");
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ShowMessage(
-                    "Unable to load genre: " + ex.Message,
+                ShowListMessage(
+                    "Unable to load the selected genre.",
                     false);
             }
         }
 
         // ==========================================
-        // DELETE GENRE
+        // CREATE OR UPDATE GENRE
         // ==========================================
+
+        protected void btnSave_Click(object sender, EventArgs e)
+        {
+            EditorOpen = true;
+
+            string genreName = (txtGenreName.Text ?? "").Trim();
+            string genreDesc = (txtGenreDesc.Text ?? "").Trim();
+
+            int genreID;
+
+            if (!int.TryParse(hfGenreID.Value, out genreID)
+                || genreID < 0)
+            {
+                ShowEditorMessage("Invalid genre ID.", false);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(genreName))
+            {
+                ShowEditorMessage("Genre name is required.", false);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(genreDesc))
+            {
+                ShowEditorMessage(
+                    "Genre description is required.",
+                    false);
+                return;
+            }
+
+            if (genreName.Length > 100 || genreDesc.Length > 255)
+            {
+                ShowEditorMessage(
+                    "Genre name or description is too long.",
+                    false);
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection con =
+                    new SqlConnection(connectionString))
+                using (SqlCommand cmd =
+                    new SqlCommand("EGenre_WebValidate", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(
+                        "@GenreID", SqlDbType.Int).Value =
+                        genreID == 0
+                        ? (object)DBNull.Value
+                        : genreID;
+
+                    cmd.Parameters.Add(
+                        "@GenreName", SqlDbType.VarChar, 100).Value =
+                        genreName;
+
+                    con.Open();
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null
+                        && result != DBNull.Value
+                        && Convert.ToInt32(result) == 0)
+                    {
+                        ShowEditorMessage(
+                            "This genre already exists.",
+                            false);
+                        return;
+                    }
+                }
+
+                using (SqlConnection con =
+                    new SqlConnection(connectionString))
+                using (SqlCommand cmd =
+                    new SqlCommand("EGenre_WebSave", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(
+                        "@GenreID", SqlDbType.Int).Value =
+                        genreID == 0
+                        ? (object)DBNull.Value
+                        : genreID;
+
+                    cmd.Parameters.Add(
+                        "@GenreName", SqlDbType.VarChar, 100).Value =
+                        genreName;
+
+                    cmd.Parameters.Add(
+                        "@GenreDesc", SqlDbType.VarChar, 255).Value =
+                        genreDesc;
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+
+                ClearForm();
+                RefreshGenres();
+
+                ShowEditorMessage(
+                    genreID == 0
+                    ? "Genre added successfully."
+                    : "Genre updated successfully.",
+                    true);
+            }
+            catch (Exception ex)
+            {
+                ShowEditorMessage(
+                    "Unable to save genre: " + ex.Message,
+                    false);
+            }
+        }
+
+        // ==========================================
+        // GRID ACTIONS
+        // ==========================================
+
+        protected void gvGenres_RowCommand(
+            object sender,
+            GridViewCommandEventArgs e)
+        {
+            if (e.CommandName != "EditGenre"
+                && e.CommandName != "DeleteGenre")
+            {
+                return;
+            }
+
+            int genreID;
+
+            if (!int.TryParse(
+                Convert.ToString(e.CommandArgument),
+                out genreID)
+                || genreID <= 0)
+            {
+                ShowListMessage("Invalid genre ID.", false);
+                return;
+            }
+
+            if (e.CommandName == "EditGenre")
+            {
+                LoadGenre(genreID);
+            }
+            else
+            {
+                DeleteGenre(genreID);
+            }
+        }
 
         private void DeleteGenre(int genreID)
         {
@@ -479,66 +507,37 @@ namespace ELibrary.Admin.Books
                 using (SqlCommand cmd =
                     new SqlCommand("EGenre_WebDelete", con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.Add(
-                        "@GenreID",
-                        SqlDbType.Int).Value = genreID;
+                        "@GenreID", SqlDbType.Int).Value =
+                        genreID;
 
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
 
-                ClearForm();
+                int editingID;
+
+                if (int.TryParse(hfGenreID.Value, out editingID)
+                    && editingID == genreID)
+                {
+                    ClearForm();
+                    EditorOpen = false;
+                }
+
                 RefreshGenres();
 
-                ShowMessage(
-                    "Genre deleted successfully.", true);
+                ShowListMessage(
+                    "Genre deleted successfully.",
+                    true);
             }
             catch (Exception ex)
             {
-                ShowMessage(
+                ShowListMessage(
                     "Unable to delete genre: " + ex.Message,
                     false);
             }
-        }
-
-        // ==========================================
-        // CLEAR EDITOR
-        // ==========================================
-
-        protected void btnCancel_Click(
-            object sender,
-            EventArgs e)
-        {
-            ClearForm();
-            lblMessage.Text = "";
-        }
-
-        private void ClearForm()
-        {
-            hfGenreID.Value = "0";
-            txtGenreName.Text = "";
-            txtGenreDesc.Text = "";
-            btnSave.Text = "Save Genre";
-        }
-
-        // ==========================================
-        // MESSAGE
-        // ==========================================
-
-        private void ShowMessage(
-            string message,
-            bool success)
-        {
-            lblMessage.CssClass =
-                success
-                    ? "el-ac-message success"
-                    : "el-ac-message error";
-
-            lblMessage.Text =
-                Server.HtmlEncode(message);
         }
     }
 }

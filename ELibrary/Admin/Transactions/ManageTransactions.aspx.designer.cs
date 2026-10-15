@@ -15,13 +15,112 @@ namespace ELibrary.Admin.Transactions
     {
 
         /// <summary>
-        /// lblMessage control.
+        /// pnlUnpaidFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Panel pnlUnpaidFilters;
+
+        /// <summary>
+        /// txtUnpaidSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUnpaidSearch;
+
+        /// <summary>
+        /// ddlUnpaidFee control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlUnpaidFee;
+
+        /// <summary>
+        /// ddlUnpaidSort control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlUnpaidSort;
+
+        /// <summary>
+        /// btnUnpaidApply control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnpaidApply;
+
+        /// <summary>
+        /// btnUnpaidClear control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnpaidClear;
+
+        /// <summary>
+        /// lblUnpaidMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUnpaidMessage;
+
+        /// <summary>
+        /// lblUnpaidCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUnpaidCount;
+
+        /// <summary>
+        /// gvUnpaid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvUnpaid;
+
+        /// <summary>
+        /// btnUnpaidPrevious control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnpaidPrevious;
+
+        /// <summary>
+        /// lblUnpaidPage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUnpaidPage;
+
+        /// <summary>
+        /// btnUnpaidNext control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnpaidNext;
 
         /// <summary>
         /// pnlHistoryFilters control.
@@ -85,6 +184,15 @@ namespace ELibrary.Admin.Transactions
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnHistoryClear;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// lblHistoryCount control.
@@ -159,6 +267,15 @@ namespace ELibrary.Admin.Transactions
         protected global::System.Web.UI.WebControls.Button btnClosePaymentHistory;
 
         /// <summary>
+        /// lblPaymentDetailsMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPaymentDetailsMessage;
+
+        /// <summary>
         /// lblPaymentHistoryMessage control.
         /// </summary>
         /// <remarks>
@@ -177,102 +294,12 @@ namespace ELibrary.Admin.Transactions
         protected global::System.Web.UI.WebControls.GridView gvPaymentHistory;
 
         /// <summary>
-        /// pnlUnpaidFilters control.
+        /// hfFocusTarget control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlUnpaidFilters;
-
-        /// <summary>
-        /// txtUnpaidSearch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtUnpaidSearch;
-
-        /// <summary>
-        /// ddlUnpaidFee control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlUnpaidFee;
-
-        /// <summary>
-        /// ddlUnpaidSort control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlUnpaidSort;
-
-        /// <summary>
-        /// btnUnpaidApply control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUnpaidApply;
-
-        /// <summary>
-        /// btnUnpaidClear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUnpaidClear;
-
-        /// <summary>
-        /// lblUnpaidCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUnpaidCount;
-
-        /// <summary>
-        /// gvUnpaid control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvUnpaid;
-
-        /// <summary>
-        /// btnUnpaidPrevious control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUnpaidPrevious;
-
-        /// <summary>
-        /// lblUnpaidPage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUnpaidPage;
-
-        /// <summary>
-        /// btnUnpaidNext control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUnpaidNext;
+        protected global::System.Web.UI.WebControls.HiddenField hfFocusTarget;
     }
 }

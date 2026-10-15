@@ -16,8 +16,21 @@ namespace ELibrary.Admin.Users
                 "ElibraryConnection"].ConnectionString;
 
         // ==========================================
-        // APPLIED SEARCH / FILTER STATE
+        // VIEW STATE
         // ==========================================
+
+        private bool EditorOpen
+        {
+            get
+            {
+                return (bool)(ViewState["EditorOpen"] ?? false);
+            }
+            set
+            {
+                ViewState["EditorOpen"] = value;
+                pnlUserEditor.Visible = value;
+            }
+        }
 
         private string AppliedSearch
         {
@@ -37,13 +50,19 @@ namespace ELibrary.Admin.Users
 
         private string AppliedBorrowing
         {
-            get { return (string)(ViewState["AppliedBorrowing"] ?? "All"); }
+            get
+            {
+                return (string)(ViewState["AppliedBorrowing"] ?? "All");
+            }
             set { ViewState["AppliedBorrowing"] = value; }
         }
 
         private string AppliedSort
         {
-            get { return (string)(ViewState["AppliedSort"] ?? "Newest"); }
+            get
+            {
+                return (string)(ViewState["AppliedSort"] ?? "Newest");
+            }
             set { ViewState["AppliedSort"] = value; }
         }
 
@@ -75,28 +94,71 @@ namespace ELibrary.Admin.Users
             {
                 LoadGenders();
                 ClearForm();
+                EditorOpen = false;
                 RefreshUsers();
+            }
+            else
+            {
+                pnlUserEditor.Visible = EditorOpen;
+            }
+
+            hfFocusTarget.Value = "";
+        }
+
+        // ==========================================
+        // CONTEXTUAL MESSAGES
+        // ==========================================
+
+        private void ShowDirectoryMessage(string message, bool success)
+        {
+            lblMessage.Text = Server.HtmlEncode(message);
+            lblMessage.CssClass = success
+                ? "u-message success"
+                : "u-message error";
+
+            hfFocusTarget.Value = "userDirectory";
+        }
+
+        private void ShowEditorMessage(string message, bool success)
+        {
+            EditorOpen = true;
+
+            lblEditorMessage.Text = Server.HtmlEncode(message);
+            lblEditorMessage.CssClass = success
+                ? "u-message success"
+                : "u-message error";
+
+            hfFocusTarget.Value = "pnlUserEditor";
+        }
+
+        private void FocusSection(string sectionID)
+        {
+            if (string.IsNullOrEmpty(hfFocusTarget.Value))
+            {
+                hfFocusTarget.Value = sectionID;
             }
         }
 
         // ==========================================
-        // PROFILE IMAGE
+        // PROFILE IMAGE URL
         // ==========================================
 
         protected string GetProfileImageUrl(object value)
         {
             string path = Convert.ToString(value);
 
-            if (string.IsNullOrWhiteSpace(path) ||
-                !path.StartsWith(
+            if (!string.IsNullOrWhiteSpace(path) &&
+                path.StartsWith(
                     "~/Uploads/ProfilePictures/",
-                    StringComparison.OrdinalIgnoreCase))
+                    StringComparison.OrdinalIgnoreCase) &&
+                path.IndexOf("..", StringComparison.Ordinal) < 0 &&
+                path.IndexOf('\\') < 0)
             {
-                return ResolveUrl(
-                    "~/Content/Images/default-avatar.svg");
+                return ResolveUrl(path);
             }
 
-            return ResolveUrl(path);
+            return ResolveUrl(
+                "~/Content/Images/default-avatar.svg");
         }
 
         // ==========================================
@@ -106,7 +168,6 @@ namespace ELibrary.Admin.Users
         private void LoadGenders()
         {
             ddlGender.Items.Clear();
-
             ddlGender.Items.Add(
                 new ListItem("-- Select Gender --", ""));
 
@@ -116,7 +177,6 @@ namespace ELibrary.Admin.Users
                 new SqlCommand("EGender_Web", con))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 con.Open();
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -133,7 +193,7 @@ namespace ELibrary.Admin.Users
         }
 
         // ==========================================
-        // SEARCH / FILTER / PAGINATION
+        // SEARCH AND FILTER
         // ==========================================
 
         protected void btnApply_Click(object sender, EventArgs e)
@@ -141,7 +201,6 @@ namespace ELibrary.Admin.Users
             AppliedSearch = (txtSearch.Text ?? "").Trim();
 
             int role;
-
             AppliedRole = int.TryParse(
                 ddlFilterRole.SelectedValue, out role)
                 ? (int?)role
@@ -149,12 +208,14 @@ namespace ELibrary.Admin.Users
 
             AppliedBorrowing = ddlFilterBorrowing.SelectedValue;
             AppliedSort = ddlSort.SelectedValue;
-
             CurrentPage = 1;
+
             RefreshUsers();
+            FocusSection("userDirectory");
         }
 
-        protected void btnClearFilters_Click(object sender, EventArgs e)
+        protected void btnClearFilters_Click(
+            object sender, EventArgs e)
         {
             txtSearch.Text = "";
             ddlFilterRole.SelectedValue = "";
@@ -165,9 +226,10 @@ namespace ELibrary.Admin.Users
             AppliedRole = null;
             AppliedBorrowing = "All";
             AppliedSort = "Newest";
-
             CurrentPage = 1;
+
             RefreshUsers();
+            FocusSection("userDirectory");
         }
 
         protected void btnPrevious_Click(object sender, EventArgs e)
@@ -177,6 +239,8 @@ namespace ELibrary.Admin.Users
                 CurrentPage--;
                 RefreshUsers();
             }
+
+            FocusSection("userDirectory");
         }
 
         protected void btnNext_Click(object sender, EventArgs e)
@@ -186,6 +250,8 @@ namespace ELibrary.Admin.Users
                 CurrentPage++;
                 RefreshUsers();
             }
+
+            FocusSection("userDirectory");
         }
 
         private void RefreshUsers()
@@ -196,7 +262,7 @@ namespace ELibrary.Admin.Users
             }
             catch (Exception ex)
             {
-                ShowMessage(
+                ShowDirectoryMessage(
                     "Unable to load users: " + ex.Message,
                     false);
             }
@@ -295,9 +361,71 @@ namespace ELibrary.Admin.Users
 
             btnPrevious.Visible = TotalPages > 1;
             btnNext.Visible = TotalPages > 1;
-
             btnPrevious.Enabled = CurrentPage > 1;
             btnNext.Enabled = CurrentPage < TotalPages;
+        }
+
+        // ==========================================
+        // OPEN / CLOSE USER EDITOR
+        // ==========================================
+
+        protected void btnCreateUser_Click(object sender, EventArgs e)
+        {
+            ClearForm();
+            EditorOpen = true;
+            lblEditorMessage.Text = "";
+            lblEditorTitle.Text = "Add New User";
+
+            FocusSection("pnlUserEditor");
+        }
+
+        protected void btnCloseEditor_Click(object sender, EventArgs e)
+        {
+            ClearForm();
+            EditorOpen = false;
+            lblEditorMessage.Text = "";
+
+            FocusSection("userDirectory");
+        }
+
+        protected void btnClear_Click(object sender, EventArgs e)
+        {
+            ClearForm();
+            EditorOpen = true;
+            lblEditorMessage.Text = "";
+
+            FocusSection("pnlUserEditor");
+        }
+
+        private void ClearForm()
+        {
+            hfUserID.Value = "0";
+
+            txtEmail.Text = "";
+            txtFirstName.Text = "";
+            txtMiddleName.Text = "";
+            txtLastName.Text = "";
+            txtAddress.Text = "";
+            txtContactNumber.Text = "";
+            txtPassword.Text = "";
+
+            if (ddlGender.Items.Count > 0)
+            {
+                ddlGender.SelectedIndex = 0;
+            }
+
+            ddlRole.SelectedValue = "1";
+            chkAllowedToBorrow.Checked = true;
+
+            imgProfilePreview.ImageUrl = ResolveUrl(
+                "~/Content/Images/default-avatar.svg");
+
+            lblPasswordNote.Text =
+                "A password is required for new users. " +
+                "Leave blank when editing to retain the existing password.";
+
+            btnSave.Text = "Save User";
+            lblEditorTitle.Text = "Add New User";
         }
 
         // ==========================================
@@ -306,24 +434,24 @@ namespace ELibrary.Admin.Users
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            lblMessage.Text = "";
-            lblMessage.CssClass = "el-au-message";
+            EditorOpen = true;
+            lblEditorMessage.Text = "";
 
             int userID;
 
             if (!int.TryParse(hfUserID.Value, out userID) ||
                 userID < 0)
             {
-                ShowMessage("Invalid user ID.", false);
+                ShowEditorMessage("Invalid user ID.", false);
                 return;
             }
 
-            string email = txtEmail.Text.Trim();
-            string firstName = txtFirstName.Text.Trim();
-            string middleName = txtMiddleName.Text.Trim();
-            string lastName = txtLastName.Text.Trim();
-            string address = txtAddress.Text.Trim();
-            string contact = txtContactNumber.Text.Trim();
+            string email = (txtEmail.Text ?? "").Trim();
+            string firstName = (txtFirstName.Text ?? "").Trim();
+            string middleName = (txtMiddleName.Text ?? "").Trim();
+            string lastName = (txtLastName.Text ?? "").Trim();
+            string address = (txtAddress.Text ?? "").Trim();
+            string contact = (txtContactNumber.Text ?? "").Trim();
 
             int genderID;
             int role;
@@ -334,7 +462,8 @@ namespace ELibrary.Admin.Users
                 string.IsNullOrWhiteSpace(address) ||
                 string.IsNullOrWhiteSpace(contact))
             {
-                ShowMessage("Complete all required fields.", false);
+                ShowEditorMessage(
+                    "Complete all required fields.", false);
                 return;
             }
 
@@ -345,14 +474,15 @@ namespace ELibrary.Admin.Users
                 address.Length > 255 ||
                 contact.Length > 30)
             {
-                ShowMessage("One or more fields are too long.", false);
+                ShowEditorMessage(
+                    "One or more fields are too long.", false);
                 return;
             }
 
             if (!int.TryParse(
                 ddlGender.SelectedValue, out genderID))
             {
-                ShowMessage("Select a gender.", false);
+                ShowEditorMessage("Select a gender.", false);
                 return;
             }
 
@@ -360,16 +490,16 @@ namespace ELibrary.Admin.Users
                 ddlRole.SelectedValue, out role) ||
                 (role != 1 && role != 2))
             {
-                ShowMessage("Select a valid role.", false);
+                ShowEditorMessage("Select a valid role.", false);
                 return;
             }
 
-            // Preserve protection against removing your own admin role.
+            // Prevent an admin from removing their own role.
             if (userID > 0 &&
                 userID == Convert.ToInt32(Session["UserID"]) &&
                 role != 2)
             {
-                ShowMessage(
+                ShowEditorMessage(
                     "You cannot remove your own administrator role.",
                     false);
                 return;
@@ -381,7 +511,7 @@ namespace ELibrary.Admin.Users
             {
                 if (string.IsNullOrWhiteSpace(txtPassword.Text))
                 {
-                    ShowMessage(
+                    ShowEditorMessage(
                         "A password is required for a new user.",
                         false);
                     return;
@@ -392,7 +522,7 @@ namespace ELibrary.Admin.Users
             }
             else if (!string.IsNullOrWhiteSpace(txtPassword.Text))
             {
-                // Blank password retains the existing password.
+                // Blank password preserves the existing password.
                 passwordHash =
                     PasswordHelper.HashPassword(txtPassword.Text);
             }
@@ -401,7 +531,7 @@ namespace ELibrary.Admin.Users
 
             try
             {
-                // Check duplicate email using existing procedure.
+                // Validate duplicate email.
                 using (SqlConnection con =
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd =
@@ -412,8 +542,7 @@ namespace ELibrary.Admin.Users
                     cmd.Parameters.Add(
                         "@UserID", SqlDbType.Int).Value =
                         userID == 0
-                        ? (object)DBNull.Value
-                        : userID;
+                        ? (object)DBNull.Value : userID;
 
                     cmd.Parameters.Add(
                         "@Email", SqlDbType.VarChar, 100).Value =
@@ -427,14 +556,14 @@ namespace ELibrary.Admin.Users
                         result != DBNull.Value &&
                         Convert.ToInt32(result) == 0)
                     {
-                        ShowMessage(
+                        ShowEditorMessage(
                             "That email is already registered.",
                             false);
                         return;
                     }
                 }
 
-                // Existing image upload behavior.
+                // Existing profile upload helper.
                 if (fuProfilePicture.HasFile)
                 {
                     newProfileImagePath =
@@ -443,7 +572,7 @@ namespace ELibrary.Admin.Users
                             "~/Uploads/ProfilePictures");
                 }
 
-                // Save using existing procedure.
+                // Save through existing stored procedure.
                 using (SqlConnection con =
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd =
@@ -454,8 +583,7 @@ namespace ELibrary.Admin.Users
                     cmd.Parameters.Add(
                         "@UserID", SqlDbType.Int).Value =
                         userID == 0
-                        ? (object)DBNull.Value
-                        : userID;
+                        ? (object)DBNull.Value : userID;
 
                     cmd.Parameters.Add(
                         "@Email", SqlDbType.VarChar, 100).Value =
@@ -464,8 +592,7 @@ namespace ELibrary.Admin.Users
                     cmd.Parameters.Add(
                         "@Password", SqlDbType.VarChar, 255).Value =
                         passwordHash == null
-                        ? (object)DBNull.Value
-                        : passwordHash;
+                        ? (object)DBNull.Value : passwordHash;
 
                     cmd.Parameters.Add(
                         "@FirstName", SqlDbType.VarChar, 100).Value =
@@ -474,8 +601,7 @@ namespace ELibrary.Admin.Users
                     cmd.Parameters.Add(
                         "@MiddleName", SqlDbType.VarChar, 100).Value =
                         string.IsNullOrWhiteSpace(middleName)
-                        ? (object)DBNull.Value
-                        : middleName;
+                        ? (object)DBNull.Value : middleName;
 
                     cmd.Parameters.Add(
                         "@LastName", SqlDbType.VarChar, 100).Value =
@@ -502,7 +628,8 @@ namespace ELibrary.Admin.Users
                         role;
 
                     cmd.Parameters.Add(
-                        "@ProfileImagePath", SqlDbType.NVarChar, 500).Value =
+                        "@ProfileImagePath",
+                        SqlDbType.NVarChar, 500).Value =
                         string.IsNullOrEmpty(newProfileImagePath)
                         ? (object)DBNull.Value
                         : newProfileImagePath;
@@ -512,9 +639,11 @@ namespace ELibrary.Admin.Users
                 }
 
                 ClearForm();
+                EditorOpen = true;
+
                 RefreshUsers();
 
-                ShowMessage(
+                ShowEditorMessage(
                     userID == 0
                     ? "User created successfully."
                     : "User updated successfully.",
@@ -522,7 +651,8 @@ namespace ELibrary.Admin.Users
             }
             catch (Exception ex)
             {
-                // Clean up newly uploaded images that were not saved.
+                // Remove uploaded images only when they
+                // were not referenced by a saved user.
                 if (!string.IsNullOrEmpty(newProfileImagePath))
                 {
                     try
@@ -536,7 +666,8 @@ namespace ELibrary.Admin.Users
                                 con))
                         {
                             cmd.Parameters.Add(
-                                "@Path", SqlDbType.NVarChar, 500).Value =
+                                "@Path",
+                                SqlDbType.NVarChar, 500).Value =
                                 newProfileImagePath;
 
                             con.Open();
@@ -551,11 +682,11 @@ namespace ELibrary.Admin.Users
                     }
                     catch
                     {
-                        // Preserve original save error.
+                        // Preserve original database error.
                     }
                 }
 
-                ShowMessage(
+                ShowEditorMessage(
                     "Unable to save user: " + ex.Message,
                     false);
             }
@@ -579,28 +710,28 @@ namespace ELibrary.Admin.Users
 
             if (!int.TryParse(
                 Convert.ToString(e.CommandArgument),
-                out userID))
+                out userID) || userID <= 0)
             {
-                ShowMessage("Invalid user ID.", false);
+                ShowDirectoryMessage(
+                    "Invalid user ID.", false);
                 return;
             }
 
             if (e.CommandName == "EditUser")
             {
                 LoadUser(userID);
+                return;
             }
-            else if (e.CommandName == "DeleteUser")
-            {
-                if (userID == Convert.ToInt32(Session["UserID"]))
-                {
-                    ShowMessage(
-                        "You cannot delete your own account.",
-                        false);
-                    return;
-                }
 
-                DeleteUser(userID);
+            if (userID == Convert.ToInt32(Session["UserID"]))
+            {
+                ShowDirectoryMessage(
+                    "You cannot delete your own account.",
+                    false);
+                return;
             }
+
+            DeleteUser(userID);
         }
 
         // ==========================================
@@ -609,8 +740,7 @@ namespace ELibrary.Admin.Users
 
         private void LoadUser(int userID)
         {
-            lblMessage.Text = "";
-            lblMessage.CssClass = "el-au-message";
+            lblEditorMessage.Text = "";
 
             try
             {
@@ -627,11 +757,13 @@ namespace ELibrary.Admin.Users
 
                     con.Open();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
                     {
                         if (!reader.Read())
                         {
-                            ShowMessage("User not found.", false);
+                            ShowDirectoryMessage(
+                                "User not found.", false);
                             return;
                         }
 
@@ -661,7 +793,8 @@ namespace ELibrary.Admin.Users
                         string genderValue =
                             Convert.ToString(reader["GenderID"]);
 
-                        if (ddlGender.Items.FindByValue(genderValue) != null)
+                        if (ddlGender.Items.FindByValue(
+                            genderValue) != null)
                         {
                             ddlGender.SelectedValue = genderValue;
                         }
@@ -680,16 +813,19 @@ namespace ELibrary.Admin.Users
                         txtPassword.Text = "";
 
                         lblPasswordNote.Text =
-                            "Leave password blank to keep " +
-                            "the current password.";
+                            "Leave blank to retain the current password.";
 
                         btnSave.Text = "Update User";
+                        lblEditorTitle.Text = "Edit User";
                     }
                 }
+
+                EditorOpen = true;
+                hfFocusTarget.Value = "pnlUserEditor";
             }
             catch (Exception ex)
             {
-                ShowMessage(
+                ShowDirectoryMessage(
                     "Unable to load user: " + ex.Message,
                     false);
             }
@@ -718,74 +854,26 @@ namespace ELibrary.Admin.Users
                     cmd.ExecuteNonQuery();
                 }
 
-                ClearForm();
+                int editingID;
+
+                if (int.TryParse(hfUserID.Value, out editingID) &&
+                    editingID == userID)
+                {
+                    ClearForm();
+                    EditorOpen = false;
+                }
+
                 RefreshUsers();
 
-                ShowMessage(
-                    "User deleted successfully.",
-                    true);
+                ShowDirectoryMessage(
+                    "User deleted successfully.", true);
             }
             catch (Exception ex)
             {
-                ShowMessage(
+                ShowDirectoryMessage(
                     "Unable to delete user: " + ex.Message,
                     false);
             }
-        }
-
-        // ==========================================
-        // CLEAR EDITOR
-        // ==========================================
-
-        protected void btnClear_Click(object sender, EventArgs e)
-        {
-            ClearForm();
-            lblMessage.Text = "";
-            lblMessage.CssClass = "el-au-message";
-        }
-
-        private void ClearForm()
-        {
-            hfUserID.Value = "0";
-
-            txtEmail.Text = "";
-            txtFirstName.Text = "";
-            txtMiddleName.Text = "";
-            txtLastName.Text = "";
-            txtAddress.Text = "";
-            txtContactNumber.Text = "";
-            txtPassword.Text = "";
-
-            if (ddlGender.Items.Count > 0)
-            {
-                ddlGender.SelectedIndex = 0;
-            }
-
-            ddlRole.SelectedValue = "1";
-            chkAllowedToBorrow.Checked = true;
-
-            imgProfilePreview.ImageUrl =
-                ResolveUrl(
-                    "~/Content/Images/default-avatar.svg");
-
-            lblPasswordNote.Text =
-                "For new users, enter a password. " +
-                "Existing passwords are not displayed.";
-
-            btnSave.Text = "Save User";
-        }
-
-        // ==========================================
-        // MESSAGES
-        // ==========================================
-
-        private void ShowMessage(string message, bool success)
-        {
-            lblMessage.Text = Server.HtmlEncode(message);
-
-            lblMessage.CssClass = success
-                ? "el-au-message success"
-                : "el-au-message error";
         }
     }
 }

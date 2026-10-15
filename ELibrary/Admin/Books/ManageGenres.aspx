@@ -9,426 +9,613 @@
 <asp:Content ID="Content1"
     ContentPlaceHolderID="head"
     runat="server">
-
-    <style>
-        .el-admin-genres .el-ac-live-filters {
-            display: grid;
-            grid-template-columns:
-                minmax(200px, 2fr)
-                minmax(160px, 1fr)
-                auto;
-            gap: 12px;
-            align-items: end;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #e4ebf3;
-            border-radius: 10px;
-            background: #f8fafc;
-        }
-
-        .el-admin-genres .el-ac-live-field {
-            min-width: 0;
-        }
-
-        .el-admin-genres .el-ac-live-field label {
-            display: block;
-            margin-bottom: 7px;
-            color: #43566b;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .el-admin-genres .el-ac-live-field .form-control {
-            width: 100%;
-            min-height: 40px;
-            padding: 9px 11px;
-            border: 1px solid #dce5ee;
-            border-radius: 8px;
-            background: #fff;
-            color: #172b43;
-            font-size: 13px;
-        }
-
-        .el-admin-genres .el-ac-live-field .form-control:focus {
-            outline: none;
-            border-color: #2f6ba0;
-            box-shadow: 0 0 0 3px rgba(47,107,160,.12);
-        }
-
-        .el-admin-genres .el-ac-live-reset {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .el-admin-genres .el-ac-live-reset .el-ac-btn {
-            min-height: 40px;
-            white-space: nowrap;
-        }
-
-        .el-admin-genres .el-ac-live-count {
-            display: block;
-            margin: 0 0 13px;
-            color: #718096;
-            font-size: 12px;
-        }
-
-        .el-admin-genres .el-genre-filter-note {
-            margin: 0 0 12px;
-            color: #718096;
-            font-size: 12px;
-        }
-
-        .el-admin-genres .el-genre-pager {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            padding: 18px 0 4px;
-        }
-
-        .el-admin-genres .el-genre-page-info {
-            color: #61748e;
-            font-size: 13px;
-        }
-
-        .el-admin-genres .el-genre-pager .el-ac-btn:disabled {
-            opacity: .45;
-            cursor: default;
-        }
-    </style>
-
+<style>
+.el-admin-genres {
+    --gn-primary:#123B4A;
+    --gn-teal:#168A91;
+    --gn-teal-hover:#12757C;
+    --gn-muted:#647F89;
+    --gn-border:#DCE9EB;
+    --gn-soft:#F5FAFA;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    color:var(--gn-primary);
+}
+.el-admin-genres * {box-sizing:border-box;}
+.el-admin-genres .gn-header,
+.el-admin-genres .gn-panel-head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+}
+.el-admin-genres .gn-eyebrow {
+    color:var(--gn-teal);
+    font-size:10px;
+    letter-spacing:.12em;
+    font-weight:800;
+}
+.el-admin-genres .gn-header h1 {
+    color:var(--gn-primary);
+    font-size:29px;
+    font-weight:800;
+    margin:7px 0;
+}
+.el-admin-genres .gn-header p,
+.el-admin-genres .gn-panel-head p {
+    font-size:12px;
+    color:var(--gn-muted);
+    margin:5px 0 0;
+    line-height:1.6;
+}
+.el-admin-genres .gn-header-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+}
+.el-admin-genres .gn-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:40px;
+    padding:9px 15px;
+    border:1px solid var(--gn-border);
+    border-radius:9px;
+    background:#FFFFFF;
+    color:var(--gn-primary);
+    font-size:12px;
+    font-weight:750;
+    cursor:pointer;
+    text-decoration:none;
+}
+.el-admin-genres .gn-btn:hover {
+    background:#EAF5F6;
+    color:var(--gn-primary);
+    border-color:#B4DADD;
+}
+.el-admin-genres .gn-btn-primary {
+    color:#FFFFFF;
+    background:var(--gn-teal);
+    border-color:var(--gn-teal);
+}
+.el-admin-genres .gn-btn-primary:hover {
+    color:#FFFFFF;
+    background:var(--gn-teal-hover);
+    border-color:var(--gn-teal-hover);
+}
+.el-admin-genres .gn-btn:disabled {
+    opacity:.45;
+    cursor:default;
+}
+.el-admin-genres .gn-panel {
+    min-width:0;
+    border:1px solid var(--gn-border);
+    border-radius:14px;
+    padding:23px;
+    background:#FFFFFF;
+    box-shadow:0 3px 14px rgba(18,59,74,.035);
+    scroll-margin-top:95px;
+}
+.el-admin-genres .gn-panel-head {
+    margin-bottom:19px;
+}
+.el-admin-genres .gn-panel-head h2 {
+    font-size:18px;
+    font-weight:800;
+    margin:0;
+    color:var(--gn-primary);
+}
+.el-admin-genres .gn-tag {
+    padding:7px 11px;
+    border-radius:8px;
+    color:#126E73;
+    background:#E9F6F6;
+    font-size:11px;
+    font-weight:750;
+}
+.el-admin-genres .gn-filters {
+    display:grid;
+    grid-template-columns:minmax(190px,2fr) minmax(160px,1fr) auto;
+    align-items:end;
+    gap:12px;
+    padding:16px;
+    border:1px solid var(--gn-border);
+    border-radius:11px;
+    background:var(--gn-soft);
+}
+.el-admin-genres .gn-field {min-width:0;}
+.el-admin-genres .gn-field label {
+    display:block;
+    margin-bottom:7px;
+    color:#375968;
+    font-size:12px;
+    font-weight:700;
+}
+.el-admin-genres .gn-field .form-control {
+    display:block;
+    width:100%;
+    min-height:41px;
+    padding:9px 12px;
+    background:#FFFFFF;
+    border:1px solid #CFE1E4;
+    border-radius:8px;
+    color:var(--gn-primary);
+    font-size:12px;
+}
+.el-admin-genres .gn-field .form-control:focus {
+    border-color:var(--gn-teal);
+    outline:0;
+    box-shadow:0 0 0 3px rgba(22,138,145,.12);
+}
+.el-admin-genres .gn-filter-actions {
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+.el-admin-genres .gn-result-bar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    color:var(--gn-muted);
+    font-size:12px;
+    margin:15px 0 12px;
+}
+.el-admin-genres .gn-table-wrap {
+    overflow-x:auto;
+    border:1px solid var(--gn-border);
+    border-radius:10px;
+}
+.el-admin-genres .gn-table {
+    width:100%;
+    min-width:620px;
+    border-collapse:collapse;
+    background:#FFFFFF;
+    font-size:12px;
+}
+.el-admin-genres .gn-table th {
+    padding:14px;
+    background:var(--gn-soft);
+    color:#496B75;
+    border-bottom:1px solid var(--gn-border);
+    font-size:11px;
+    font-weight:800;
+    text-align:left;
+}
+.el-admin-genres .gn-table td {
+    padding:15px 14px;
+    vertical-align:middle;
+    color:#47616D;
+    border-bottom:1px solid #EDF3F4;
+    overflow-wrap:anywhere;
+}
+.el-admin-genres .gn-table tr:hover td {
+    background:#F9FCFC;
+}
+.el-admin-genres .gn-row-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+.el-admin-genres .gn-row-action {
+    display:inline-flex;
+    padding:7px 11px;
+    border:1px solid #CCE7E8;
+    border-radius:7px;
+    background:#E9F6F6;
+    color:#126E73;
+    font-size:11px;
+    font-weight:750;
+    text-decoration:none;
+    white-space:nowrap;
+}
+.el-admin-genres .gn-row-action:hover {
+    background:#DDF0F1;
+    color:#0F6065;
+}
+.el-admin-genres .gn-row-action.danger {
+    color:#B94E49;
+    background:#FFF4F3;
+    border-color:#F2D8D5;
+}
+.el-admin-genres .gn-row-action.danger:hover {
+    background:#FBE7E5;
+    color:#913D39;
+}
+.el-admin-genres .gn-pager {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    padding-top:19px;
+    color:var(--gn-muted);
+    font-size:12px;
+}
+.el-admin-genres .gn-form-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.el-admin-genres .gn-full {grid-column:1/-1;}
+.el-admin-genres .gn-form-grid textarea {
+    min-height:105px;
+    resize:vertical;
+}
+.el-admin-genres .gn-form-actions {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid #EDF3F4;
+}
+.el-admin-genres .gn-form-buttons {
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+}
+.el-admin-genres .gn-note {
+    font-size:11px;
+    color:var(--gn-muted);
+    line-height:1.6;
+}
+.el-admin-genres .gn-message {
+    display:block;
+    margin-bottom:16px;
+    font-size:12px;
+    line-height:1.7;
+    scroll-margin-top:100px;
+}
+.el-admin-genres .gn-message:empty {display:none;}
+.el-admin-genres .gn-message.success {
+    padding:13px 16px;
+    background:#E9F7F1;
+    border:1px solid #C8E8D7;
+    border-left:4px solid #28845B;
+    border-radius:8px;
+    color:#236747;
+}
+.el-admin-genres .gn-message.error {
+    padding:13px 16px;
+    background:#FFF0EF;
+    border:1px solid #F2D3CF;
+    border-left:4px solid #C34D46;
+    border-radius:8px;
+    color:#9E3E39;
+}
+@media(max-width:850px) {
+    .el-admin-genres .gn-filters {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .el-admin-genres .gn-filter-actions {
+        grid-column:1/-1;
+    }
+}
+@media(max-width:600px) {
+    .el-admin-genres .gn-header h1 {font-size:24px;}
+    .el-admin-genres .gn-panel {padding:15px;}
+    .el-admin-genres .gn-filters,
+    .el-admin-genres .gn-form-grid {
+        grid-template-columns:1fr;
+    }
+    .el-admin-genres .gn-filter-actions,
+    .el-admin-genres .gn-full {grid-column:auto;}
+    .el-admin-genres .gn-header-actions,
+    .el-admin-genres .gn-form-buttons {width:100%;}
+    .el-admin-genres .gn-header-actions .gn-btn,
+    .el-admin-genres .gn-form-buttons .gn-btn {flex:1;}
+}
+</style>
 </asp:Content>
 
 <asp:Content ID="Content2"
     ContentPlaceHolderID="MainContent"
     runat="server">
 
-    <div class="el-admin-catalog el-admin-genres">
+<div class="el-admin-genres">
 
-        <!-- PAGE HEADER -->
-        <div class="el-ac-header">
-            <div>
-                <span class="el-ac-eyebrow">
-                    ADMINISTRATION / CATALOG
-                </span>
+    <header class="gn-header">
+        <div>
+            <span class="gn-eyebrow">
+                ADMINISTRATION / LIBRARY MANAGEMENT
+            </span>
+            <h1>Manage Genres</h1>
+            <p>
+                Maintain the categories used to organize
+                the library collection.
+            </p>
+        </div>
 
-                <h1>Manage Genres</h1>
-
-                <p>
-                    Organize the categories used throughout
-                    your library collection.
-                </p>
-            </div>
-
+        <div class="gn-header-actions">
             <asp:HyperLink
                 runat="server"
                 NavigateUrl="~/Admin/Books/ManageBooks.aspx"
-                CssClass="el-ac-btn el-ac-btn-light"
+                CssClass="gn-btn"
                 Text="← Manage Books" />
+
+            <asp:Button
+                ID="btnCreateGenre"
+                runat="server"
+                Text="+ Add Genre"
+                CssClass="gn-btn gn-btn-primary"
+                CausesValidation="false"
+                OnClick="btnCreateGenre_Click" />
+        </div>
+    </header>
+
+    <!-- GENRE CATALOG -->
+    <section id="genreCatalog" class="gn-panel">
+        <div class="gn-panel-head">
+            <div>
+                <h2>Genre Catalog</h2>
+                <p>Search, organize, edit, or delete existing genres.</p>
+            </div>
+            <span class="gn-tag">Catalog Categories</span>
         </div>
 
-        <!-- MESSAGE -->
+        <!-- LOCAL CATALOG MESSAGE -->
         <asp:Label
-            ID="lblMessage"
+            ID="lblListMessage"
             runat="server"
             EnableViewState="false"
-            CssClass="el-ac-message" />
+            CssClass="gn-message"
+            role="status"
+            aria-live="polite" />
 
-        <!-- GENRE LIST -->
-        <section class="el-ac-panel">
+        <asp:Panel
+            ID="pnlGenreFilters"
+            runat="server"
+            DefaultButton="btnApply"
+            CssClass="gn-filters">
 
-            <div class="el-ac-panel-heading">
-                <div>
-                    <h2>Genre List</h2>
-
-                    <p>
-                        Search, sort, edit, or delete
-                        catalog genres.
-                    </p>
-                </div>
-
-                <a href="#genreEditor"
-                   class="el-ac-btn el-ac-btn-primary">
-                    + Create Genre
-                </a>
+            <div class="gn-field">
+                <asp:Label
+                    runat="server"
+                    AssociatedControlID="txtSearch"
+                    Text="Search Genres" />
+                <asp:TextBox
+                    ID="txtSearch"
+                    runat="server"
+                    CssClass="form-control"
+                    MaxLength="255"
+                    placeholder="Search ID, name, or description..."
+                    autocomplete="off" />
             </div>
 
-            <!-- SEARCH AND FILTER -->
-            <asp:Panel
-                ID="pnlGenreFilters"
-                runat="server"
-                DefaultButton="btnApply"
-                CssClass="el-ac-live-filters">
+            <div class="gn-field">
+                <asp:Label
+                    runat="server"
+                    AssociatedControlID="ddlSort"
+                    Text="Sort By" />
+                <asp:DropDownList
+                    ID="ddlSort"
+                    runat="server"
+                    CssClass="form-control">
+                    <asp:ListItem Text="Default Order" Value="Default" />
+                    <asp:ListItem Text="Genre Name (A–Z)" Value="NameAsc" />
+                    <asp:ListItem Text="Genre Name (Z–A)" Value="NameDesc" />
+                    <asp:ListItem Text="ID (Lowest First)" Value="IDAsc" />
+                    <asp:ListItem Text="ID (Highest First)" Value="IDDesc" />
+                </asp:DropDownList>
+            </div>
 
-                <div class="el-ac-live-field">
-                    <asp:Label
-                        runat="server"
-                        AssociatedControlID="txtSearch"
-                        Text="Search Genres" />
+            <div class="gn-filter-actions">
+                <asp:Button
+                    ID="btnApply"
+                    runat="server"
+                    Text="Apply"
+                    CssClass="gn-btn gn-btn-primary"
+                    CausesValidation="false"
+                    OnClick="btnApply_Click" />
+                <asp:Button
+                    ID="btnClearFilters"
+                    runat="server"
+                    Text="Clear"
+                    CssClass="gn-btn"
+                    CausesValidation="false"
+                    OnClick="btnClearFilters_Click" />
+            </div>
+        </asp:Panel>
 
-                    <asp:TextBox
-                        ID="txtSearch"
-                        runat="server"
-                        CssClass="form-control"
-                        MaxLength="255"
-                        placeholder="Search ID, name, or description..."
-                        autocomplete="off" />
-                </div>
-
-                <div class="el-ac-live-field">
-                    <asp:Label
-                        runat="server"
-                        AssociatedControlID="ddlSort"
-                        Text="Sort By" />
-
-                    <asp:DropDownList
-                        ID="ddlSort"
-                        runat="server"
-                        CssClass="form-control">
-
-                        <asp:ListItem
-                            Text="Default Order"
-                            Value="Default" />
-
-                        <asp:ListItem
-                            Text="Genre Name (A–Z)"
-                            Value="NameAsc" />
-
-                        <asp:ListItem
-                            Text="Genre Name (Z–A)"
-                            Value="NameDesc" />
-
-                        <asp:ListItem
-                            Text="ID (Lowest First)"
-                            Value="IDAsc" />
-
-                        <asp:ListItem
-                            Text="ID (Highest First)"
-                            Value="IDDesc" />
-
-                    </asp:DropDownList>
-                </div>
-
-                <div class="el-ac-live-field el-ac-live-reset">
-
-                    <asp:Button
-                        ID="btnApply"
-                        runat="server"
-                        Text="Apply"
-                        CssClass="el-ac-btn el-ac-btn-primary"
-                        CausesValidation="false"
-                        OnClick="btnApply_Click" />
-
-                    <asp:Button
-                        ID="btnClearFilters"
-                        runat="server"
-                        Text="Clear"
-                        CssClass="el-ac-btn el-ac-btn-light"
-                        CausesValidation="false"
-                        OnClick="btnClearFilters_Click" />
-
-                </div>
-
-            </asp:Panel>
-
-            <p class="el-genre-filter-note">
-                Press Enter or click Apply to search and sort.
-            </p>
-
+        <div class="gn-result-bar">
             <asp:Label
                 ID="lblResultCount"
                 runat="server"
-                CssClass="el-ac-live-count"
                 Text="Showing genres" />
+            <span>Press Enter or Apply to search.</span>
+        </div>
 
-            <!-- GENRE TABLE -->
-            <div class="el-ac-table-scroll">
-
-                <asp:GridView
-                    ID="gvGenres"
-                    runat="server"
-                    AutoGenerateColumns="False"
-                    CssClass="el-ac-table"
-                    GridLines="None"
-                    EmptyDataText="No genres match your search."
-                    OnRowCommand="gvGenres_RowCommand">
-
-                    <Columns>
-
-                        <asp:BoundField
-                            DataField="GenreID"
-                            HeaderText="ID" />
-
-                        <asp:BoundField
-                            DataField="GenreName"
-                            HeaderText="Genre Name" />
-
-                        <asp:BoundField
-                            DataField="GenreDesc"
-                            HeaderText="Description" />
-
-                        <asp:TemplateField HeaderText="Actions">
-                            <ItemTemplate>
-
-                                <div class="el-ac-row-actions">
-
-                                    <asp:LinkButton
-                                        ID="btnEdit"
-                                        runat="server"
-                                        Text="Edit"
-                                        CssClass="el-ac-table-action"
-                                        CommandName="EditGenre"
-                                        CommandArgument='<%# Eval("GenreID") %>'
-                                        CausesValidation="false" />
-
-                                    <asp:LinkButton
-                                        ID="btnDelete"
-                                        runat="server"
-                                        Text="Delete"
-                                        CssClass="el-ac-table-action danger"
-                                        CommandName="DeleteGenre"
-                                        CommandArgument='<%# Eval("GenreID") %>'
-                                        CausesValidation="false"
-                                        OnClientClick="return confirm('Delete this genre?');" />
-
-                                </div>
-
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                    </Columns>
-                </asp:GridView>
-
-            </div>
-
-            <!-- PAGINATION -->
-            <div class="el-genre-pager">
-
-                <asp:Button
-                    ID="btnPrevious"
-                    runat="server"
-                    Text="← Previous"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnPrevious_Click" />
-
-                <asp:Label
-                    ID="lblPageInfo"
-                    runat="server"
-                    CssClass="el-genre-page-info"
-                    Text="Page 1 of 1" />
-
-                <asp:Button
-                    ID="btnNext"
-                    runat="server"
-                    Text="Next →"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnNext_Click" />
-
-            </div>
-
-        </section>
-
-        <!-- CREATE / EDIT GENRE -->
-        <section class="el-ac-panel el-ac-editor"
-                 id="genreEditor">
-
-            <div class="el-ac-panel-heading">
-                <div>
-                    <h2>Create / Edit Genre</h2>
-
-                    <p>
-                        Add a category or edit an existing one.
-                    </p>
-                </div>
-            </div>
-
-            <asp:HiddenField
-                ID="hfGenreID"
+        <div class="gn-table-wrap">
+            <asp:GridView
+                ID="gvGenres"
                 runat="server"
-                Value="0" />
+                AutoGenerateColumns="False"
+                CssClass="gn-table"
+                GridLines="None"
+                EmptyDataText="No genres match your search."
+                OnRowCommand="gvGenres_RowCommand">
+                <Columns>
+                    <asp:BoundField
+                        DataField="GenreID"
+                        HeaderText="ID" />
+                    <asp:TemplateField HeaderText="Genre Name">
+                        <ItemTemplate>
+                            <strong><%#: Eval("GenreName") %></strong>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField
+                        DataField="GenreDesc"
+                        HeaderText="Description" />
+                    <asp:TemplateField HeaderText="Actions">
+                        <ItemTemplate>
+                            <div class="gn-row-actions">
+                                <asp:LinkButton
+                                    ID="btnEdit"
+                                    runat="server"
+                                    Text="Edit"
+                                    CssClass="gn-row-action"
+                                    CommandName="EditGenre"
+                                    CommandArgument='<%# Eval("GenreID") %>'
+                                    CausesValidation="false" />
 
-            <div class="el-ac-form-grid">
+                                <asp:LinkButton
+                                    ID="btnDelete"
+                                    runat="server"
+                                    Text="Delete"
+                                    CssClass="gn-row-action danger"
+                                    CommandName="DeleteGenre"
+                                    CommandArgument='<%# Eval("GenreID") %>'
+                                    CausesValidation="false"
+                                    OnClientClick="return confirm('Delete this genre? Genres currently in use may not be removable.');" />
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+        </div>
 
-                <div class="el-ac-field">
-                    <label for="<%= txtGenreName.ClientID %>">
-                        Genre Name *
-                    </label>
+        <div class="gn-pager">
+            <asp:Button
+                ID="btnPrevious"
+                runat="server"
+                Text="← Previous"
+                CssClass="gn-btn"
+                CausesValidation="false"
+                OnClick="btnPrevious_Click" />
+            <asp:Label
+                ID="lblPageInfo"
+                runat="server"
+                Text="Page 1 of 1" />
+            <asp:Button
+                ID="btnNext"
+                runat="server"
+                Text="Next →"
+                CssClass="gn-btn"
+                CausesValidation="false"
+                OnClick="btnNext_Click" />
+        </div>
+    </section>
 
-                    <asp:TextBox
-                        ID="txtGenreName"
+    <!-- EDITOR: ONLY RENDERED WHEN OPENED -->
+    <asp:Panel
+        ID="pnlGenreEditor"
+        runat="server"
+        Visible="false"
+        ClientIDMode="Static"
+        CssClass="gn-panel">
+
+        <div class="gn-panel-head">
+            <div>
+                <h2>
+                    <asp:Label
+                        ID="lblEditorTitle"
                         runat="server"
-                        CssClass="form-control"
-                        MaxLength="100"
-                        placeholder="e.g. Science Fiction" />
-                </div>
+                        Text="Add New Genre" />
+                </h2>
+                <p>Add a category or update an existing one.</p>
+            </div>
+            <span class="gn-tag">Genre Information</span>
+        </div>
 
-                <div class="el-ac-field el-ac-full">
-                    <label for="<%= txtGenreDesc.ClientID %>">
-                        Genre Description *
-                    </label>
+        <!-- LOCAL FORM MESSAGE -->
+        <asp:Label
+            ID="lblEditorMessage"
+            runat="server"
+            EnableViewState="false"
+            CssClass="gn-message"
+            role="status"
+            aria-live="polite" />
 
-                    <asp:TextBox
-                        ID="txtGenreDesc"
-                        runat="server"
-                        CssClass="form-control"
-                        TextMode="MultiLine"
-                        Rows="3"
-                        MaxLength="255"
-                        placeholder="Briefly describe this genre" />
-                </div>
+        <asp:HiddenField
+            ID="hfGenreID"
+            runat="server"
+            Value="0" />
 
+        <div class="gn-form-grid">
+            <div class="gn-field">
+                <label for="<%= txtGenreName.ClientID %>">
+                    Genre Name *
+                </label>
+                <asp:TextBox
+                    ID="txtGenreName"
+                    runat="server"
+                    CssClass="form-control"
+                    MaxLength="100"
+                    placeholder="e.g. Science Fiction" />
             </div>
 
-            <div class="el-ac-editor-actions">
-                <span>
-                    Fields marked * are required.
-                </span>
-
-                <div class="el-ac-button-group">
-
-                    <asp:Button
-                        ID="btnCancel"
-                        runat="server"
-                        Text="Clear Form"
-                        CssClass="el-ac-btn el-ac-btn-light"
-                        CausesValidation="false"
-                        OnClick="btnCancel_Click" />
-
-                    <asp:Button
-                        ID="btnSave"
-                        runat="server"
-                        Text="Save Genre"
-                        CssClass="el-ac-btn el-ac-btn-primary"
-                        OnClick="btnSave_Click" />
-
-                </div>
+            <div class="gn-field gn-full">
+                <label for="<%= txtGenreDesc.ClientID %>">
+                    Genre Description *
+                </label>
+                <asp:TextBox
+                    ID="txtGenreDesc"
+                    runat="server"
+                    CssClass="form-control"
+                    TextMode="MultiLine"
+                    Rows="3"
+                    MaxLength="255"
+                    placeholder="Briefly describe this genre" />
             </div>
+        </div>
 
-        </section>
+        <div class="gn-form-actions">
+            <span class="gn-note">
+                Fields marked * are required.
+            </span>
+            <div class="gn-form-buttons">
+                <asp:Button
+                    ID="btnCancel"
+                    runat="server"
+                    Text="Clear Form"
+                    CssClass="gn-btn"
+                    CausesValidation="false"
+                    OnClick="btnCancel_Click" />
+                <asp:Button
+                    ID="btnCloseEditor"
+                    runat="server"
+                    Text="Close"
+                    CssClass="gn-btn"
+                    CausesValidation="false"
+                    OnClick="btnCloseEditor_Click" />
+                <asp:Button
+                    ID="btnSave"
+                    runat="server"
+                    Text="Save Genre"
+                    CssClass="gn-btn gn-btn-primary"
+                    CausesValidation="false"
+                    OnClick="btnSave_Click" />
+            </div>
+        </div>
+    </asp:Panel>
+</div>
 
-    </div>
+<asp:HiddenField
+    ID="hfFocusTarget"
+    runat="server"
+    ClientIDMode="Static" />
 
-    <!-- SCROLL TO EDITOR WHEN EDITING -->
-    <script type="text/javascript">
-        (function () {
-            var editor = document.getElementById('genreEditor');
+<script type="text/javascript">
+    (function () {
+        var focus = document.getElementById('hfFocusTarget');
+        if (!focus || !focus.value) return;
 
-            var genreId = document.getElementById(
-                '<%= hfGenreID.ClientID %>');
+        var target = document.getElementById(focus.value);
+        if (!target) return;
 
-            if (editor && genreId &&
-                genreId.value !== '0' &&
-                genreId.value !== '') {
-
-                editor.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        })();
-    </script>
-
+        requestAnimationFrame(function () {
+            target.scrollIntoView({
+                behavior: window.matchMedia(
+                    '(prefers-reduced-motion: reduce)').matches
+                    ? 'auto' : 'smooth',
+                block: 'start'
+            });
+        });
+    })();
+</script>
 </asp:Content>

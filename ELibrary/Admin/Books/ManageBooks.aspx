@@ -10,202 +10,554 @@
     ContentPlaceHolderID="head"
     runat="server">
 
-    <style>
-        .el-admin-books .el-book-filters {
-            display: grid;
-            grid-template-columns:
-                minmax(180px, 2fr)
-                repeat(3, minmax(125px, 1fr))
-                auto;
-            gap: 12px;
-            align-items: end;
-            padding: 16px;
-            margin-bottom: 14px;
-            background: #f8fafc;
-            border: 1px solid #e4ebf3;
-            border-radius: 10px;
-        }
+<style>
+/* ==========================================
+   OCEAN TEAL - ADMIN MANAGE BOOKS
+========================================== */
 
-        .el-admin-books .el-book-filter-field {
-            min-width: 0;
-        }
+.el-admin-books {
+    --bk-primary: #123B4A;
+    --bk-accent: #168A91;
+    --bk-hover: #12757C;
+    --bk-border: #DCE9EB;
+    --bk-muted: #647F89;
+    --bk-soft: #F5FAFA;
+    --bk-danger: #B94E49;
 
-        .el-admin-books .el-book-filter-field label {
-            display: block;
-            margin-bottom: 7px;
-            color: #43566b;
-            font-size: 12px;
-            font-weight: 700;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    color: var(--bk-primary);
+}
 
-        .el-admin-books .el-book-filter-field .form-control {
-            display: block;
-            width: 100%;
-            min-width: 0;
-            min-height: 40px;
-            padding: 9px 11px;
-            border: 1px solid #dce5ee;
-            border-radius: 8px;
-            background: #fff;
-            color: #172b43;
-            font-size: 13px;
-        }
+.el-admin-books * {
+    box-sizing: border-box;
+}
 
-        .el-admin-books .el-book-filter-field .form-control:focus {
-            outline: none;
-            border-color: #2f6ba0;
-            box-shadow: 0 0 0 3px rgba(47,107,160,.12);
-        }
+.el-admin-books .bk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 4px 0;
+}
 
-        .el-admin-books .el-book-filter-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
+.el-admin-books .bk-eyebrow {
+    display: block;
+    color: var(--bk-accent);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    margin-bottom: 8px;
+}
 
-        .el-admin-books .el-book-filter-actions .el-ac-btn {
-            min-height: 40px;
-            white-space: nowrap;
-        }
+.el-admin-books .bk-header h1 {
+    margin: 0 0 7px;
+    color: var(--bk-primary);
+    font-size: 29px;
+    font-weight: 800;
+}
 
-        .el-admin-books .el-book-result-count {
-            margin: 0 0 13px;
-            color: #718096;
-            font-size: 12px;
-        }
+.el-admin-books .bk-header p,
+.el-admin-books .bk-panel-head p {
+    margin: 0;
+    color: var(--bk-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
 
-        .el-admin-books .el-book-filter-note {
-            margin: -4px 0 14px;
-            color: #718096;
-            font-size: 11px;
-        }
+.el-admin-books .bk-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
 
-        .el-admin-books .el-ac-table-scroll {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+.el-admin-books .bk-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 16px;
+    background: #FFFFFF;
+    color: var(--bk-primary);
+    border: 1px solid var(--bk-border);
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
 
-        .el-admin-books .el-loss-panel {
-            border: 1px solid #e4ebf3;
-            border-radius: 10px;
-            background: #fff;
-            padding: 18px;
-            margin-bottom: 16px;
-        }
+.el-admin-books .bk-btn:hover {
+    background: #EAF5F6;
+    color: var(--bk-primary);
+    border-color: #B4DADD;
+}
 
-        .el-admin-books .el-loss-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-        }
+.el-admin-books .bk-btn-primary {
+    background: var(--bk-accent);
+    color: #FFFFFF;
+    border-color: var(--bk-accent);
+}
 
-        .el-admin-books .el-loss-field {
-            min-width: 0;
-        }
+.el-admin-books .bk-btn-primary:hover {
+    background: var(--bk-hover);
+    border-color: var(--bk-hover);
+    color: #FFFFFF;
+}
 
-        .el-admin-books .el-loss-field label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: #43566b;
-            margin-bottom: 7px;
-        }
+.el-admin-books .bk-btn-danger {
+    color: var(--bk-danger);
+    background: #FFF6F5;
+    border-color: #F1D8D5;
+}
 
-        .el-admin-books .el-loss-field .form-control {
-            width: 100%;
-            min-height: 40px;
-            padding: 9px 11px;
-            border: 1px solid #dce5ee;
-            border-radius: 8px;
-            background: #fff;
-            box-sizing: border-box;
-        }
+.el-admin-books .bk-btn-danger:hover {
+    color: #913D39;
+    background: #FCEAE8;
+}
 
-        .el-admin-books .el-loss-summary {
-            padding: 14px;
-            margin: 12px 0;
-            background: #f8fafc;
-            border: 1px solid #e4ebf3;
-            border-radius: 8px;
-            line-height: 1.8;
-            color: #334155;
-        }
+.el-admin-books .bk-panel {
+    min-width: 0;
+    background: #FFFFFF;
+    border: 1px solid var(--bk-border);
+    border-radius: 14px;
+    padding: 23px;
+    box-shadow: 0 3px 14px rgba(18,59,74,.035);
+    scroll-margin-top: 95px;
+}
 
-        .el-admin-books .el-loss-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 16px;
-        }
+.el-admin-books .bk-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
 
-        .el-admin-books .el-loss-note {
-            color: #64748b;
-            font-size: 12px;
-            margin: 10px 0;
-        }
+.el-admin-books .bk-panel-head h2 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--bk-primary);
+}
 
-        .el-admin-books .el-loss-danger {
-            color: #b42318;
-        }
+.el-admin-books .bk-tag {
+    display: inline-block;
+    padding: 7px 11px;
+    color: #126E73;
+    background: #E9F6F6;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+}
 
-        .el-admin-books .el-history-filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+.el-admin-books .bk-filters {
+    display: grid;
+    grid-template-columns:
+        minmax(190px, 2fr)
+        repeat(3, minmax(115px, 1fr))
+        auto;
+    align-items: end;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--bk-border);
+    border-radius: 11px;
+    background: var(--bk-soft);
+}
 
-        .el-admin-books .el-history-filters .form-control {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
-            border: 1px solid #dce5ee;
-            border-radius: 8px;
-        }
+.el-admin-books .bk-field {
+    min-width: 0;
+}
 
-        .el-admin-books .el-book-pagination {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 18px;
-        }
+.el-admin-books .bk-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #375968;
+    font-size: 12px;
+    font-weight: 700;
+}
 
-        @media (max-width: 1250px) {
-            .el-admin-books .el-book-filters {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
+.el-admin-books .bk-field .form-control {
+    display: block;
+    width: 100%;
+    min-height: 41px;
+    padding: 9px 12px;
+    color: var(--bk-primary);
+    background: #FFFFFF;
+    border: 1px solid #CFE1E4;
+    border-radius: 8px;
+    font-size: 12px;
+}
 
-            .el-admin-books .el-book-search-field {
-                grid-column: 1 / -1;
-            }
-        }
+.el-admin-books .bk-field .form-control:focus {
+    outline: none;
+    border-color: var(--bk-accent);
+    box-shadow: 0 0 0 3px rgba(22,138,145,.12);
+}
 
-        @media (max-width: 600px) {
-            .el-admin-books .el-book-filters,
-            .el-admin-books .el-loss-grid {
-                grid-template-columns: 1fr;
-            }
+.el-admin-books .bk-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
 
-            .el-admin-books .el-book-filters {
-                padding: 13px;
-            }
+.el-admin-books .bk-result-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0 13px;
+    color: var(--bk-muted);
+    font-size: 12px;
+}
 
-            .el-admin-books .el-book-search-field {
-                grid-column: auto;
-            }
+.el-admin-books .bk-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--bk-border);
+    border-radius: 10px;
+}
 
-            .el-admin-books .el-book-filter-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
+.el-admin-books .bk-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: collapse;
+    background: #FFFFFF;
+    font-size: 12px;
+}
 
-            .el-admin-books .el-book-filter-actions .el-ac-btn {
-                width: 100%;
-            }
-        }
-    </style>
+.el-admin-books .bk-table th {
+    padding: 14px 13px;
+    color: #496B75;
+    background: var(--bk-soft);
+    border-bottom: 1px solid var(--bk-border);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.el-admin-books .bk-table td {
+    padding: 14px 13px;
+    color: #47616D;
+    vertical-align: middle;
+    border-bottom: 1px solid #EDF3F4;
+}
+
+.el-admin-books .bk-table tr:hover td {
+    background: #F9FCFC;
+}
+
+.el-admin-books .bk-book-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 180px;
+}
+
+.el-admin-books .bk-book-thumb {
+    width: 43px;
+    height: 59px;
+    flex-shrink: 0;
+    border: 1px solid var(--bk-border);
+    border-radius: 5px;
+    object-fit: cover;
+    background: #EAF3F3;
+}
+
+.el-admin-books .bk-book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.el-admin-books .bk-book-info strong {
+    color: var(--bk-primary);
+    font-size: 12px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.el-admin-books .bk-book-info small {
+    color: var(--bk-muted);
+    font-size: 11px;
+}
+
+.el-admin-books .bk-row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.el-admin-books .bk-row-action {
+    display: inline-flex;
+    padding: 7px 10px;
+    color: #126E73;
+    background: #E9F6F6;
+    border: 1px solid #CCE7E8;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.el-admin-books .bk-row-action:hover {
+    color: #0F6065;
+    background: #DDF0F1;
+}
+
+.el-admin-books .bk-row-action.danger {
+    color: var(--bk-danger);
+    background: #FFF4F3;
+    border-color: #F2D8D5;
+}
+
+.el-admin-books .bk-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 0 0;
+    color: var(--bk-muted);
+    font-size: 12px;
+}
+
+/* LOCAL SUCCESS / ERROR MESSAGES */
+
+.el-admin-books .bk-message {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 1.7;
+    scroll-margin-top: 110px;
+}
+
+.el-admin-books .bk-message:empty {
+    display: none;
+}
+
+.el-admin-books .bk-message.success {
+    padding: 13px 16px;
+    background: #E9F7F1;
+    border: 1px solid #C8E8D7;
+    border-left: 4px solid #28845B;
+    border-radius: 8px;
+    color: #236747;
+}
+
+.el-admin-books .bk-message.error {
+    padding: 13px 16px;
+    background: #FFF0EF;
+    border: 1px solid #F2D3CF;
+    border-left: 4px solid #C34D46;
+    border-radius: 8px;
+    color: #9E3E39;
+}
+
+/* EDITOR */
+
+.el-admin-books .bk-editor-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 245px;
+    gap: 24px;
+    align-items: start;
+}
+
+.el-admin-books .bk-form-grid,
+.el-admin-books .bk-loss-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.el-admin-books .bk-full {
+    grid-column: 1 / -1;
+}
+
+.el-admin-books .bk-field textarea.form-control {
+    min-height: 95px;
+    resize: vertical;
+}
+
+.el-admin-books .bk-help {
+    display: block;
+    margin-top: 7px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--bk-muted);
+}
+
+.el-admin-books .bk-cover-panel {
+    padding: 18px;
+    border: 1px solid var(--bk-border);
+    border-radius: 11px;
+    background: var(--bk-soft);
+}
+
+.el-admin-books .bk-cover-panel h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--bk-primary);
+}
+
+.el-admin-books .bk-cover-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 195px;
+    margin: 16px 0;
+    padding: 15px;
+    border: 1px dashed #BCD6D9;
+    border-radius: 9px;
+    background: #FFFFFF;
+}
+
+.el-admin-books .bk-cover-preview {
+    max-width: 100%;
+    height: 165px;
+    object-fit: contain;
+}
+
+.el-admin-books .bk-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-top: 20px;
+    margin-top: 22px;
+    border-top: 1px solid #EDF3F4;
+}
+
+.el-admin-books .bk-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.el-admin-books .bk-loss-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 12px 0 20px;
+}
+
+.el-admin-books .bk-loss-stat {
+    padding: 15px;
+    background: var(--bk-soft);
+    border: 1px solid var(--bk-border);
+    border-radius: 9px;
+}
+
+.el-admin-books .bk-loss-stat small {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--bk-muted);
+    font-size: 11px;
+}
+
+.el-admin-books .bk-loss-stat strong {
+    font-size: 21px;
+    color: var(--bk-primary);
+}
+
+.el-admin-books .bk-warning {
+    padding: 13px 15px;
+    margin: 16px 0;
+    border: 1px solid #F2D9C0;
+    border-radius: 9px;
+    background: #FFF8EF;
+    color: #875C29;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.el-admin-books .bk-history-filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.el-admin-books .bk-history-filters .form-control {
+    flex: 1;
+    min-width: 200px;
+    min-height: 40px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+    .el-admin-books .bk-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .el-admin-books .bk-search-field {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 900px) {
+    .el-admin-books .bk-editor-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .el-admin-books .bk-header h1 {
+        font-size: 24px;
+    }
+
+    .el-admin-books .bk-panel {
+        padding: 15px;
+    }
+
+    .el-admin-books .bk-filters,
+    .el-admin-books .bk-form-grid,
+    .el-admin-books .bk-loss-grid,
+    .el-admin-books .bk-loss-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .el-admin-books .bk-search-field {
+        grid-column: auto;
+    }
+
+    .el-admin-books .bk-full {
+        grid-column: auto;
+    }
+
+    .el-admin-books .bk-filter-actions,
+    .el-admin-books .bk-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .el-admin-books .bk-filter-actions .bk-btn {
+        flex: 1;
+    }
+
+    .el-admin-books .bk-header-actions {
+        width: 100%;
+    }
+
+    .el-admin-books .bk-header-actions .bk-btn {
+        flex: 1;
+    }
+
+    .el-admin-books .bk-button-group,
+    .el-admin-books .bk-button-group .bk-btn {
+        width: 100%;
+    }
+}
+</style>
 
 </asp:Content>
 
@@ -213,645 +565,474 @@
     ContentPlaceHolderID="MainContent"
     runat="server">
 
-    <div class="el-admin-catalog el-admin-books">
+<div class="el-admin-books">
 
-        <div class="el-ac-header">
-            <div>
-                <span class="el-ac-eyebrow">
-                    ADMINISTRATION / CATALOG
-                </span>
-                <h1>Manage Books</h1>
-                <p>
-                    Search your collection, manage inventory,
-                    and create new book records.
-                </p>
-            </div>
+    <!-- HEADER -->
+
+    <header class="bk-header">
+        <div>
+            <span class="bk-eyebrow">
+                ADMINISTRATION / LIBRARY MANAGEMENT
+            </span>
+
+            <h1>Manage Books</h1>
+
+            <p>
+                Organize your catalog, manage stock,
+                and maintain accurate book records.
+            </p>
+        </div>
+
+        <div class="bk-header-actions">
 
             <asp:HyperLink
                 runat="server"
                 NavigateUrl="~/Admin/Books/ManageGenres.aspx"
-                CssClass="el-ac-btn el-ac-btn-light"
+                CssClass="bk-btn"
                 Text="Manage Genres" />
+
+            <asp:Button
+                ID="btnCreateBook"
+                runat="server"
+                Text="+ Add Book"
+                CssClass="bk-btn bk-btn-primary"
+                CausesValidation="false"
+                OnClick="btnCreateBook_Click" />
+
+        </div>
+    </header>
+
+    <!-- BOOK CATALOG -->
+
+    <section id="bookCatalog"
+        class="bk-panel">
+
+        <div class="bk-panel-head">
+            <div>
+                <h2>Book Catalog</h2>
+
+                <p>
+                    Search, edit, archive, or adjust available stock.
+                </p>
+            </div>
+
+            <span class="bk-tag">
+                Active Collection
+            </span>
         </div>
 
+        <!-- CATALOG NOTIFICATIONS -->
+
         <asp:Label
-            ID="lblMessage"
+            ID="lblListMessage"
             runat="server"
             EnableViewState="false"
-            CssClass="book-message" />
+            CssClass="bk-message"
+            role="status"
+            aria-live="polite" />
 
-        <!-- BOOK LIST -->
-        <section class="el-ac-panel">
-
-            <div class="el-ac-panel-heading">
-                <div>
-                    <h2>Book List</h2>
-                    <p>
-                        Search, filter, edit, archive,
-                        or record inventory losses.
-                    </p>
-                </div>
-
-                <a href="#bookEditor"
-                    class="el-ac-btn el-ac-btn-primary">
-                    + Create Book
-                </a>
-            </div>
-
-            <asp:Panel
-                ID="pnlBookFilters"
-                runat="server"
-                DefaultButton="btnSearch"
-                CssClass="el-book-filters">
-
-                <div class="el-book-filter-field el-book-search-field">
-                    <label for="<%= txtSearch.ClientID %>">
-                        Search Books
-                    </label>
-                    <asp:TextBox
-                        ID="txtSearch"
-                        runat="server"
-                        CssClass="form-control"
-                        MaxLength="255"
-                        placeholder="Search title, author, ISBN, or ID"
-                        autocomplete="off" />
-                </div>
-
-                <div class="el-book-filter-field">
-                    <label for="<%= ddlSearchGenre.ClientID %>">
-                        Genre
-                    </label>
-                    <asp:DropDownList
-                        ID="ddlSearchGenre"
-                        runat="server"
-                        CssClass="form-control" />
-                </div>
-
-                <div class="el-book-filter-field">
-                    <label for="<%= ddlAvailability.ClientID %>">
-                        Availability
-                    </label>
-                    <asp:DropDownList
-                        ID="ddlAvailability"
-                        runat="server"
-                        CssClass="form-control">
-                        <asp:ListItem Text="All Books" Value="All" />
-                        <asp:ListItem Text="Available" Value="Available" />
-                        <asp:ListItem Text="Unavailable" Value="Unavailable" />
-                    </asp:DropDownList>
-                </div>
-
-                <div class="el-book-filter-field">
-                    <label for="<%= ddlSort.ClientID %>">
-                        Sort By
-                    </label>
-                    <asp:DropDownList
-                        ID="ddlSort"
-                        runat="server"
-                        CssClass="form-control">
-                        <asp:ListItem Text="Default Order" Value="Default" />
-                        <asp:ListItem Text="Title (A-Z)" Value="TitleAsc" />
-                        <asp:ListItem Text="Title (Z-A)" Value="TitleDesc" />
-                        <asp:ListItem Text="Highest ID First" Value="IDDesc" />
-                        <asp:ListItem Text="Lowest ID First" Value="IDAsc" />
-                        <asp:ListItem Text="Most Available Copies" Value="CopiesDesc" />
-                    </asp:DropDownList>
-                </div>
-
-                <div class="el-book-filter-actions">
-                    <asp:Button
-                        ID="btnSearch"
-                        runat="server"
-                        Text="Apply"
-                        CssClass="el-ac-btn el-ac-btn-primary"
-                        CausesValidation="false"
-                        OnClick="btnSearch_Click" />
-
-                    <asp:Button
-                        ID="btnResetFilters"
-                        runat="server"
-                        Text="Clear"
-                        CssClass="el-ac-btn el-ac-btn-light"
-                        CausesValidation="false"
-                        OnClick="btnResetFilters_Click" />
-                </div>
-            </asp:Panel>
-
-            <p class="el-book-filter-note">
-                Press Enter or click Apply to search and filter.
-            </p>
-
-            <p class="el-book-result-count">
-                <asp:Label
-                    ID="lblBookResultCount"
-                    runat="server"
-                    Text="Showing books" />
-            </p>
-
-            <div class="el-ac-table-scroll">
-                <asp:GridView
-                    ID="gvBooks"
-                    runat="server"
-                    AutoGenerateColumns="False"
-                    CssClass="el-ac-table"
-                    GridLines="None"
-                    EmptyDataText="No books found."
-                    OnRowCommand="gvBooks_RowCommand">
-
-                    <Columns>
-
-                        <asp:TemplateField HeaderText="Book">
-                            <ItemTemplate>
-                                <div class="el-ac-book-cell">
-                                    <asp:Image
-                                        ID="imgBookCover"
-                                        runat="server"
-                                        CssClass="el-ac-book-thumb"
-                                        AlternateText="Book cover"
-                                        ImageUrl='<%# GetCoverUrl(Eval("CoverImagePath")) %>' />
-
-                                    <div class="el-ac-book-info">
-                                        <strong><%#: Eval("Title") %></strong>
-                                        <small><%#: Eval("Author") %></small>
-                                    </div>
-                                </div>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                        <asp:BoundField
-                            DataField="BookID"
-                            HeaderText="ID" />
-
-                        <asp:BoundField
-                            DataField="ISBN"
-                            HeaderText="ISBN" />
-
-                        <asp:BoundField
-                            DataField="GenreName"
-                            HeaderText="Genre" />
-
-                        <asp:BoundField
-                            DataField="TotalCopies"
-                            HeaderText="Total" />
-
-                        <asp:BoundField
-                            DataField="AvailableCopies"
-                            HeaderText="Available" />
-
-                        <asp:BoundField
-                            DataField="BorrowingFee"
-                            HeaderText="Fee (PHP)"
-                            DataFormatString="{0:N2}" />
-
-                        <asp:TemplateField HeaderText="Actions">
-                            <ItemTemplate>
-                                <div class="el-ac-row-actions">
-
-                                    <asp:LinkButton
-                                        ID="btnEdit"
-                                        runat="server"
-                                        Text="Edit"
-                                        CssClass="el-ac-table-action"
-                                        CommandName="EditBook"
-                                        CommandArgument='<%# Eval("BookID") %>'
-                                        CausesValidation="false" />
-
-                                    <asp:LinkButton
-                                        ID="btnInventoryLost"
-                                        runat="server"
-                                        Text="Mark Lost"
-                                        CssClass="el-ac-table-action"
-                                        CommandName="InventoryLost"
-                                        CommandArgument='<%# Eval("BookID") %>'
-                                        CausesValidation="false"
-                                        Visible='<%# Convert.ToInt32(Eval("AvailableCopies")) > 0 %>' />
-
-                                    <asp:LinkButton
-                                        ID="btnArchive"
-                                        runat="server"
-                                        Text="Archive"
-                                        CssClass="el-ac-table-action danger"
-                                        CommandName="ArchiveBook"
-                                        CommandArgument='<%# Eval("BookID") %>'
-                                        CausesValidation="false"
-                                        OnClientClick="return confirm('Archive this book?');" />
-
-                                </div>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                    </Columns>
-                </asp:GridView>
-            </div>
-
-            <div class="el-book-pagination">
-                <asp:Button
-                    ID="btnPrevious"
-                    runat="server"
-                    Text="← Previous"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnPrevious_Click" />
-
-                <asp:Label
-                    ID="lblPageInfo"
-                    runat="server"
-                    Text="Page 1 of 1" />
-
-                <asp:Button
-                    ID="btnNext"
-                    runat="server"
-                    Text="Next →"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnNext_Click" />
-            </div>
-        </section>
-
-        <!-- INVENTORY LOSS FORM -->
         <asp:Panel
-            ID="pnlInventoryLoss"
+            ID="pnlBookFilters"
             runat="server"
-            Visible="false"
-            CssClass="el-ac-panel"
-            ClientIDMode="Static">
+            DefaultButton="btnSearch"
+            CssClass="bk-filters">
 
-            <div class="el-ac-panel-heading">
-                <div>
-                    <h2>Mark Inventory Lost</h2>
-                    <p>
-                        Record missing or damaged copies
-                        from available library stock.
-                    </p>
-                </div>
-                <span class="el-ac-section-chip">
-                    Inventory Adjustment
-                </span>
+            <div class="bk-field bk-search-field">
+                <label for="<%= txtSearch.ClientID %>">
+                    Search Books
+                </label>
+
+                <asp:TextBox
+                    ID="txtSearch"
+                    runat="server"
+                    CssClass="form-control"
+                    MaxLength="255"
+                    autocomplete="off"
+                    placeholder="Search title, author, ISBN or ID" />
             </div>
 
-            <div class="el-loss-panel">
+            <div class="bk-field">
+                <label for="<%= ddlSearchGenre.ClientID %>">
+                    Genre
+                </label>
 
-                <asp:HiddenField
-                    ID="hfInventoryLossBookID"
+                <asp:DropDownList
+                    ID="ddlSearchGenre"
                     runat="server"
-                    Value="0" />
+                    CssClass="form-control" />
+            </div>
 
-                <h3>
-                    <asp:Label
-                        ID="lblLossBookTitle"
-                        runat="server" />
-                </h3>
+            <div class="bk-field">
+                <label for="<%= ddlAvailability.ClientID %>">
+                    Availability
+                </label>
 
-                <div class="el-loss-summary">
-                    <strong>Current Inventory</strong>
-                    <div>
-                        Total Copies:
-                        <asp:Label
-                            ID="lblLossTotal"
-                            runat="server"
-                            Text="0" />
-                    </div>
-                    <div>
-                        Available Copies:
-                        <asp:Label
-                            ID="lblLossAvailable"
-                            runat="server"
-                            Text="0" />
-                    </div>
-                    <div>
-                        Maximum Inventory Loss:
-                        <asp:Label
-                            ID="lblLossMaximum"
-                            runat="server"
-                            Text="0" />
-                    </div>
-                </div>
+                <asp:DropDownList
+                    ID="ddlAvailability"
+                    runat="server"
+                    CssClass="form-control">
 
-                <div class="el-loss-grid">
+                    <asp:ListItem Text="All Books" Value="All" />
+                    <asp:ListItem Text="Available" Value="Available" />
+                    <asp:ListItem Text="Unavailable" Value="Unavailable" />
 
-                    <div class="el-loss-field">
-                        <label for="<%= txtQuantityLost.ClientID %>">
-                            Quantity Lost *
-                        </label>
-                        <asp:TextBox
-                            ID="txtQuantityLost"
-                            runat="server"
-                            CssClass="form-control"
-                            TextMode="Number"
-                            placeholder="Enter quantity" />
-                    </div>
+                </asp:DropDownList>
+            </div>
 
-                    <div class="el-loss-field">
-                        <label for="<%= txtLossReason.ClientID %>">
-                            Reason *
-                        </label>
-                        <asp:TextBox
-                            ID="txtLossReason"
-                            runat="server"
-                            CssClass="form-control"
-                            TextMode="MultiLine"
-                            Rows="3"
-                            MaxLength="500"
-                            placeholder="Explain why these copies are missing or damaged" />
-                    </div>
+            <div class="bk-field">
+                <label for="<%= ddlSort.ClientID %>">
+                    Sort
+                </label>
 
-                </div>
+                <asp:DropDownList
+                    ID="ddlSort"
+                    runat="server"
+                    CssClass="form-control">
 
-                <p class="el-loss-note">
-                    Only available copies may be recorded as
-                    inventory lost. Borrowed books must be handled
-                    through Manage Borrowings.
-                </p>
+                    <asp:ListItem Text="Default Order" Value="Default" />
+                    <asp:ListItem Text="Title A–Z" Value="TitleAsc" />
+                    <asp:ListItem Text="Title Z–A" Value="TitleDesc" />
+                    <asp:ListItem Text="Newest ID" Value="IDDesc" />
+                    <asp:ListItem Text="Oldest ID" Value="IDAsc" />
+                    <asp:ListItem Text="Most Available" Value="CopiesDesc" />
 
-                <p class="el-loss-note el-loss-danger">
-                    This operation permanently reduces total and
-                    available copies. It does not automatically
-                    archive the book.
-                </p>
+                </asp:DropDownList>
+            </div>
 
-                <div class="el-loss-actions">
-                    <asp:Button
-                        ID="btnConfirmInventoryLoss"
-                        runat="server"
-                        Text="Confirm Inventory Loss"
-                        CssClass="el-ac-btn el-ac-btn-primary"
-                        CausesValidation="false"
-                        OnClick="btnConfirmInventoryLoss_Click"
-                        OnClientClick="return confirm('Confirm this inventory loss? The stock deduction will be recorded in the audit history.');" />
+            <div class="bk-filter-actions">
 
-                    <asp:Button
-                        ID="btnCancelInventoryLoss"
-                        runat="server"
-                        Text="Cancel"
-                        CssClass="el-ac-btn el-ac-btn-light"
-                        CausesValidation="false"
-                        OnClick="btnCancelInventoryLoss_Click" />
-                </div>
+                <asp:Button
+                    ID="btnSearch"
+                    runat="server"
+                    Text="Apply"
+                    CssClass="bk-btn bk-btn-primary"
+                    CausesValidation="false"
+                    OnClick="btnSearch_Click" />
+
+                <asp:Button
+                    ID="btnResetFilters"
+                    runat="server"
+                    Text="Clear"
+                    CssClass="bk-btn"
+                    CausesValidation="false"
+                    OnClick="btnResetFilters_Click" />
 
             </div>
         </asp:Panel>
 
-        <!-- INVENTORY LOSS HISTORY -->
-        <section class="el-ac-panel" id="inventoryLossHistory">
-
-            <div class="el-ac-panel-heading">
-                <div>
-                    <h2>Inventory Loss History</h2>
-                    <p>
-                        Review recorded stock losses and
-                        the librarians responsible.
-                    </p>
-                </div>
-            </div>
-
-            <asp:Panel
-                ID="pnlLossHistorySearch"
+        <div class="bk-result-bar">
+            <asp:Label
+                ID="lblBookResultCount"
                 runat="server"
-                DefaultButton="btnLossHistorySearch"
-                CssClass="el-history-filters">
+                Text="Showing books" />
 
-                <asp:TextBox
-                    ID="txtLossHistorySearch"
-                    runat="server"
-                    CssClass="form-control"
-                    MaxLength="255"
-                    placeholder="Search book, ISBN, librarian, or reason" />
+            <span>
+                Press Enter or Apply to search.
+            </span>
+        </div>
 
-                <asp:Button
-                    ID="btnLossHistorySearch"
-                    runat="server"
-                    Text="Search"
-                    CssClass="el-ac-btn el-ac-btn-primary"
-                    CausesValidation="false"
-                    OnClick="btnLossHistorySearch_Click" />
+        <div class="bk-table-wrap">
 
-                <asp:Button
-                    ID="btnLossHistoryClear"
-                    runat="server"
-                    Text="Clear"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnLossHistoryClear_Click" />
-            </asp:Panel>
-
-            <p class="el-book-filter-note">
-                History searches run only when you press Enter
-                or click Search.
-            </p>
-
-            <div class="el-ac-table-scroll">
-                <asp:GridView
-                    ID="gvInventoryLossHistory"
-                    runat="server"
-                    AutoGenerateColumns="False"
-                    CssClass="el-ac-table"
-                    GridLines="None"
-                    EmptyDataText="No inventory losses found.">
-
-                    <Columns>
-                        <asp:BoundField
-                            DataField="InventoryLossID"
-                            HeaderText="Loss ID" />
-
-                        <asp:BoundField
-                            DataField="BookTitle"
-                            HeaderText="Book" />
-
-                        <asp:BoundField
-                            DataField="QuantityLost"
-                            HeaderText="Lost Qty" />
-
-                        <asp:BoundField
-                            DataField="Reason"
-                            HeaderText="Reason" />
-
-                        <asp:BoundField
-                            DataField="RecordedBy"
-                            HeaderText="Recorded By" />
-
-                        <asp:BoundField
-                            DataField="DateRecorded"
-                            HeaderText="Date"
-                            DataFormatString="{0:MMM dd, yyyy hh:mm tt}" />
-
-                        <asp:BoundField
-                            DataField="TotalCopiesBefore"
-                            HeaderText="Total Before" />
-
-                        <asp:BoundField
-                            DataField="TotalCopiesAfter"
-                            HeaderText="Total After" />
-
-                        <asp:BoundField
-                            DataField="AvailableCopiesBefore"
-                            HeaderText="Available Before" />
-
-                        <asp:BoundField
-                            DataField="AvailableCopiesAfter"
-                            HeaderText="Available After" />
-                    </Columns>
-                </asp:GridView>
-            </div>
-
-            <div class="el-book-pagination">
-                <asp:Button
-                    ID="btnLossHistoryPrevious"
-                    runat="server"
-                    Text="← Previous"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnLossHistoryPrevious_Click" />
-
-                <asp:Label
-                    ID="lblLossHistoryPageInfo"
-                    runat="server"
-                    Text="Page 1 of 1" />
-
-                <asp:Button
-                    ID="btnLossHistoryNext"
-                    runat="server"
-                    Text="Next →"
-                    CssClass="el-ac-btn el-ac-btn-light"
-                    CausesValidation="false"
-                    OnClick="btnLossHistoryNext_Click" />
-            </div>
-        </section>
-
-        <!-- CREATE / EDIT BOOK -->
-        <section
-            class="el-ac-panel el-ac-editor"
-            id="bookEditor">
-
-            <div class="el-ac-panel-heading">
-                <div>
-                    <h2>Create / Edit Book</h2>
-                    <p>
-                        Add a new book, edit its information,
-                        or increase its inventory.
-                    </p>
-                </div>
-
-                <span class="el-ac-section-chip">
-                    Book Information
-                </span>
-            </div>
-
-            <asp:HiddenField
-                ID="hfBookID"
+            <asp:GridView
+                ID="gvBooks"
                 runat="server"
-                Value="0" />
+                AutoGenerateColumns="False"
+                CssClass="bk-table"
+                GridLines="None"
+                EmptyDataText="No matching books found."
+                OnRowCommand="gvBooks_RowCommand">
 
-            <div class="el-ac-editor-layout">
+                <Columns>
 
-                <div class="el-ac-editor-main">
-                    <div class="el-ac-form-grid">
+                    <asp:TemplateField HeaderText="Book">
+                        <ItemTemplate>
+                            <div class="bk-book-cell">
 
-                        <div class="el-ac-field el-ac-full">
-                            <label for="<%= txtTitle.ClientID %>">
-                                Book Title *
-                            </label>
-                            <asp:TextBox
-                                ID="txtTitle"
-                                runat="server"
-                                CssClass="form-control"
-                                MaxLength="255"
-                                placeholder="Enter book title" />
-                        </div>
+                                <asp:Image
+                                    ID="imgBookCover"
+                                    runat="server"
+                                    CssClass="bk-book-thumb"
+                                    AlternateText="Book cover"
+                                    ImageUrl='<%# GetCoverUrl(Eval("CoverImagePath")) %>' />
 
-                        <div class="el-ac-field">
-                            <label for="<%= txtISBN.ClientID %>">
-                                ISBN *
-                            </label>
-                            <asp:TextBox
-                                ID="txtISBN"
-                                runat="server"
-                                CssClass="form-control"
-                                MaxLength="20"
-                                placeholder="Enter ISBN" />
-                        </div>
+                                <div class="bk-book-info">
+                                    <strong>
+                                        <%#: Eval("Title") %>
+                                    </strong>
 
-                        <div class="el-ac-field">
-                            <label for="<%= ddlGenre.ClientID %>">
-                                Genre *
-                            </label>
-                            <asp:DropDownList
-                                ID="ddlGenre"
-                                runat="server"
-                                CssClass="form-control" />
-                        </div>
+                                    <small>
+                                        <%#: Eval("Author") %>
+                                    </small>
+                                </div>
 
-                        <div class="el-ac-field el-ac-full">
-                            <label for="<%= txtAuthor.ClientID %>">
-                                Author *
-                            </label>
-                            <asp:TextBox
-                                ID="txtAuthor"
-                                runat="server"
-                                CssClass="form-control"
-                                MaxLength="150"
-                                placeholder="Enter author name" />
-                        </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
-                        <div class="el-ac-field">
-                            <label for="<%= txtTotalCopies.ClientID %>">
-                                Total Copies *
-                            </label>
-                            <asp:TextBox
-                                ID="txtTotalCopies"
-                                runat="server"
-                                CssClass="form-control"
-                                TextMode="Number"
-                                placeholder="0" />
-                            <small>
-                                Existing books: you may add copies,
-                                but reductions require Mark Inventory Lost.
-                            </small>
-                        </div>
+                    <asp:BoundField
+                        DataField="BookID"
+                        HeaderText="ID" />
 
-                        <div class="el-ac-field">
-                            <label for="<%= txtBorrowingFee.ClientID %>">
-                                Borrowing Fee (PHP) *
-                            </label>
-                            <asp:TextBox
-                                ID="txtBorrowingFee"
-                                runat="server"
-                                CssClass="form-control"
-                                placeholder="0.00" />
-                        </div>
+                    <asp:BoundField
+                        DataField="ISBN"
+                        HeaderText="ISBN" />
 
-                        <div class="el-ac-field el-ac-full">
-                            <label for="<%= txtBookDesc.ClientID %>">
-                                Description *
-                            </label>
-                            <asp:TextBox
-                                ID="txtBookDesc"
-                                runat="server"
-                                CssClass="form-control"
-                                TextMode="MultiLine"
-                                Rows="4"
-                                MaxLength="255"
-                                placeholder="Enter a short book description" />
-                        </div>
+                    <asp:BoundField
+                        DataField="GenreName"
+                        HeaderText="Genre" />
 
-                    </div>
+                    <asp:BoundField
+                        DataField="TotalCopies"
+                        HeaderText="Total" />
+
+                    <asp:BoundField
+                        DataField="AvailableCopies"
+                        HeaderText="Available" />
+
+                    <asp:BoundField
+                        DataField="BorrowingFee"
+                        HeaderText="Fee (PHP)"
+                        DataFormatString="{0:N2}" />
+
+                    <asp:TemplateField HeaderText="Actions">
+                        <ItemTemplate>
+
+                            <div class="bk-row-actions">
+
+                                <asp:LinkButton
+                                    ID="btnEdit"
+                                    runat="server"
+                                    Text="Edit"
+                                    CssClass="bk-row-action"
+                                    CommandName="EditBook"
+                                    CommandArgument='<%# Eval("BookID") %>'
+                                    CausesValidation="false" />
+
+                                <asp:LinkButton
+                                    ID="btnInventoryLost"
+                                    runat="server"
+                                    Text="Mark Lost"
+                                    CssClass="bk-row-action"
+                                    CommandName="InventoryLost"
+                                    CommandArgument='<%# Eval("BookID") %>'
+                                    CausesValidation="false"
+                                    Visible='<%# Convert.ToInt32(Eval("AvailableCopies")) > 0 %>' />
+
+                                <asp:LinkButton
+                                    ID="btnArchive"
+                                    runat="server"
+                                    Text="Archive"
+                                    CssClass="bk-row-action danger"
+                                    CommandName="ArchiveBook"
+                                    CommandArgument='<%# Eval("BookID") %>'
+                                    CausesValidation="false"
+                                    OnClientClick="return confirm('Archive this book?');" />
+
+                            </div>
+
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
+
+            </asp:GridView>
+
+        </div>
+
+        <div class="bk-pagination">
+
+            <asp:Button
+                ID="btnPrevious"
+                runat="server"
+                Text="← Previous"
+                CssClass="bk-btn"
+                CausesValidation="false"
+                OnClick="btnPrevious_Click" />
+
+            <asp:Label
+                ID="lblPageInfo"
+                runat="server"
+                Text="Page 1 of 1" />
+
+            <asp:Button
+                ID="btnNext"
+                runat="server"
+                Text="Next →"
+                CssClass="bk-btn"
+                CausesValidation="false"
+                OnClick="btnNext_Click" />
+
+        </div>
+
+    </section>
+
+    <!-- CREATE / EDIT BOOK - HIDDEN UNTIL NEEDED -->
+
+    <asp:Panel
+        ID="pnlBookEditor"
+        runat="server"
+        Visible="false"
+        ClientIDMode="Static"
+        CssClass="bk-panel">
+
+        <div class="bk-panel-head">
+            <div>
+
+                <h2>
+                    <asp:Label
+                        ID="lblEditorTitle"
+                        runat="server"
+                        Text="Add New Book" />
+                </h2>
+
+                <p>
+                    Enter book details and manage its cover image.
+                </p>
+
+            </div>
+
+            <span class="bk-tag">
+                Book Information
+            </span>
+        </div>
+
+        <!-- EDITOR NOTIFICATIONS -->
+
+        <asp:Label
+            ID="lblEditorMessage"
+            runat="server"
+            EnableViewState="false"
+            CssClass="bk-message"
+            role="status"
+            aria-live="polite" />
+
+        <asp:HiddenField
+            ID="hfBookID"
+            runat="server"
+            Value="0" />
+
+        <div class="bk-editor-layout">
+
+            <div class="bk-form-grid">
+
+                <div class="bk-field bk-full">
+                    <label for="<%= txtTitle.ClientID %>">
+                        Book Title *
+                    </label>
+
+                    <asp:TextBox
+                        ID="txtTitle"
+                        runat="server"
+                        CssClass="form-control"
+                        MaxLength="255"
+                        placeholder="Enter book title" />
                 </div>
 
-                <aside class="el-ac-cover-panel">
-                    <h3>Book Cover</h3>
-                    <p>
-                        Upload a cover image for the catalog.
-                    </p>
+                <div class="bk-field">
+                    <label for="<%= txtISBN.ClientID %>">
+                        ISBN *
+                    </label>
 
-                    <div class="el-ac-cover-preview-box">
-                        <asp:Image
-                            ID="imgCoverPreview"
-                            runat="server"
-                            CssClass="el-ac-cover-preview"
-                            AlternateText="Book cover preview" />
-                    </div>
+                    <asp:TextBox
+                        ID="txtISBN"
+                        runat="server"
+                        CssClass="form-control"
+                        MaxLength="20"
+                        placeholder="Enter ISBN" />
+                </div>
 
+                <div class="bk-field">
+                    <label for="<%= ddlGenre.ClientID %>">
+                        Genre *
+                    </label>
+
+                    <asp:DropDownList
+                        ID="ddlGenre"
+                        runat="server"
+                        CssClass="form-control" />
+                </div>
+
+                <div class="bk-field bk-full">
+                    <label for="<%= txtAuthor.ClientID %>">
+                        Author *
+                    </label>
+
+                    <asp:TextBox
+                        ID="txtAuthor"
+                        runat="server"
+                        CssClass="form-control"
+                        MaxLength="150"
+                        placeholder="Enter author name" />
+                </div>
+
+                <div class="bk-field">
+                    <label for="<%= txtTotalCopies.ClientID %>">
+                        Total Copies *
+                    </label>
+
+                    <asp:TextBox
+                        ID="txtTotalCopies"
+                        runat="server"
+                        CssClass="form-control"
+                        TextMode="Number"
+                        placeholder="0" />
+
+                    <small class="bk-help">
+                        Existing stock may be increased here.
+                        Use Mark Lost for stock deductions.
+                    </small>
+                </div>
+
+                <div class="bk-field">
+                    <label for="<%= txtBorrowingFee.ClientID %>">
+                        Borrowing Fee (PHP) *
+                    </label>
+
+                    <asp:TextBox
+                        ID="txtBorrowingFee"
+                        runat="server"
+                        CssClass="form-control"
+                        placeholder="0.00" />
+                </div>
+
+                <div class="bk-field bk-full">
+                    <label for="<%= txtBookDesc.ClientID %>">
+                        Description *
+                    </label>
+
+                    <asp:TextBox
+                        ID="txtBookDesc"
+                        runat="server"
+                        CssClass="form-control"
+                        TextMode="MultiLine"
+                        Rows="4"
+                        MaxLength="255"
+                        placeholder="Enter a short description" />
+                </div>
+
+            </div>
+
+            <!-- BOOK COVER -->
+
+            <aside class="bk-cover-panel">
+
+                <h3>Book Cover</h3>
+
+                <p class="bk-help">
+                    Upload a cover image for your catalog.
+                </p>
+
+                <div class="bk-cover-box">
+                    <asp:Image
+                        ID="imgCoverPreview"
+                        runat="server"
+                        CssClass="bk-cover-preview"
+                        AlternateText="Book cover preview" />
+                </div>
+
+                <div class="bk-field">
                     <label for="<%= fuBookCover.ClientID %>">
-                        Choose Cover Image
+                        Choose Cover
                     </label>
 
                     <asp:FileUpload
@@ -859,101 +1040,407 @@
                         runat="server"
                         CssClass="form-control"
                         accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-
-                    <small>
-                        JPG or PNG, maximum 2 MB.
-                        Leave blank to keep the existing cover.
-                    </small>
-                </aside>
-
-            </div>
-
-            <div class="el-ac-editor-actions">
-                <span>
-                    Fields marked * are required.
-                </span>
-
-                <div class="el-ac-button-group">
-                    <asp:Button
-                        ID="btnClear"
-                        runat="server"
-                        Text="Clear Form"
-                        CssClass="el-ac-btn el-ac-btn-light"
-                        CausesValidation="false"
-                        OnClick="btnClear_Click" />
-
-                    <asp:Button
-                        ID="btnSave"
-                        runat="server"
-                        Text="Save Book"
-                        CssClass="el-ac-btn el-ac-btn-primary"
-                        OnClick="btnSave_Click" />
                 </div>
+
+                <small class="bk-help">
+                    JPG or PNG, maximum 2 MB.
+                    Leave blank to keep the existing image.
+                </small>
+
+            </aside>
+
+        </div>
+
+        <div class="bk-form-footer">
+
+            <small class="bk-help">
+                Fields marked * are required.
+            </small>
+
+            <div class="bk-button-group">
+
+                <asp:Button
+                    ID="btnClear"
+                    runat="server"
+                    Text="Clear Form"
+                    CssClass="bk-btn"
+                    CausesValidation="false"
+                    OnClick="btnClear_Click" />
+
+                <asp:Button
+                    ID="btnCancelEditor"
+                    runat="server"
+                    Text="Close"
+                    CssClass="bk-btn"
+                    CausesValidation="false"
+                    OnClick="btnCancelEditor_Click" />
+
+                <asp:Button
+                    ID="btnSave"
+                    runat="server"
+                    Text="Save Book"
+                    CssClass="bk-btn bk-btn-primary"
+                    CausesValidation="false"
+                    OnClick="btnSave_Click" />
+
+            </div>
+        </div>
+
+    </asp:Panel>
+
+    <!-- INVENTORY LOSS FORM - HIDDEN UNTIL NEEDED -->
+
+    <asp:Panel
+        ID="pnlInventoryLoss"
+        runat="server"
+        Visible="false"
+        CssClass="bk-panel"
+        ClientIDMode="Static">
+
+        <div class="bk-panel-head">
+            <div>
+                <h2>Mark Inventory Lost</h2>
+                <p>
+                    Record missing or damaged copies
+                    from available stock.
+                </p>
             </div>
 
-        </section>
-    </div>
+            <span class="bk-tag">
+                Inventory Adjustment
+            </span>
+        </div>
 
-    <script type="text/javascript">
-        (function () {
-            var upload = document.getElementById(
-                '<%= fuBookCover.ClientID %>');
+        <!-- LOSS FORM NOTIFICATIONS -->
 
-            var preview = document.getElementById(
-                '<%= imgCoverPreview.ClientID %>');
+        <asp:Label
+            ID="lblLossMessage"
+            runat="server"
+            EnableViewState="false"
+            CssClass="bk-message"
+            role="status"
+            aria-live="polite" />
 
-            if (upload && preview) {
-                upload.addEventListener('change', function () {
-                    var file = upload.files && upload.files[0];
-                    if (!file) return;
+        <asp:HiddenField
+            ID="hfInventoryLossBookID"
+            runat="server"
+            Value="0" />
 
-                    if (file.type !== 'image/jpeg' &&
-                        file.type !== 'image/png') {
-                        alert('Choose a JPG or PNG image.');
-                        upload.value = '';
-                        return;
-                    }
+        <h3 style="font-size:17px;font-weight:800;">
+            <asp:Label
+                ID="lblLossBookTitle"
+                runat="server" />
+        </h3>
 
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert('Image must not exceed 2 MB.');
-                        upload.value = '';
-                        return;
-                    }
+        <div class="bk-loss-summary">
 
-                    var reader = new FileReader();
-                    reader.onload = function (event) {
-                        preview.src = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
+            <div class="bk-loss-stat">
+                <small>Total Copies</small>
+                <strong>
+                    <asp:Label
+                        ID="lblLossTotal"
+                        runat="server"
+                        Text="0" />
+                </strong>
+            </div>
+
+            <div class="bk-loss-stat">
+                <small>Available Copies</small>
+                <strong>
+                    <asp:Label
+                        ID="lblLossAvailable"
+                        runat="server"
+                        Text="0" />
+                </strong>
+            </div>
+
+            <div class="bk-loss-stat">
+                <small>Maximum Loss</small>
+                <strong>
+                    <asp:Label
+                        ID="lblLossMaximum"
+                        runat="server"
+                        Text="0" />
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="bk-loss-grid">
+
+            <div class="bk-field">
+                <label for="<%= txtQuantityLost.ClientID %>">
+                    Quantity Lost *
+                </label>
+
+                <asp:TextBox
+                    ID="txtQuantityLost"
+                    runat="server"
+                    CssClass="form-control"
+                    TextMode="Number"
+                    placeholder="Enter quantity" />
+            </div>
+
+            <div class="bk-field">
+                <label for="<%= txtLossReason.ClientID %>">
+                    Reason *
+                </label>
+
+                <asp:TextBox
+                    ID="txtLossReason"
+                    runat="server"
+                    CssClass="form-control"
+                    TextMode="MultiLine"
+                    Rows="3"
+                    MaxLength="500"
+                    placeholder="Explain why these copies are missing or damaged" />
+            </div>
+
+        </div>
+
+        <div class="bk-warning">
+            Only available copies can be marked lost.
+            This operation permanently reduces total and
+            available stock. Borrowed books must be handled
+            through Manage Borrowings.
+        </div>
+
+        <div class="bk-button-group">
+
+            <asp:Button
+                ID="btnConfirmInventoryLoss"
+                runat="server"
+                Text="Confirm Inventory Loss"
+                CssClass="bk-btn bk-btn-primary"
+                CausesValidation="false"
+                OnClick="btnConfirmInventoryLoss_Click"
+                OnClientClick="return confirm('Confirm this inventory loss? The stock deduction will be recorded in the audit history.');" />
+
+            <asp:Button
+                ID="btnCancelInventoryLoss"
+                runat="server"
+                Text="Cancel"
+                CssClass="bk-btn"
+                CausesValidation="false"
+                OnClick="btnCancelInventoryLoss_Click" />
+
+        </div>
+
+    </asp:Panel>
+
+    <!-- INVENTORY LOSS HISTORY -->
+
+    <section id="inventoryLossHistory"
+        class="bk-panel">
+
+        <div class="bk-panel-head">
+            <div>
+                <h2>Inventory Loss History</h2>
+                <p>
+                    Review stock adjustments and responsible librarians.
+                </p>
+            </div>
+
+            <span class="bk-tag">
+                Audit Records
+            </span>
+        </div>
+
+        <!-- HISTORY NOTIFICATIONS -->
+
+        <asp:Label
+            ID="lblHistoryMessage"
+            runat="server"
+            EnableViewState="false"
+            CssClass="bk-message"
+            role="status"
+            aria-live="polite" />
+
+        <asp:Panel
+            ID="pnlLossHistorySearch"
+            runat="server"
+            DefaultButton="btnLossHistorySearch"
+            CssClass="bk-history-filters">
+
+            <asp:TextBox
+                ID="txtLossHistorySearch"
+                runat="server"
+                CssClass="form-control"
+                MaxLength="255"
+                placeholder="Search book, ISBN, librarian or reason" />
+
+            <asp:Button
+                ID="btnLossHistorySearch"
+                runat="server"
+                Text="Search"
+                CssClass="bk-btn bk-btn-primary"
+                CausesValidation="false"
+                OnClick="btnLossHistorySearch_Click" />
+
+            <asp:Button
+                ID="btnLossHistoryClear"
+                runat="server"
+                Text="Clear"
+                CssClass="bk-btn"
+                CausesValidation="false"
+                OnClick="btnLossHistoryClear_Click" />
+
+        </asp:Panel>
+
+        <p class="bk-help" style="margin-bottom:15px;">
+            Search runs only when you press Enter or click Search.
+        </p>
+
+        <div class="bk-table-wrap">
+
+            <asp:GridView
+                ID="gvInventoryLossHistory"
+                runat="server"
+                AutoGenerateColumns="False"
+                CssClass="bk-table"
+                GridLines="None"
+                EmptyDataText="No inventory loss records found.">
+
+                <Columns>
+
+                    <asp:BoundField
+                        DataField="InventoryLossID"
+                        HeaderText="Loss ID" />
+
+                    <asp:BoundField
+                        DataField="BookTitle"
+                        HeaderText="Book" />
+
+                    <asp:BoundField
+                        DataField="QuantityLost"
+                        HeaderText="Lost Qty" />
+
+                    <asp:BoundField
+                        DataField="Reason"
+                        HeaderText="Reason" />
+
+                    <asp:BoundField
+                        DataField="RecordedBy"
+                        HeaderText="Recorded By" />
+
+                    <asp:BoundField
+                        DataField="DateRecorded"
+                        HeaderText="Date"
+                        DataFormatString="{0:MMM dd, yyyy hh:mm tt}" />
+
+                    <asp:BoundField
+                        DataField="TotalCopiesBefore"
+                        HeaderText="Total Before" />
+
+                    <asp:BoundField
+                        DataField="TotalCopiesAfter"
+                        HeaderText="Total After" />
+
+                    <asp:BoundField
+                        DataField="AvailableCopiesBefore"
+                        HeaderText="Available Before" />
+
+                    <asp:BoundField
+                        DataField="AvailableCopiesAfter"
+                        HeaderText="Available After" />
+
+                </Columns>
+            </asp:GridView>
+
+        </div>
+
+        <div class="bk-pagination">
+
+            <asp:Button
+                ID="btnLossHistoryPrevious"
+                runat="server"
+                Text="← Previous"
+                CssClass="bk-btn"
+                CausesValidation="false"
+                OnClick="btnLossHistoryPrevious_Click" />
+
+            <asp:Label
+                ID="lblLossHistoryPageInfo"
+                runat="server"
+                Text="Page 1 of 1" />
+
+            <asp:Button
+                ID="btnLossHistoryNext"
+                runat="server"
+                Text="Next →"
+                CssClass="bk-btn"
+                CausesValidation="false"
+                OnClick="btnLossHistoryNext_Click" />
+
+        </div>
+
+    </section>
+
+</div>
+
+<!-- SCROLL TO THE RELEVANT FORM OR RESULT -->
+
+<asp:HiddenField
+    ID="hfFocusTarget"
+    runat="server"
+    Value=""
+    ClientIDMode="Static" />
+
+<script type="text/javascript">
+    (function () {
+
+        var upload = document.getElementById(
+        '<%= fuBookCover.ClientID %>');
+
+    var preview = document.getElementById(
+        '<%= imgCoverPreview.ClientID %>');
+
+        if (upload && preview) {
+            upload.addEventListener('change', function () {
+                var file = upload.files && upload.files[0];
+                if (!file) return;
+
+                if (file.type !== 'image/jpeg' &&
+                    file.type !== 'image/png') {
+                    alert('Choose a JPG or PNG image.');
+                    upload.value = '';
+                    return;
+                }
+
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Image must not exceed 2 MB.');
+                    upload.value = '';
+                    return;
+                }
+
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+                    preview.src = event.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        var focusInput =
+            document.getElementById('hfFocusTarget');
+
+        if (focusInput && focusInput.value) {
+            var target = document.getElementById(
+                focusInput.value);
+
+            if (target) {
+                window.requestAnimationFrame(function () {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 });
             }
+        }
 
-            var editor = document.getElementById('bookEditor');
-            var bookId = document.getElementById(
-                '<%= hfBookID.ClientID %>');
-
-            if (editor && bookId &&
-                bookId.value !== '0' &&
-                bookId.value !== '') {
-                editor.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-
-            var lossPanel = document.getElementById('pnlInventoryLoss');
-            var lossBookId = document.getElementById(
-                '<%= hfInventoryLossBookID.ClientID %>');
-
-            if (lossPanel && lossBookId &&
-                lossBookId.value !== '0' &&
-                lossBookId.value !== '') {
-                lossPanel.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        })();
-    </script>
+    })();
+</script>
 
 </asp:Content>

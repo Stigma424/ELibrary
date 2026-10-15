@@ -15,13 +15,22 @@ namespace ELibrary.Admin.Books
     {
 
         /// <summary>
-        /// lblMessage control.
+        /// btnCreateGenre control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Button btnCreateGenre;
+
+        /// <summary>
+        /// lblListMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblListMessage;
 
         /// <summary>
         /// pnlGenreFilters control.
@@ -114,6 +123,33 @@ namespace ELibrary.Admin.Books
         protected global::System.Web.UI.WebControls.Button btnNext;
 
         /// <summary>
+        /// pnlGenreEditor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlGenreEditor;
+
+        /// <summary>
+        /// lblEditorTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEditorTitle;
+
+        /// <summary>
+        /// lblEditorMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEditorMessage;
+
+        /// <summary>
         /// hfGenreID control.
         /// </summary>
         /// <remarks>
@@ -150,6 +186,15 @@ namespace ELibrary.Admin.Books
         protected global::System.Web.UI.WebControls.Button btnCancel;
 
         /// <summary>
+        /// btnCloseEditor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseEditor;
+
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
@@ -157,5 +202,14 @@ namespace ELibrary.Admin.Books
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSave;
+
+        /// <summary>
+        /// hfFocusTarget control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfFocusTarget;
     }
 }
