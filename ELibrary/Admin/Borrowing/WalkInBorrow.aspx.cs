@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -14,19 +15,14 @@ namespace ELibrary.Admin.Borrowing
             ConfigurationManager.ConnectionStrings[
                 "ElibraryConnection"].ConnectionString;
 
-        // ==========================================
-        // SELECTED RECORDS
-        // ==========================================
-
         private int SelectedUserID
         {
             get
             {
-                object value = ViewState["SelectedUserID"];
-
-                return value == null
+                return ViewState["SelectedUserID"] == null
                     ? 0
-                    : Convert.ToInt32(value);
+                    : Convert.ToInt32(
+                        ViewState["SelectedUserID"]);
             }
             set
             {
@@ -38,11 +34,10 @@ namespace ELibrary.Admin.Borrowing
         {
             get
             {
-                object value = ViewState["SelectedBookID"];
-
-                return value == null
+                return ViewState["SelectedBookID"] == null
                     ? 0
-                    : Convert.ToInt32(value);
+                    : Convert.ToInt32(
+                        ViewState["SelectedBookID"]);
             }
             set
             {
@@ -50,15 +45,35 @@ namespace ELibrary.Admin.Borrowing
             }
         }
 
-        // ==========================================
-        // PAGE LOAD
-        // ==========================================
+        private bool PaymentPreviewVerified
+        {
+            get
+            {
+                return ViewState["PaymentPreviewVerified"] != null
+                    && Convert.ToBoolean(
+                        ViewState["PaymentPreviewVerified"]);
+            }
+            set
+            {
+                ViewState["PaymentPreviewVerified"] = value;
+            }
+        }
+
+        private enum MessageArea
+        {
+            Customer,
+            Book,
+            Verification,
+            Payment,
+            Completed
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!AdminHelper.IsAdmin(Session))
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -70,17 +85,26 @@ namespace ELibrary.Admin.Borrowing
             hfFocusTarget.Value = "";
         }
 
-        // ==========================================
-        // LOCAL NOTIFICATIONS
-        // ==========================================
-
-        private enum MessageArea
+        private string FormatPeso(decimal value)
         {
-            Customer,
-            Book,
-            Verification,
-            Confirmation,
-            Completed
+            return "₱" + value.ToString(
+                "N2",
+                CultureInfo.GetCultureInfo("en-PH"));
+        }
+
+        private void HideMessage(Label label)
+        {
+            label.Text = "";
+            label.Visible = false;
+        }
+
+        private void HideMessages()
+        {
+            HideMessage(lblCustomerMessage);
+            HideMessage(lblBookMessage);
+            HideMessage(lblVerifyMessage);
+            HideMessage(lblMessage);
+            HideMessage(lblCompletedMessage);
         }
 
         private void ShowMessage(
@@ -88,79 +112,72 @@ namespace ELibrary.Admin.Borrowing
             bool success,
             MessageArea area)
         {
-            Label label;
+            Label target;
             string focus;
 
             switch (area)
             {
                 case MessageArea.Customer:
-                    label = lblCustomerMessage;
+                    target = lblCustomerMessage;
                     focus = "walkinCustomer";
                     break;
 
                 case MessageArea.Book:
-                    label = lblBookMessage;
+                    target = lblBookMessage;
                     focus = "walkinBook";
                     break;
 
                 case MessageArea.Verification:
-                    label = lblVerifyMessage;
+                    target = lblVerifyMessage;
                     focus = "walkinVerify";
                     break;
 
                 case MessageArea.Completed:
                     pnlCompleted.Visible = true;
-                    label = lblCompletedMessage;
+                    target = lblCompletedMessage;
                     focus = "pnlCompleted";
                     break;
 
                 default:
                     pnlPreview.Visible = true;
-                    label = lblMessage;
+                    target = lblMessage;
                     focus = "pnlPreview";
                     break;
             }
 
-            label.Text = Server.HtmlEncode(message);
-            label.CssClass = success
+            target.Text = Server.HtmlEncode(message);
+            target.CssClass = success
                 ? "wi-message success"
                 : "wi-message error";
+            target.Visible = true;
 
-            label.Visible = true;
             hfFocusTarget.Value = focus;
         }
 
-        private void HideMessages()
+        private void InvalidatePreview()
         {
-            HideLabel(lblCustomerMessage);
-            HideLabel(lblBookMessage);
-            HideLabel(lblVerifyMessage);
-            HideLabel(lblMessage);
-            HideLabel(lblCompletedMessage);
+            PaymentPreviewVerified = false;
+
+            pnlPreview.Visible = false;
+            pnlCompleted.Visible = false;
+
+            chkPaymentConfirmed.Checked = false;
+            ddlPaymentMethod.SelectedIndex = 0;
+
+            txtAmountReceived.Text = "";
+            txtReferenceNo.Text = "";
         }
 
-        private void HideLabel(Label label)
-        {
-            label.Text = "";
-            label.Visible = false;
-        }
-
-        private void FocusSection(string target)
-        {
-            hfFocusTarget.Value = target;
-        }
-
-        // ==========================================
-        // CUSTOMER SEARCH
-        // ==========================================
+        // =========================================
+        // SEARCH CUSTOMERS
+        // =========================================
 
         protected void btnSearchCustomer_Click(
             object sender,
             EventArgs e)
         {
             HideMessages();
-            pnlPreview.Visible = false;
-            pnlCompleted.Visible = false;
+            InvalidatePreview();
 
             SelectedUserID = 0;
             pnlSelectedCustomer.Visible = false;
@@ -169,7 +186,7 @@ namespace ELibrary.Admin.Borrowing
             string search =
                 (txtCustomerSearch.Text ?? "").Trim();
 
-            if (string.IsNullOrWhiteSpace(search))
+            if (search.Length == 0)
             {
                 pnlCustomerResults.Visible = false;
 
@@ -196,19 +213,17 @@ namespace ELibrary.Admin.Borrowing
                     WHERE Role = 1
                       AND
                       (
-                           FullName LIKE '%' + @Search + '%'
-                           OR FirstName LIKE '%' + @Search + '%'
-                           OR LastName LIKE '%' + @Search + '%'
-                           OR Email LIKE '%' + @Search + '%'
+                          FullName LIKE '%' + @Search + '%'
+                          OR FirstName LIKE '%' + @Search + '%'
+                          OR LastName LIKE '%' + @Search + '%'
+                          OR Email LIKE '%' + @Search + '%'
                       )
-                    ORDER BY
-                        FullName ASC,
-                        UserID ASC;", con))
+                    ORDER BY FullName, UserID;", con))
                 {
                     cmd.Parameters.Add(
                         "@Search",
-                        SqlDbType.VarChar, 100).Value =
-                        search;
+                        SqlDbType.VarChar,
+                        100).Value = search;
 
                     using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
@@ -221,39 +236,35 @@ namespace ELibrary.Admin.Borrowing
                 gvCustomers.DataBind();
 
                 pnlCustomerResults.Visible = true;
-
                 lblCustomerEmpty.Visible =
                     results.Rows.Count == 0;
 
-                FocusSection("walkinCustomer");
+                hfFocusTarget.Value = "walkinCustomer";
             }
             catch (Exception)
             {
                 pnlCustomerResults.Visible = false;
 
                 ShowMessage(
-                    "Unable to search customers. Please try again.",
+                    "Unable to retrieve customers.",
                     false,
                     MessageArea.Customer);
             }
         }
 
-        // ==========================================
+        // =========================================
         // SELECT CUSTOMER
-        // ==========================================
+        // =========================================
 
         protected void gvCustomers_RowCommand(
             object sender,
             GridViewCommandEventArgs e)
         {
             if (e.CommandName != "SelectCustomer")
-            {
                 return;
-            }
 
             HideMessages();
-            pnlPreview.Visible = false;
-            pnlCompleted.Visible = false;
+            InvalidatePreview();
 
             int userID;
 
@@ -274,7 +285,6 @@ namespace ELibrary.Admin.Borrowing
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(@"
                     SELECT
-                        UserID,
                         FullName,
                         Email,
                         IsAllowedToBorrow
@@ -284,8 +294,7 @@ namespace ELibrary.Admin.Borrowing
                 {
                     cmd.Parameters.Add(
                         "@UserID",
-                        SqlDbType.Int).Value =
-                        userID;
+                        SqlDbType.Int).Value = userID;
 
                     con.Open();
 
@@ -295,7 +304,7 @@ namespace ELibrary.Admin.Borrowing
                         if (!reader.Read())
                         {
                             ShowMessage(
-                                "The selected customer was not found.",
+                                "Customer not found.",
                                 false,
                                 MessageArea.Customer);
                             return;
@@ -305,7 +314,7 @@ namespace ELibrary.Admin.Borrowing
                             reader["IsAllowedToBorrow"]))
                         {
                             ShowMessage(
-                                "This customer is restricted from borrowing.",
+                                "This customer is not allowed to borrow.",
                                 false,
                                 MessageArea.Customer);
                             return;
@@ -336,23 +345,22 @@ namespace ELibrary.Admin.Borrowing
             catch (Exception)
             {
                 ShowMessage(
-                    "Unable to select the customer. Please try again.",
+                    "Unable to select customer.",
                     false,
                     MessageArea.Customer);
             }
         }
 
-        // ==========================================
-        // BOOK SEARCH
-        // ==========================================
+        // =========================================
+        // SEARCH BOOKS
+        // =========================================
 
         protected void btnSearchBook_Click(
             object sender,
             EventArgs e)
         {
             HideMessages();
-            pnlPreview.Visible = false;
-            pnlCompleted.Visible = false;
+            InvalidatePreview();
 
             SelectedBookID = 0;
             pnlSelectedBook.Visible = false;
@@ -361,7 +369,7 @@ namespace ELibrary.Admin.Borrowing
             string search =
                 (txtBookSearch.Text ?? "").Trim();
 
-            if (string.IsNullOrWhiteSpace(search))
+            if (search.Length == 0)
             {
                 pnlBookResults.Visible = false;
 
@@ -388,18 +396,16 @@ namespace ELibrary.Admin.Borrowing
                     WHERE IsArchived = 0
                       AND
                       (
-                           Title LIKE '%' + @Search + '%'
-                           OR Author LIKE '%' + @Search + '%'
-                           OR ISBN LIKE '%' + @Search + '%'
+                          Title LIKE '%' + @Search + '%'
+                          OR Author LIKE '%' + @Search + '%'
+                          OR ISBN LIKE '%' + @Search + '%'
                       )
-                    ORDER BY
-                        Title ASC,
-                        BookID ASC;", con))
+                    ORDER BY Title, BookID;", con))
                 {
                     cmd.Parameters.Add(
                         "@Search",
-                        SqlDbType.VarChar, 255).Value =
-                        search;
+                        SqlDbType.VarChar,
+                        255).Value = search;
 
                     using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
@@ -412,39 +418,35 @@ namespace ELibrary.Admin.Borrowing
                 gvBooks.DataBind();
 
                 pnlBookResults.Visible = true;
-
                 lblBookEmpty.Visible =
                     results.Rows.Count == 0;
 
-                FocusSection("walkinBook");
+                hfFocusTarget.Value = "walkinBook";
             }
             catch (Exception)
             {
                 pnlBookResults.Visible = false;
 
                 ShowMessage(
-                    "Unable to search books. Please try again.",
+                    "Unable to retrieve books.",
                     false,
                     MessageArea.Book);
             }
         }
 
-        // ==========================================
+        // =========================================
         // SELECT BOOK
-        // ==========================================
+        // =========================================
 
         protected void gvBooks_RowCommand(
             object sender,
             GridViewCommandEventArgs e)
         {
             if (e.CommandName != "SelectBook")
-            {
                 return;
-            }
 
             HideMessages();
-            pnlPreview.Visible = false;
-            pnlCompleted.Visible = false;
+            InvalidatePreview();
 
             int bookID;
 
@@ -465,7 +467,6 @@ namespace ELibrary.Admin.Borrowing
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(@"
                     SELECT
-                        BookID,
                         Title,
                         Author,
                         AvailableCopies
@@ -475,8 +476,7 @@ namespace ELibrary.Admin.Borrowing
                 {
                     cmd.Parameters.Add(
                         "@BookID",
-                        SqlDbType.Int).Value =
-                        bookID;
+                        SqlDbType.Int).Value = bookID;
 
                     con.Open();
 
@@ -486,20 +486,17 @@ namespace ELibrary.Admin.Borrowing
                         if (!reader.Read())
                         {
                             ShowMessage(
-                                "The selected book was not found or is archived.",
+                                "Book not found or archived.",
                                 false,
                                 MessageArea.Book);
                             return;
                         }
 
-                        int availableCopies =
-                            Convert.ToInt32(
-                                reader["AvailableCopies"]);
-
-                        if (availableCopies <= 0)
+                        if (Convert.ToInt32(
+                            reader["AvailableCopies"]) <= 0)
                         {
                             ShowMessage(
-                                "This book has no available copies.",
+                                "No available copies remain.",
                                 false,
                                 MessageArea.Book);
                             return;
@@ -509,12 +506,10 @@ namespace ELibrary.Admin.Borrowing
 
                         lblSelectedBook.Text =
                             Server.HtmlEncode(
-                                Convert.ToString(
-                                    reader["Title"])) +
+                                Convert.ToString(reader["Title"])) +
                             " — " +
                             Server.HtmlEncode(
-                                Convert.ToString(
-                                    reader["Author"]));
+                                Convert.ToString(reader["Author"]));
                     }
                 }
 
@@ -529,37 +524,189 @@ namespace ELibrary.Admin.Borrowing
             catch (Exception)
             {
                 ShowMessage(
-                    "Unable to select the book. Please try again.",
+                    "Unable to select book.",
                     false,
                     MessageArea.Book);
             }
         }
 
-        // ==========================================
-        // VERIFY BORROWING
-        // ==========================================
+        // =========================================
+        // VERIFY CUSTOMER, BOOK, AND PRICES
+        // =========================================
+
+        private bool ValidateBorrowing(
+            int userID,
+            int bookID,
+            out string customerName,
+            out string bookTitle,
+            out int availableCopies,
+            out decimal borrowingFee,
+            out decimal depositAmount,
+            out string message)
+        {
+            customerName = "";
+            bookTitle = "";
+            availableCopies = 0;
+            borrowingFee = 0;
+            depositAmount = 0;
+            message = "";
+
+            using (SqlConnection con =
+                new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT FullName, IsAllowedToBorrow
+                    FROM dbo.EUsers
+                    WHERE UserID = @UserID
+                      AND Role = 1;", con))
+                {
+                    cmd.Parameters.Add(
+                        "@UserID",
+                        SqlDbType.Int).Value = userID;
+
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            message = "Customer not found.";
+                            return false;
+                        }
+
+                        if (!Convert.ToBoolean(
+                            reader["IsAllowedToBorrow"]))
+                        {
+                            message =
+                                "Customer is restricted from borrowing.";
+                            return false;
+                        }
+
+                        customerName =
+                            Convert.ToString(reader["FullName"]);
+                    }
+                }
+
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT
+                        Title,
+                        AvailableCopies,
+                        BorrowingFee
+                    FROM dbo.EBook
+                    WHERE BookID = @BookID
+                      AND IsArchived = 0;", con))
+                {
+                    cmd.Parameters.Add(
+                        "@BookID",
+                        SqlDbType.Int).Value = bookID;
+
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            message = "Book not found or archived.";
+                            return false;
+                        }
+
+                        bookTitle =
+                            Convert.ToString(reader["Title"]);
+
+                        availableCopies =
+                            Convert.ToInt32(
+                                reader["AvailableCopies"]);
+
+                        borrowingFee =
+                            Convert.ToDecimal(reader["BorrowingFee"]);
+                    }
+                }
+
+                if (availableCopies <= 0)
+                {
+                    message = "No available copies remain.";
+                    return false;
+                }
+
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT COUNT(*)
+                    FROM dbo.EBorrowLog
+                    WHERE UserID = @UserID
+                      AND BookID = @BookID
+                      AND DateReturned IS NULL
+                      AND
+                      (
+                          (
+                              CollectionStatus = 'Pending'
+                              AND Status = 'Borrowed'
+                          )
+                          OR
+                          (
+                              CollectionStatus = 'Collected'
+                              AND Status IN ('Borrowed','Overdue')
+                          )
+                      );", con))
+                {
+                    cmd.Parameters.Add(
+                        "@UserID",
+                        SqlDbType.Int).Value = userID;
+
+                    cmd.Parameters.Add(
+                        "@BookID",
+                        SqlDbType.Int).Value = bookID;
+
+                    int existing =
+                        Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (existing > 0)
+                    {
+                        message =
+                            "Customer already has an active loan " +
+                            "or reservation for this book.";
+                        return false;
+                    }
+                }
+
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT DecimalValue
+                    FROM dbo.ELibrarySettings
+                    WHERE SettingKey = 'SecurityDeposit';", con))
+                {
+                    object result = cmd.ExecuteScalar();
+
+                    if (result == null ||
+                        result == DBNull.Value)
+                    {
+                        message =
+                            "Security deposit configuration is missing.";
+                        return false;
+                    }
+
+                    depositAmount = Convert.ToDecimal(result);
+                }
+            }
+
+            if (borrowingFee < 0 || depositAmount <= 0)
+            {
+                message = "Invalid borrowing fee or deposit.";
+                return false;
+            }
+
+            return true;
+        }
 
         protected void btnVerify_Click(
             object sender,
             EventArgs e)
         {
             HideMessages();
-            pnlPreview.Visible = false;
-            pnlCompleted.Visible = false;
+            InvalidatePreview();
 
-            if (SelectedUserID <= 0)
+            if (SelectedUserID <= 0 ||
+                SelectedBookID <= 0)
             {
                 ShowMessage(
-                    "Please select a customer first.",
-                    false,
-                    MessageArea.Verification);
-                return;
-            }
-
-            if (SelectedBookID <= 0)
-            {
-                ShowMessage(
-                    "Please select a book first.",
+                    "Select both a customer and a book.",
                     false,
                     MessageArea.Verification);
                 return;
@@ -569,8 +716,10 @@ namespace ELibrary.Admin.Borrowing
             {
                 string customerName;
                 string bookTitle;
+                string message;
                 int availableCopies;
-                string validationMessage;
+                decimal borrowingFee;
+                decimal depositAmount;
 
                 bool valid = ValidateBorrowing(
                     SelectedUserID,
@@ -578,12 +727,14 @@ namespace ELibrary.Admin.Borrowing
                     out customerName,
                     out bookTitle,
                     out availableCopies,
-                    out validationMessage);
+                    out borrowingFee,
+                    out depositAmount,
+                    out message);
 
                 if (!valid)
                 {
                     ShowMessage(
-                        validationMessage,
+                        message,
                         false,
                         MessageArea.Verification);
                     return;
@@ -598,180 +749,40 @@ namespace ELibrary.Admin.Borrowing
                 lblAvailable.Text =
                     availableCopies.ToString();
 
+                lblBorrowingFee.Text =
+                    FormatPeso(borrowingFee);
+
+                lblSecurityDeposit.Text =
+                    FormatPeso(depositAmount);
+
+                lblTotalDue.Text =
+                    FormatPeso(borrowingFee + depositAmount);
+
+                PaymentPreviewVerified = true;
                 pnlPreview.Visible = true;
 
-                FocusSection("pnlPreview");
+                hfFocusTarget.Value = "pnlPreview";
             }
             catch (Exception)
             {
                 ShowMessage(
-                    "Unable to verify borrowing. Please try again.",
+                    "Unable to verify borrowing details.",
                     false,
                     MessageArea.Verification);
             }
         }
 
-        // ==========================================
-        // SERVER-SIDE BORROW VALIDATION
-        // ==========================================
-
-        private bool ValidateBorrowing(
-            int userID,
-            int bookID,
-            out string customerName,
-            out string bookTitle,
-            out int availableCopies,
-            out string validationMessage)
-        {
-            customerName = "";
-            bookTitle = "";
-            availableCopies = 0;
-            validationMessage = "";
-
-            using (SqlConnection con =
-                new SqlConnection(connectionString))
-            {
-                con.Open();
-
-                // Check customer eligibility.
-                using (SqlCommand cmd = new SqlCommand(@"
-                    SELECT
-                        FullName,
-                        IsAllowedToBorrow
-                    FROM dbo.EUsers
-                    WHERE UserID = @UserID
-                      AND Role = 1;", con))
-                {
-                    cmd.Parameters.Add(
-                        "@UserID",
-                        SqlDbType.Int).Value =
-                        userID;
-
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
-                    {
-                        if (!reader.Read())
-                        {
-                            validationMessage =
-                                "The selected customer no longer exists.";
-                            return false;
-                        }
-
-                        if (!Convert.ToBoolean(
-                            reader["IsAllowedToBorrow"]))
-                        {
-                            validationMessage =
-                                "The customer is not allowed to borrow.";
-                            return false;
-                        }
-
-                        customerName =
-                            Convert.ToString(
-                                reader["FullName"]);
-                    }
-                }
-
-                // Check available book inventory.
-                using (SqlCommand cmd = new SqlCommand(@"
-                    SELECT
-                        Title,
-                        AvailableCopies
-                    FROM dbo.EBook
-                    WHERE BookID = @BookID
-                      AND IsArchived = 0;", con))
-                {
-                    cmd.Parameters.Add(
-                        "@BookID",
-                        SqlDbType.Int).Value =
-                        bookID;
-
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
-                    {
-                        if (!reader.Read())
-                        {
-                            validationMessage =
-                                "The selected book is unavailable or archived.";
-                            return false;
-                        }
-
-                        bookTitle =
-                            Convert.ToString(
-                                reader["Title"]);
-
-                        availableCopies =
-                            Convert.ToInt32(
-                                reader["AvailableCopies"]);
-
-                        if (availableCopies <= 0)
-                        {
-                            validationMessage =
-                                "No available copies remain.";
-                            return false;
-                        }
-                    }
-                }
-
-                // Prevent an existing active borrowing
-                // or reservation for this same book.
-                using (SqlCommand cmd = new SqlCommand(@"
-                    SELECT COUNT(1)
-                    FROM dbo.EBorrowLog
-                    WHERE UserID = @UserID
-                      AND BookID = @BookID
-                      AND DateReturned IS NULL
-                      AND
-                      (
-                          (
-                              CollectionStatus = 'Pending'
-                              AND Status = 'Borrowed'
-                          )
-                          OR
-                          (
-                              CollectionStatus = 'Collected'
-                              AND Status IN ('Borrowed', 'Overdue')
-                          )
-                      );", con))
-                {
-                    cmd.Parameters.Add(
-                        "@UserID",
-                        SqlDbType.Int).Value =
-                        userID;
-
-                    cmd.Parameters.Add(
-                        "@BookID",
-                        SqlDbType.Int).Value =
-                        bookID;
-
-                    int existing =
-                        Convert.ToInt32(
-                            cmd.ExecuteScalar());
-
-                    if (existing > 0)
-                    {
-                        validationMessage =
-                            "This customer already has an active loan " +
-                            "or reservation for this book.";
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        // ==========================================
-        // CONFIRM WALK-IN BORROWING
-        // ==========================================
+        // =========================================
+        // CONFIRM PAYMENT AND WALK-IN BORROWING
+        // =========================================
 
         protected void btnConfirm_Click(
             object sender,
             EventArgs e)
         {
             HideMessages();
-            pnlCompleted.Visible = false;
 
-            if (!pnlPreview.Visible ||
+            if (!PaymentPreviewVerified ||
                 SelectedUserID <= 0 ||
                 SelectedBookID <= 0)
             {
@@ -786,29 +797,184 @@ namespace ELibrary.Admin.Borrowing
 
             if (!int.TryParse(
                 Convert.ToString(Session["UserID"]),
-                out adminUserID))
+                out adminUserID) ||
+                adminUserID <= 0)
             {
                 ShowMessage(
-                    "Your session has expired. Please log in again.",
+                    "Administrator session is invalid.",
                     false,
-                    MessageArea.Confirmation);
+                    MessageArea.Payment);
                 return;
             }
 
-            btnConfirm.Enabled = false;
+            string method = ddlPaymentMethod.SelectedValue;
+
+            if (method != "Cash" &&
+                method != "GCash" &&
+                method != "Card" &&
+                method != "Bank Transfer")
+            {
+                ShowMessage(
+                    "Select a valid payment method.",
+                    false,
+                    MessageArea.Payment);
+                return;
+            }
+
+            decimal receivedAmount;
+
+            if (!decimal.TryParse(
+                (txtAmountReceived.Text ?? "").Trim(),
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out receivedAmount) ||
+                receivedAmount <= 0)
+            {
+                ShowMessage(
+                    "Enter a valid positive payment amount, " +
+                    "such as 245.00.",
+                    false,
+                    MessageArea.Payment);
+                return;
+            }
+
+            if (!chkPaymentConfirmed.Checked)
+            {
+                ShowMessage(
+                    "Confirm that payment was actually received.",
+                    false,
+                    MessageArea.Payment);
+                return;
+            }
+
+            string referenceNo =
+                (txtReferenceNo.Text ?? "").Trim();
+
+            if (referenceNo.Length > 100)
+            {
+                ShowMessage(
+                    "Payment reference exceeds 100 characters.",
+                    false,
+                    MessageArea.Payment);
+                return;
+            }
+
+            // V2 administrator account must actually exist.
+            try
+            {
+                using (SqlConnection con =
+                    new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand(@"
+                    SELECT COUNT(*)
+                    FROM dbo.EUsers
+                    WHERE UserID = @UserID
+                      AND Role = 2;", con))
+                {
+                    cmd.Parameters.Add(
+                        "@UserID",
+                        SqlDbType.Int).Value = adminUserID;
+
+                    con.Open();
+
+                    if (Convert.ToInt32(
+                        cmd.ExecuteScalar()) != 1)
+                    {
+                        ShowMessage(
+                            "The administrator account is not " +
+                            "registered in the V2 database.",
+                            false,
+                            MessageArea.Payment);
+                        return;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                ShowMessage(
+                    "Unable to verify administrator access.",
+                    false,
+                    MessageArea.Payment);
+                return;
+            }
+
+            // Recalculate before final confirmation.
+            // SQL procedure independently validates prices,
+            // inventory and payments inside its transaction.
+            try
+            {
+                string customerName;
+                string bookTitle;
+                string message;
+                int availableCopies;
+                decimal borrowingFee;
+                decimal depositAmount;
+
+                bool valid = ValidateBorrowing(
+                    SelectedUserID,
+                    SelectedBookID,
+                    out customerName,
+                    out bookTitle,
+                    out availableCopies,
+                    out borrowingFee,
+                    out depositAmount,
+                    out message);
+
+                if (!valid)
+                {
+                    InvalidatePreview();
+
+                    ShowMessage(
+                        message,
+                        false,
+                        MessageArea.Verification);
+                    return;
+                }
+
+                decimal expectedAmount =
+                    borrowingFee + depositAmount;
+
+                if (receivedAmount != expectedAmount)
+                {
+                    InvalidatePreview();
+
+                    ShowMessage(
+                        "Payment amount does not match the " +
+                        "current total of " +
+                        FormatPeso(expectedAmount) +
+                        ". Verify the borrowing again.",
+                        false,
+                        MessageArea.Verification);
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                ShowMessage(
+                    "Unable to recheck the payment amount.",
+                    false,
+                    MessageArea.Payment);
+                return;
+            }
+
+            // Prevent another submission on this page once
+            // the procedure reports a successful transaction.
+            PaymentPreviewVerified = false;
 
             try
             {
                 int borrowLogID = 0;
+                int receiptID = 0;
+                decimal borrowingFee = 0;
+                decimal depositAmount = 0;
+                decimal totalPaid = 0;
+                DateTime dueDate = DateTime.MinValue;
 
                 using (SqlConnection con =
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(
-                    "dbo.EBorrowLog_WebWalkInBorrow",
-                    con))
+                    "dbo.EBorrowLog_WebWalkInBorrow", con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.Add(
                         "@BookID",
@@ -825,6 +991,28 @@ namespace ELibrary.Admin.Borrowing
                         SqlDbType.Int).Value =
                         adminUserID;
 
+                    cmd.Parameters.Add(
+                        "@PaymentMethod",
+                        SqlDbType.VarChar,
+                        30).Value = method;
+
+                    SqlParameter amount =
+                        cmd.Parameters.Add(
+                            "@AmountReceived",
+                            SqlDbType.Decimal);
+
+                    amount.Precision = 10;
+                    amount.Scale = 2;
+                    amount.Value = receivedAmount;
+
+                    cmd.Parameters.Add(
+                        "@ReferenceNo",
+                        SqlDbType.VarChar,
+                        100).Value =
+                        referenceNo.Length == 0
+                            ? (object)DBNull.Value
+                            : referenceNo;
+
                     con.Open();
 
                     using (SqlDataReader reader =
@@ -835,106 +1023,150 @@ namespace ELibrary.Admin.Borrowing
                             borrowLogID =
                                 Convert.ToInt32(
                                     reader["BorrowLogID"]);
+
+                            receiptID =
+                                Convert.ToInt32(
+                                    reader["ReceiptID"]);
+
+                            borrowingFee =
+                                Convert.ToDecimal(
+                                    reader["BorrowingFee"]);
+
+                            depositAmount =
+                                Convert.ToDecimal(
+                                    reader["SecurityDeposit"]);
+
+                            totalPaid =
+                                Convert.ToDecimal(
+                                    reader["TotalPaid"]);
+
+                            dueDate =
+                                Convert.ToDateTime(
+                                    reader["DueDate"]);
                         }
                     }
                 }
 
-                // Clear the verified selection only
-                // AFTER successful database processing.
+                if (borrowLogID <= 0)
+                {
+                    pnlPreview.Visible = false;
+
+                    ShowMessage(
+                        "No confirmation was returned. " +
+                        "Check the borrowing records before retrying.",
+                        false,
+                        MessageArea.Completed);
+                    return;
+                }
+
                 ClearForm();
 
-                if (borrowLogID > 0)
-                {
-                    ShowMessage(
-                        "Walk-in borrowing recorded successfully. " +
-                        "Borrowing ID: " +
-                        borrowLogID +
-                        ". The book is marked as collected, " +
-                        "and the 7-day loan has started.",
-                        true,
-                        MessageArea.Completed);
-                }
-                else
-                {
-                    ShowMessage(
-                        "Walk-in borrowing recorded successfully.",
-                        true,
-                        MessageArea.Completed);
-                }
+                ShowMessage(
+                    "Walk-in borrowing completed. " +
+                    "Borrow ID: " + borrowLogID +
+                    ". Receipt ID: " + receiptID +
+                    ". Total received: " + FormatPeso(totalPaid) +
+                    " (borrowing fee " + FormatPeso(borrowingFee) +
+                    "; refundable deposit " +
+                    FormatPeso(depositAmount) + "). " +
+                    "Due: " + dueDate.ToString(
+                        "MMM dd, yyyy hh:mm tt") + ".",
+                    true,
+                    MessageArea.Completed);
             }
             catch (SqlException ex)
             {
+                // A stored procedure error rolls back its SQL
+                // transaction, including stock and deposit changes.
+                // Restore preview eligibility for recoverable errors.
+                PaymentPreviewVerified = true;
+
                 ShowMessage(
                     GetBorrowingError(ex),
                     false,
-                    MessageArea.Confirmation);
+                    MessageArea.Payment);
             }
             catch (Exception)
             {
+                // Connection or response failure may be ambiguous:
+                // a commit could have succeeded even if the response
+                // was lost. Require a new verification rather than
+                // blindly allowing another payment submission.
+                InvalidatePreview();
+
                 ShowMessage(
-                    "Unable to complete the borrowing transaction. " +
-                    "Check the borrowing records before retrying.",
+                    "Unable to confirm the result. Check " +
+                    "borrowing records before attempting again.",
                     false,
-                    MessageArea.Confirmation);
-            }
-            finally
-            {
-                btnConfirm.Enabled = true;
+                    MessageArea.Verification);
             }
         }
-
-        // ==========================================
-        // SQL ERROR MESSAGES
-        // ==========================================
 
         private string GetBorrowingError(SqlException ex)
         {
             switch (ex.Number)
             {
-                case 50401:
-                    return "Only librarians can process walk-in borrowing.";
+                case 52501:
+                    return "Only librarians may process walk-in borrowing.";
 
-                case 50402:
-                    return "The customer is not allowed to borrow.";
+                case 52502:
+                    return "Customer is not eligible to borrow.";
 
-                case 50403:
+                case 52503:
+                    return "Invalid payment method.";
+
+                case 52504:
+                    return "Payment amount must be positive.";
+
+                case 52505:
                     return "The selected book was not found.";
 
-                case 50404:
+                case 52506:
                     return "Archived books cannot be borrowed.";
 
-                case 50405:
+                case 52507:
                     return "No available copies remain.";
 
-                case 50406:
-                    return "The customer already has an active loan " +
-                           "or reservation for this book.";
+                case 52508:
+                    return "The borrowing fee is invalid.";
 
-                case 50407:
-                    return "Unable to update the available book copies.";
+                case 52509:
+                    return "Customer already has an active " +
+                           "reservation or loan for this book.";
+
+                case 52510:
+                    return "Security deposit setting is invalid.";
+
+                case 52511:
+                    return "Payment does not match the full " +
+                           "borrowing fee plus security deposit.";
+
+                case 52512:
+                    return "Unable to update book inventory.";
 
                 default:
-                    return "Unable to complete borrowing. " +
-                           "Please verify the selected records and try again.";
+                    return "Borrowing was rejected. " +
+                           "Review the transaction before retrying.";
             }
         }
 
-        // ==========================================
-        // CLEAR SELECTION
-        // ==========================================
+        // =========================================
+        // CLEAR FORM
+        // =========================================
 
         protected void btnClear_Click(
             object sender,
             EventArgs e)
         {
             ClearForm();
-            FocusSection("walkinCustomer");
+            hfFocusTarget.Value = "walkinCustomer";
         }
 
         private void ClearForm()
         {
             SelectedUserID = 0;
             SelectedBookID = 0;
+            PaymentPreviewVerified = false;
 
             txtCustomerSearch.Text = "";
             txtBookSearch.Text = "";
@@ -957,6 +1189,15 @@ namespace ELibrary.Admin.Borrowing
             lblCustomer.Text = "";
             lblBook.Text = "";
             lblAvailable.Text = "";
+
+            lblBorrowingFee.Text = "";
+            lblSecurityDeposit.Text = "";
+            lblTotalDue.Text = "";
+
+            ddlPaymentMethod.SelectedIndex = 0;
+            txtAmountReceived.Text = "";
+            txtReferenceNo.Text = "";
+            chkPaymentConfirmed.Checked = false;
 
             lblCustomerEmpty.Visible = false;
             lblBookEmpty.Visible = false;
