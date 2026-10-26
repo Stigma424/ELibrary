@@ -6,8 +6,10 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head runat="server">
     <meta charset="utf-8" />
+
     <meta name="viewport"
         content="width=device-width, initial-scale=1" />
 
@@ -22,46 +24,51 @@
     <link rel="stylesheet"
         href="<%= ResolveUrl("~/Content/ocean-teal-shell.css") %>" />
 
-    <!-- COASTAL MINIMAL: CUSTOMER SHELL ONLY -->
     <style>
+        /* ==========================================
+           CUSTOMER SHELL
+           ========================================== */
+
         body.el-customer-mode {
             --coast-ink: #123B4A;
             --coast-accent: #168A91;
-            --coast-accent-dark: #12757C;
             --coast-muted: #647F89;
             --coast-border: #DCE9EB;
-            --coast-background: #F3F9FA;
-            --coast-soft: #EAF6F6;
-            background: var(--coast-background);
+
+            background: #F3F9FA;
             color: var(--coast-ink);
         }
 
         body.el-customer-mode .el-ocean-public-header {
             position: relative;
             z-index: 110;
-            min-height: 76px;
-            padding: 12px clamp(16px, 4vw, 54px);
-            background: #FFFFFF;
-            border-bottom: 1px solid var(--coast-border);
-            box-shadow: 0 2px 14px rgba(18,59,74,.035);
             display: flex;
             align-items: center;
             gap: 22px;
+
+            min-height: 76px;
+            padding: 12px clamp(16px, 4vw, 54px);
+
+            background: #123B4A !important;
+            border-bottom: 1px solid #245A68 !important;
+            box-shadow: 0 4px 18px rgba(9,35,47,.16);
         }
 
         body.el-customer-mode .el-public-brand {
             display: inline-flex;
             align-items: center;
             flex-shrink: 0;
-            color: var(--coast-ink);
+
             font-size: 21px;
             font-weight: 850;
             letter-spacing: -.7px;
+
+            color: #FFFFFF !important;
             text-decoration: none;
         }
 
         body.el-customer-mode .el-public-brand:hover {
-            color: var(--coast-accent);
+            color: #B8FFF0 !important;
         }
 
         body.el-customer-mode .el-public-nav {
@@ -73,8 +80,8 @@
             align-items: center;
             justify-content: flex-end;
             gap: 15px;
-            min-width: 0;
             flex: 1;
+            min-width: 0;
         }
 
         body.el-customer-mode .el-customer-nav {
@@ -87,39 +94,41 @@
 
         body.el-customer-mode .el-customer-nav-link {
             display: inline-flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+
             min-height: 38px;
             padding: 9px 11px;
+
             border: 1px solid transparent;
             border-radius: 9px;
+
             background: transparent;
-            color: #536F78;
+            color: #D7EAED !important;
+
             font-size: 12px;
             font-weight: 650;
             text-decoration: none;
             white-space: nowrap;
-            transition: background .18s ease, color .18s ease;
+
+            transition:
+                background .18s ease,
+                color .18s ease;
         }
 
-        body.el-customer-mode .el-customer-nav-link:hover {
-            background: #F0F8F9;
-            color: var(--coast-accent-dark);
-        }
-
-        body.el-customer-mode .el-customer-nav-link.active {
-            color: #126E73;
-            background: #EAF6F6;
-            font-weight: 800;
+        body.el-customer-mode
+        .el-customer-nav-link:not(.el-nav-current):hover {
+            background: #245A68 !important;
+            color: #FFFFFF !important;
         }
 
         body.el-customer-mode .el-customer-logout {
-            color: #A6534D;
+            color: #FFB7AC !important;
         }
 
         body.el-customer-mode .el-customer-logout:hover {
-            color: #903E39;
-            background: #FFF1EF;
+            background: #90484A !important;
+            color: #FFFFFF !important;
         }
 
         body.el-customer-mode .el-customer-avatar-link {
@@ -127,18 +136,21 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+
             width: 42px;
             height: 42px;
             border-radius: 50%;
-            background: #EAF6F6;
+
+            background: #245A68;
             text-decoration: none;
         }
 
-        body.el-customer-mode .el-customer-avatar-link .el-avatar-image {
+        body.el-customer-mode
+        .el-customer-avatar-link .el-avatar-image {
             width: 39px;
             height: 39px;
-            border: 2px solid #C4E3E5;
             border-radius: 50%;
+            border: 2px solid #68BDBF;
             object-fit: cover;
         }
 
@@ -146,37 +158,153 @@
             display: none;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+
             width: 41px;
             height: 41px;
-            border: 1px solid #CFE5E6;
+
+            border: 1px solid #427580;
             border-radius: 10px;
-            background: #F0F8F9;
-            color: var(--coast-ink);
+
+            background: #245A68;
+            color: #FFFFFF;
             font-size: 20px;
             cursor: pointer;
         }
 
         body.el-customer-mode .el-main {
             min-width: 0;
-            background: var(--coast-background);
+            background: #F3F9FA;
         }
 
         body.el-customer-mode .el-page-container {
             width: 100%;
             max-width: 1320px;
             min-width: 0;
+
             margin: 0 auto;
             padding: 30px 28px 65px;
         }
 
         body.el-customer-mode .el-footer {
             background: #FFFFFF;
-            border-top: 1px solid var(--coast-border);
-            color: var(--coast-muted);
-            text-align: center;
+            border-top: 1px solid #DCE9EB;
+            color: #647F89;
             font-size: 12px;
+            text-align: center;
         }
+
+        /* ==========================================
+           ACTIVE ADMIN NAVIGATION
+           ========================================== */
+
+        body.el-admin-mode
+        .el-ocean-sidebar
+        a.el-menu-link.el-nav-current,
+        body.el-admin-mode
+        .el-ocean-sidebar
+        a.el-menu-link[aria-current="page"] {
+
+            background: #168A91 !important;
+            background-image: none !important;
+            color: #FFFFFF !important;
+
+            font-weight: 800 !important;
+
+            border-left: 4px solid #B8FFF0 !important;
+            border-radius: 9px !important;
+
+            padding-left: 12px !important;
+
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.22) !important;
+
+            text-decoration: none !important;
+            position: relative;
+        }
+
+        body.el-admin-mode
+        .el-ocean-sidebar
+        a.el-menu-link.el-nav-current::after {
+
+            content: "";
+            position: absolute;
+
+            right: 12px;
+            top: 50%;
+
+            width: 7px;
+            height: 7px;
+
+            transform: translateY(-50%);
+            border-radius: 50%;
+
+            background: #B8FFF0;
+        }
+
+        body.el-admin-mode
+        .el-ocean-sidebar
+        a.el-menu-link.el-nav-current:hover {
+
+            background: #12757C !important;
+            color: #FFFFFF !important;
+        }
+
+        body.el-admin-mode
+        .el-menu-group-toggle.el-group-current {
+
+            background: #245A68 !important;
+            color: #B8FFF0 !important;
+            font-weight: 800 !important;
+        }
+
+        /* ==========================================
+           ACTIVE CUSTOMER NAVIGATION
+           ========================================== */
+
+        body.el-customer-mode
+        #customerNav
+        a.el-customer-nav-link.el-nav-current,
+        body.el-customer-mode
+        #customerNav
+        a.el-customer-nav-link[aria-current="page"] {
+
+            background: #168A91 !important;
+            background-image: none !important;
+
+            color: #FFFFFF !important;
+            font-weight: 800 !important;
+
+            border: 1px solid #168A91 !important;
+            border-bottom: 3px solid #B8FFF0 !important;
+            border-radius: 9px !important;
+
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.22) !important;
+
+            text-decoration: none !important;
+        }
+
+        body.el-customer-mode
+        #customerNav
+        a.el-customer-nav-link.el-nav-current:hover {
+
+            background: #12757C !important;
+            color: #FFFFFF !important;
+        }
+
+        /* ==========================================
+           ACCESSIBILITY
+           ========================================== */
+
+        .el-menu-link:focus-visible,
+        .el-customer-nav-link:focus-visible {
+            outline: 3px solid #F0BC68 !important;
+            outline-offset: 2px;
+        }
+
+        /* ==========================================
+           RESPONSIVE CUSTOMER HEADER
+           ========================================== */
 
         @media (max-width: 1150px) {
             body.el-customer-mode .el-ocean-public-header {
@@ -195,25 +323,27 @@
                 display: inline-flex;
             }
 
-            body.el-customer-mode .el-customer-header-content {
-                position: static;
-            }
-
             body.el-customer-mode .el-customer-nav {
                 display: none;
+
                 position: absolute;
                 top: calc(100% + 6px);
-                right: 16px;
                 left: 16px;
+                right: 16px;
                 z-index: 120;
+
                 flex-direction: column;
                 align-items: stretch;
                 gap: 5px;
+
                 padding: 12px;
-                border: 1px solid var(--coast-border);
+
+                background: #123B4A !important;
+                border: 1px solid #326C79 !important;
                 border-radius: 14px;
-                background: #FFFFFF;
-                box-shadow: 0 18px 38px rgba(18,59,74,.13);
+
+                box-shadow:
+                    0 18px 38px rgba(0,0,0,.24);
             }
 
             body.el-customer-mode
@@ -247,15 +377,12 @@
             body.el-customer-mode .el-page-container {
                 padding: 18px 13px 38px;
             }
-
-            body.el-customer-mode .el-customer-header-content {
-                gap: 9px;
-            }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            body.el-customer-mode .el-customer-nav-link {
-                transition: none;
+            .el-menu-link,
+            .el-customer-nav-link {
+                transition: none !important;
             }
         }
     </style>
@@ -266,579 +393,1004 @@
 </head>
 
 <body id="pageBody" runat="server">
-    <form id="form1" runat="server">
 
-        <!-- ADMIN BACKDROP -->
-        <div id="elAdminBackdrop"
-             class="el-shell-backdrop"
-             aria-hidden="true"
-             onclick="closeAdminSidebar()">
+<form id="form1" runat="server">
+
+    <!-- ======================================
+         ADMIN BACKDROP
+         ====================================== -->
+
+    <div id="elAdminBackdrop"
+        class="el-shell-backdrop"
+        aria-hidden="true"
+        onclick="closeAdminSidebar()">
+    </div>
+
+    <!-- ======================================
+         ADMIN SIDEBAR
+         ====================================== -->
+
+    <asp:Panel ID="pnlAdminSidebar"
+        runat="server"
+        CssClass="el-sidebar el-ocean-sidebar"
+        Visible="false">
+
+        <div class="el-sidebar-brand el-ocean-brand">
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-ocean-brand-link">
+
+                <span class="el-brand-logo">EL</span>
+
+                <span class="el-ocean-brand-copy">
+                    <strong class="el-brand-name">
+                        ELibrary
+                    </strong>
+
+                    <small class="el-brand-caption">
+                        Administration Workspace
+                    </small>
+                </span>
+
+            </asp:HyperLink>
+
+            <button type="button"
+                class="el-ocean-sidebar-close"
+                aria-label="Close navigation"
+                onclick="closeAdminSidebar()">
+                &times;
+            </button>
         </div>
 
-        <!-- ADMIN SIDEBAR -->
-        <asp:Panel ID="pnlAdminSidebar"
-            runat="server"
-            CssClass="el-sidebar el-ocean-sidebar"
-            Visible="false">
+        <div class="el-sidebar-scroll">
 
-            <div class="el-sidebar-brand el-ocean-brand">
-                <asp:HyperLink runat="server"
-                    NavigateUrl="~/AdminHome.aspx"
-                    CssClass="el-ocean-brand-link">
-
-                    <span class="el-brand-logo">EL</span>
-
-                    <span class="el-ocean-brand-copy">
-                        <strong class="el-brand-name">ELibrary</strong>
-                        <small class="el-brand-caption">
-                            Administration Workspace
-                        </small>
-                    </span>
-                </asp:HyperLink>
-
-                <button type="button"
-                    class="el-ocean-sidebar-close"
-                    aria-label="Close navigation"
-                    onclick="closeAdminSidebar()">
-                    &times;
-                </button>
+            <div class="el-menu-label">
+                OVERVIEW
             </div>
 
-            <div class="el-sidebar-scroll">
-
-                <div class="el-menu-label">OVERVIEW</div>
-
-                <asp:HyperLink ID="navAdminDashboard"
-                    runat="server"
-                    NavigateUrl="~/AdminHome.aspx"
-                    CssClass="el-menu-link"
-                    Text="Dashboard" />
-
-                <div class="el-menu-label">MANAGEMENT</div>
-
-                <!-- LIBRARY -->
-                <button type="button"
-                    class="el-menu-group-toggle"
-                    data-el-group="library"
-                    aria-expanded="false"
-                    aria-controls="el-group-library">
-                    <span>Library Management</span>
-                    <span class="el-menu-chevron"
-                        aria-hidden="true">&#9662;</span>
-                </button>
-
-                <div id="el-group-library"
-                    class="el-menu-group-content"
-                    hidden>
-
-                    <asp:HyperLink ID="navManageBooks"
-                        runat="server"
-                        NavigateUrl="~/Admin/Books/ManageBooks.aspx"
-                        CssClass="el-menu-link"
-                        Text="Manage Books" />
-
-                    <asp:HyperLink ID="navManageGenres"
-                        runat="server"
-                        NavigateUrl="~/Admin/Books/ManageGenres.aspx"
-                        CssClass="el-menu-link"
-                        Text="Manage Genres" />
-                </div>
-
-                <!-- BORROWING -->
-                <button type="button"
-                    class="el-menu-group-toggle"
-                    data-el-group="borrowing"
-                    aria-expanded="false"
-                    aria-controls="el-group-borrowing">
-                    <span>Borrowing Management</span>
-                    <span class="el-menu-chevron"
-                        aria-hidden="true">&#9662;</span>
-                </button>
-
-                <div id="el-group-borrowing"
-                    class="el-menu-group-content"
-                    hidden>
-
-                    <asp:HyperLink ID="navManageBorrows"
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                        CssClass="el-menu-link"
-                        Text="Manage Borrowings" />
-
-                    <asp:HyperLink ID="navWalkInBorrow"
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/WalkInBorrow.aspx"
-                        CssClass="el-menu-link"
-                        Text="Walk-in Borrowing" />
-
-                    <asp:HyperLink ID="navOverdueBooks"
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/OverdueBooks.aspx"
-                        CssClass="el-menu-link"
-                        Text="Overdue Books" />
-
-                    <asp:HyperLink ID="navBorrowHistory"
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
-                        CssClass="el-menu-link"
-                        Text="Borrow History" />
-
-                    <asp:HyperLink ID="navSettlements" runat="server" NavigateUrl="~/Admin/Borrowing/Settlements.aspx" CssClass="el-menu-link" Text="Expired and Lost Settlements" />
-                </div>
-
-                <!-- FINANCE -->
-                <button type="button"
-                    class="el-menu-group-toggle"
-                    data-el-group="finance"
-                    aria-expanded="false"
-                    aria-controls="el-group-finance">
-                    <span>Financial Management</span>
-                    <span class="el-menu-chevron"
-                        aria-hidden="true">&#9662;</span>
-                </button>
-
-                <div id="el-group-finance"
-                    class="el-menu-group-content"
-                    hidden>
-
-                    <asp:HyperLink ID="navTransactions"
-                        runat="server"
-                        NavigateUrl="~/Admin/Transactions/ManageTransactions.aspx"
-                        CssClass="el-menu-link"
-                        Text="Manage Transactions" />
-
-                    <asp:HyperLink ID="navCollectDeposits" runat="server"
-                        NavigateUrl="~/Admin/Transactions/CollectDeposits.aspx"
-                        CssClass="el-menu-link" Text="Collect Deposits" />
-
-                    <asp:HyperLink ID="navRefundDeposits" runat="server"
-                        NavigateUrl="~/Admin/Transactions/RefundDeposits.aspx"
-                        CssClass="el-menu-link" Text="Refund Deposits" />
-
-                    <asp:HyperLink ID="navDepositLedger" runat="server"
-                        NavigateUrl="~/Admin/Transactions/DepositLedger.aspx"
-                        CssClass="el-menu-link" Text="Deposit Ledger" />
-                </div>
-
-                <!-- USERS -->
-                <button type="button"
-                    class="el-menu-group-toggle"
-                    data-el-group="users"
-                    aria-expanded="false"
-                    aria-controls="el-group-users">
-                    <span>User Management</span>
-                    <span class="el-menu-chevron"
-                        aria-hidden="true">&#9662;</span>
-                </button>
-
-                <div id="el-group-users"
-                    class="el-menu-group-content"
-                    hidden>
-
-                    <asp:HyperLink ID="navManageUsers"
-                        runat="server"
-                        NavigateUrl="~/Admin/Users/ManageUsers.aspx"
-                        CssClass="el-menu-link"
-                        Text="Manage Users" />
-                </div>
-
-                <!-- RECORDS -->
-                <button type="button"
-                    class="el-menu-group-toggle"
-                    data-el-group="records"
-                    aria-expanded="false"
-                    aria-controls="el-group-records">
-                    <span>Records &amp; Monitoring</span>
-                    <span class="el-menu-chevron"
-                        aria-hidden="true">&#9662;</span>
-                </button>
-
-                <div id="el-group-records"
-                    class="el-menu-group-content"
-                    hidden>
-
-                    <asp:HyperLink ID="navArchivedBooks"
-                        runat="server"
-                        NavigateUrl="~/Admin/Archive/ArchiveBooks.aspx"
-                        CssClass="el-menu-link"
-                        Text="Archived Books" />
-
-                    <asp:HyperLink ID="navAuditLogs"
-                        runat="server"
-                        NavigateUrl="~/Admin/Audit/AuditLogs.aspx"
-                        CssClass="el-menu-link"
-                        Text="Audit Logs" />
-                </div>
-            </div>
-
-            <div class="el-sidebar-footer">
-                <div class="el-ocean-sidebar-footer-label">
-                    LIBRARY ADMINISTRATION
-                </div>
-
-                <asp:HyperLink runat="server"
-                    NavigateUrl="~/Logout.aspx"
-                    CssClass="el-menu-link el-signout"
-                    Text="Sign Out" />
-            </div>
-        </asp:Panel>
-
-        <!-- ADMIN HEADER -->
-        <asp:Panel ID="pnlAdminHeader"
-            runat="server"
-            CssClass="el-admin-header el-ocean-admin-header"
-            Visible="false">
-
-            <div class="el-header-left">
-                <button type="button"
-                    class="el-ocean-menu-button"
-                    aria-label="Open or close navigation"
-                    aria-controls="pnlAdminSidebar"
-                    aria-expanded="false"
-                    onclick="toggleSidebar()">
-                    <span aria-hidden="true">&#9776;</span>
-                </button>
-
-                <div class="el-header-title">
-                    <strong>Administration</strong>
-                    <span>E-Library Management Workspace</span>
-                </div>
-            </div>
-
-            <div class="el-header-right">
-                <asp:HyperLink runat="server"
-                    NavigateUrl="~/AdminHome.aspx"
-                    CssClass="el-header-link"
-                    Text="Dashboard" />
-
-                <asp:HyperLink runat="server"
-                    NavigateUrl="~/Logout.aspx"
-                    CssClass="el-header-link el-header-logout"
-                    Text="Sign Out" />
-
-                <asp:Image ID="imgAdminAvatar"
-                    runat="server"
-                    CssClass="el-user-avatar el-avatar-image"
-                    AlternateText="Administrator profile picture" />
-            </div>
-        </asp:Panel>
-
-        <!-- GUEST / CUSTOMER HEADER -->
-        <asp:Panel ID="pnlPublicHeader"
-            runat="server"
-            CssClass="el-public-header el-ocean-public-header">
-
-            <asp:HyperLink ID="lnkPublicBrand"
+            <asp:HyperLink
+                ID="navAdminDashboard"
                 runat="server"
-                NavigateUrl="~/Default.aspx"
-                CssClass="el-public-brand"
-                Text="ELibrary" />
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-menu-link"
+                Text="Dashboard" />
 
-            <nav class="el-public-nav"
-                aria-label="Guest navigation">
+            <div class="el-menu-label">
+                MANAGEMENT
+            </div>
 
-                <asp:PlaceHolder ID="phGuestNavigation"
-                    runat="server">
+            <!-- LIBRARY MANAGEMENT -->
 
-                    <asp:HyperLink runat="server"
-                        NavigateUrl="~/Default.aspx"
+            <button type="button"
+                class="el-menu-group-toggle"
+                data-el-group="library"
+                aria-expanded="false"
+                aria-controls="el-group-library">
+
+                <span>Library Management</span>
+                <span class="el-menu-chevron">&#9662;</span>
+            </button>
+
+            <div id="el-group-library"
+                class="el-menu-group-content"
+                hidden>
+
+                <asp:HyperLink
+                    ID="navManageBooks"
+                    runat="server"
+                    NavigateUrl="~/Admin/Books/ManageBooks.aspx"
+                    CssClass="el-menu-link"
+                    Text="Manage Books" />
+
+                <asp:HyperLink
+                    ID="navManageGenres"
+                    runat="server"
+                    NavigateUrl="~/Admin/Books/ManageGenres.aspx"
+                    CssClass="el-menu-link"
+                    Text="Manage Genres" />
+            </div>
+
+            <!-- BORROWING MANAGEMENT -->
+
+            <button type="button"
+                class="el-menu-group-toggle"
+                data-el-group="borrowing"
+                aria-expanded="false"
+                aria-controls="el-group-borrowing">
+
+                <span>Borrowing Management</span>
+                <span class="el-menu-chevron">&#9662;</span>
+            </button>
+
+            <div id="el-group-borrowing"
+                class="el-menu-group-content"
+                hidden>
+
+                <asp:HyperLink
+                    ID="navManageBorrows"
+                    runat="server"
+                    NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
+                    CssClass="el-menu-link"
+                    Text="Manage Borrowings" />
+
+                <asp:HyperLink
+                    ID="navWalkInBorrow"
+                    runat="server"
+                    NavigateUrl="~/Admin/Borrowing/WalkInBorrow.aspx"
+                    CssClass="el-menu-link"
+                    Text="Walk-in Borrowing" />
+
+                <asp:HyperLink
+                    ID="navOverdueBooks"
+                    runat="server"
+                    NavigateUrl="~/Admin/Borrowing/OverdueBooks.aspx"
+                    CssClass="el-menu-link"
+                    Text="Overdue Books" />
+
+                <asp:HyperLink
+                    ID="navBorrowHistory"
+                    runat="server"
+                    NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
+                    CssClass="el-menu-link"
+                    Text="Borrow History" />
+
+                <asp:HyperLink
+                    ID="navSettlements"
+                    runat="server"
+                    NavigateUrl="~/Admin/Borrowing/Settlements.aspx"
+                    CssClass="el-menu-link"
+                    Text="Expired and Lost Settlements" />
+            </div>
+
+            <!-- FINANCIAL MANAGEMENT -->
+
+            <button type="button"
+                class="el-menu-group-toggle"
+                data-el-group="finance"
+                aria-expanded="false"
+                aria-controls="el-group-finance">
+
+                <span>Financial Management</span>
+                <span class="el-menu-chevron">&#9662;</span>
+            </button>
+
+            <div id="el-group-finance"
+                class="el-menu-group-content"
+                hidden>
+
+                <asp:HyperLink
+                    ID="navTransactions"
+                    runat="server"
+                    NavigateUrl="~/Admin/Transactions/ManageTransactions.aspx"
+                    CssClass="el-menu-link"
+                    Text="Manage Transactions" />
+
+                <asp:HyperLink
+                    ID="navCollectDeposits"
+                    runat="server"
+                    NavigateUrl="~/Admin/Transactions/CollectDeposits.aspx"
+                    CssClass="el-menu-link"
+                    Text="Collect Deposits" />
+
+                <asp:HyperLink
+                    ID="navRefundDeposits"
+                    runat="server"
+                    NavigateUrl="~/Admin/Transactions/RefundDeposits.aspx"
+                    CssClass="el-menu-link"
+                    Text="Refund Deposits" />
+
+                <asp:HyperLink
+                    ID="navDepositLedger"
+                    runat="server"
+                    NavigateUrl="~/Admin/Transactions/DepositLedger.aspx"
+                    CssClass="el-menu-link"
+                    Text="Deposit Ledger" />
+            </div>
+
+            <!-- USER MANAGEMENT -->
+
+            <button type="button"
+                class="el-menu-group-toggle"
+                data-el-group="users"
+                aria-expanded="false"
+                aria-controls="el-group-users">
+
+                <span>User Management</span>
+                <span class="el-menu-chevron">&#9662;</span>
+            </button>
+
+            <div id="el-group-users"
+                class="el-menu-group-content"
+                hidden>
+
+                <asp:HyperLink
+                    ID="navManageUsers"
+                    runat="server"
+                    NavigateUrl="~/Admin/Users/ManageUsers.aspx"
+                    CssClass="el-menu-link"
+                    Text="Manage Users" />
+            </div>
+
+            <!-- RECORDS -->
+
+            <button type="button"
+                class="el-menu-group-toggle"
+                data-el-group="records"
+                aria-expanded="false"
+                aria-controls="el-group-records">
+
+                <span>Records &amp; Monitoring</span>
+                <span class="el-menu-chevron">&#9662;</span>
+            </button>
+
+            <div id="el-group-records"
+                class="el-menu-group-content"
+                hidden>
+
+                <asp:HyperLink
+                    ID="navArchivedBooks"
+                    runat="server"
+                    NavigateUrl="~/Admin/Archive/ArchiveBooks.aspx"
+                    CssClass="el-menu-link"
+                    Text="Archived Books" />
+
+                <asp:HyperLink
+                    ID="navAuditLogs"
+                    runat="server"
+                    NavigateUrl="~/Admin/Audit/AuditLogs.aspx"
+                    CssClass="el-menu-link"
+                    Text="Audit Logs" />
+            </div>
+
+        </div>
+
+        <div class="el-sidebar-footer">
+
+            <div class="el-ocean-sidebar-footer-label">
+                LIBRARY ADMINISTRATION
+            </div>
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/Logout.aspx"
+                CssClass="el-menu-link el-signout"
+                Text="Sign Out" />
+        </div>
+
+    </asp:Panel>
+
+    <!-- ======================================
+         ADMIN HEADER
+         ====================================== -->
+
+    <asp:Panel
+        ID="pnlAdminHeader"
+        runat="server"
+        CssClass="el-admin-header el-ocean-admin-header"
+        Visible="false">
+
+        <div class="el-header-left">
+
+            <button type="button"
+                class="el-ocean-menu-button"
+                aria-label="Toggle admin navigation"
+                aria-expanded="false"
+                onclick="toggleSidebar()">
+
+                <span>&#9776;</span>
+            </button>
+
+            <div class="el-header-title">
+                <strong>Administration</strong>
+
+                <span>
+                    E-Library Management Workspace
+                </span>
+            </div>
+        </div>
+
+        <div class="el-header-right">
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-header-link"
+                Text="Dashboard" />
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/Logout.aspx"
+                CssClass="el-header-link el-header-logout"
+                Text="Sign Out" />
+
+            <asp:Image
+                ID="imgAdminAvatar"
+                runat="server"
+                CssClass="el-user-avatar el-avatar-image"
+                AlternateText="Administrator profile picture" />
+        </div>
+
+    </asp:Panel>
+
+    <!-- ======================================
+         GUEST / CUSTOMER HEADER
+         ====================================== -->
+
+    <asp:Panel
+        ID="pnlPublicHeader"
+        runat="server"
+        CssClass="el-public-header el-ocean-public-header">
+
+        <asp:HyperLink
+            ID="lnkPublicBrand"
+            runat="server"
+            NavigateUrl="~/Default.aspx"
+            CssClass="el-public-brand"
+            Text="ELibrary" />
+
+        <nav class="el-public-nav"
+            aria-label="Guest navigation">
+
+            <asp:PlaceHolder
+                ID="phGuestNavigation"
+                runat="server">
+
+                <asp:HyperLink
+                    runat="server"
+                    NavigateUrl="~/Default.aspx"
+                    Text="Home" />
+
+                <asp:HyperLink
+                    runat="server"
+                    NavigateUrl="~/Login.aspx"
+                    Text="Login" />
+
+                <asp:HyperLink
+                    runat="server"
+                    NavigateUrl="~/Register.aspx"
+                    Text="Register" />
+
+            </asp:PlaceHolder>
+        </nav>
+
+        <asp:PlaceHolder
+            ID="phCustomerNavigation"
+            runat="server"
+            Visible="false">
+
+            <div class="el-customer-header-content">
+
+                <button type="button"
+                    class="el-customer-menu-toggle"
+                    aria-label="Toggle customer navigation"
+                    aria-controls="customerNav"
+                    aria-expanded="false"
+                    onclick="toggleCustomerMenu()">
+
+                    &#9776;
+                </button>
+
+                <nav id="customerNav"
+                    class="el-customer-nav"
+                    aria-label="Customer navigation">
+
+                    <asp:HyperLink
+                        ID="navCustomerDashboard"
+                        runat="server"
+                        NavigateUrl="~/CustomerHome.aspx"
+                        CssClass="el-customer-nav-link"
                         Text="Home" />
 
-                    <asp:HyperLink runat="server"
-                        NavigateUrl="~/Login.aspx"
-                        Text="Login" />
+                    <asp:HyperLink
+                        ID="navCustomerBooks"
+                        runat="server"
+                        NavigateUrl="~/Customer/Books.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Browse Books" />
 
-                    <asp:HyperLink runat="server"
-                        NavigateUrl="~/Register.aspx"
-                        Text="Register" />
-                </asp:PlaceHolder>
-            </nav>
+                    <asp:HyperLink
+                        ID="navCustomerBorrows"
+                        runat="server"
+                        NavigateUrl="~/Customer/MyBorrows.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="My Borrowings" />
 
-            <asp:PlaceHolder ID="phCustomerNavigation"
-                runat="server"
-                Visible="false">
+                    <asp:HyperLink
+                        ID="navCustomerHistory"
+                        runat="server"
+                        NavigateUrl="~/Customer/BorrowHistory.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="History" />
 
-                <div class="el-customer-header-content">
+                    <asp:HyperLink
+                        ID="navCustomerTransactions"
+                        runat="server"
+                        NavigateUrl="~/Customer/MyTransactions.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Transactions" />
 
-                    <button type="button"
-                        class="el-customer-menu-toggle"
-                        aria-label="Toggle customer navigation"
-                        aria-controls="customerNav"
-                        aria-expanded="false"
-                        onclick="toggleCustomerMenu()">
-                        &#9776;
-                    </button>
+                    <asp:HyperLink
+                        ID="navCustomerDepositLedger"
+                        runat="server"
+                        NavigateUrl="~/Admin/Transactions/DepositLedger.aspx"
+                        CssClass="el-customer-nav-link"
+                        Text="Deposits" />
 
-                    <nav id="customerNav"
-                        class="el-customer-nav"
-                        aria-label="Customer navigation">
-
-                        <asp:HyperLink ID="navCustomerDashboard"
-                            runat="server"
-                            NavigateUrl="~/CustomerHome.aspx"
-                            CssClass="el-customer-nav-link"
-                            Text="Home" />
-
-                        <asp:HyperLink ID="navCustomerBooks"
-                            runat="server"
-                            NavigateUrl="~/Customer/Books.aspx"
-                            CssClass="el-customer-nav-link"
-                            Text="Browse Books" />
-
-                        <asp:HyperLink ID="navCustomerBorrows"
-                            runat="server"
-                            NavigateUrl="~/Customer/MyBorrows.aspx"
-                            CssClass="el-customer-nav-link"
-                            Text="My Borrowings" />
-
-                        <asp:HyperLink ID="navCustomerHistory"
-                            runat="server"
-                            NavigateUrl="~/Customer/BorrowHistory.aspx"
-                            CssClass="el-customer-nav-link"
-                            Text="History" />
-
-                        <asp:HyperLink ID="navCustomerTransactions"
-                            runat="server"
-                            NavigateUrl="~/Customer/MyTransactions.aspx"
-                            CssClass="el-customer-nav-link"
-                            Text="Transactions" />
-
-                        <asp:HyperLink ID="navCustomerDepositLedger" runat="server" NavigateUrl="~/Admin/Transactions/DepositLedger.aspx" CssClass="el-customer-nav-link" Text="Deposits" />
-
-                        <asp:HyperLink ID="navCustomerProfile"
-                            runat="server"
-                            NavigateUrl="~/Customer/Profile.aspx"
-                            CssClass="el-customer-nav-link"
-                            Text="Profile" />
-
-                        <asp:HyperLink ID="navCustomerLogout"
-                            runat="server"
-                            NavigateUrl="~/Logout.aspx"
-                            CssClass="el-customer-nav-link el-customer-logout"
-                            Text="Logout" />
-                    </nav>
-
-                    <asp:HyperLink ID="lnkCustomerAvatar"
+                    <asp:HyperLink
+                        ID="navCustomerProfile"
                         runat="server"
                         NavigateUrl="~/Customer/Profile.aspx"
-                        CssClass="el-customer-avatar-link">
+                        CssClass="el-customer-nav-link"
+                        Text="Profile" />
 
-                        <asp:Image ID="imgCustomerAvatar"
-                            runat="server"
-                            CssClass="el-user-avatar el-avatar-image"
-                            AlternateText="My profile picture" />
-                    </asp:HyperLink>
-                </div>
-            </asp:PlaceHolder>
+                    <asp:HyperLink
+                        ID="navCustomerLogout"
+                        runat="server"
+                        NavigateUrl="~/Logout.aspx"
+                        CssClass="el-customer-nav-link el-customer-logout"
+                        Text="Logout" />
+
+                </nav>
+
+                <asp:HyperLink
+                    ID="lnkCustomerAvatar"
+                    runat="server"
+                    NavigateUrl="~/Customer/Profile.aspx"
+                    CssClass="el-customer-avatar-link">
+
+                    <asp:Image
+                        ID="imgCustomerAvatar"
+                        runat="server"
+                        CssClass="el-user-avatar el-avatar-image"
+                        AlternateText="My profile picture" />
+
+                </asp:HyperLink>
+
+            </div>
+
+        </asp:PlaceHolder>
+
+    </asp:Panel>
+
+    <!-- ======================================
+         MAIN CONTENT
+         ====================================== -->
+
+    <main class="el-main">
+
+        <asp:Panel
+            ID="pnlAdminToolbar"
+            runat="server"
+            CssClass="el-page-toolbar"
+            Visible="false">
+
+            <asp:HyperLink
+                runat="server"
+                NavigateUrl="~/AdminHome.aspx"
+                CssClass="el-back-link"
+                Text="&#8592; Admin Dashboard" />
+
+            <span class="el-toolbar-caption">
+                ELibrary Administration
+            </span>
+
         </asp:Panel>
 
-        <!-- MAIN CONTENT -->
-        <main class="el-main">
+        <div class="el-page-container">
 
-            <asp:Panel ID="pnlAdminToolbar"
-                runat="server"
-                CssClass="el-page-toolbar"
-                Visible="false">
+            <asp:ContentPlaceHolder
+                ID="MainContent"
+                runat="server" />
 
-                <asp:HyperLink runat="server"
-                    NavigateUrl="~/AdminHome.aspx"
-                    CssClass="el-back-link"
-                    Text="&#8592; Admin Dashboard" />
+        </div>
 
-                <span class="el-toolbar-caption">
-                    ELibrary Administration
-                </span>
-            </asp:Panel>
+    </main>
 
-            <div class="el-page-container">
-                <asp:ContentPlaceHolder ID="MainContent"
-                    runat="server" />
-            </div>
-        </main>
+    <footer class="el-footer">
+        &copy; 2026 ELibrary — E-Library Management System
+    </footer>
 
-        <footer class="el-footer">
-            &copy; 2026 ELibrary — E-Library Management System
-        </footer>
+</form>
 
-    </form>
+<!-- ==========================================
+     SINGLE NAVIGATION SCRIPT
+     ========================================== -->
 
-    <!-- EXISTING ADMIN AND CUSTOMER MENU BEHAVIOR -->
-    <script type="text/javascript">
-        (function () {
-            var sidebar =
-                document.querySelector(".el-ocean-sidebar");
+<script type="text/javascript">
+    (function () {
+        "use strict";
 
-            var backdrop =
-                document.getElementById("elAdminBackdrop");
+        var sidebar = document.querySelector(
+            ".el-ocean-sidebar"
+        );
 
-            var adminMenuButton =
-                document.querySelector(".el-ocean-menu-button");
+        var backdrop = document.getElementById(
+            "elAdminBackdrop"
+        );
 
-            var customerMenuButton =
-                document.querySelector(".el-customer-menu-toggle");
+        var adminButton = document.querySelector(
+            ".el-ocean-menu-button"
+        );
 
-            var customerNav =
-                document.getElementById("customerNav");
+        var customerButton = document.querySelector(
+            ".el-customer-menu-toggle"
+        );
 
-            function setAdminMenu(open) {
-                document.body.classList.toggle(
-                    "el-sidebar-open", open);
+        var customerNav = document.getElementById(
+            "customerNav"
+        );
 
-                if (adminMenuButton) {
-                    adminMenuButton.setAttribute(
-                        "aria-expanded",
-                        open ? "true" : "false");
-                }
+        function setAdminMenu(open) {
+            document.body.classList.toggle(
+                "el-sidebar-open",
+                open
+            );
 
-                if (backdrop) {
-                    backdrop.setAttribute(
-                        "aria-hidden",
-                        open ? "false" : "true");
-                }
+            if (adminButton) {
+                adminButton.setAttribute(
+                    "aria-expanded",
+                    open ? "true" : "false"
+                );
             }
 
-            window.toggleSidebar = function () {
-                setAdminMenu(
-                    !document.body.classList.contains(
-                        "el-sidebar-open"));
-            };
+            if (backdrop) {
+                backdrop.setAttribute(
+                    "aria-hidden",
+                    open ? "false" : "true"
+                );
+            }
+        }
 
-            window.closeAdminSidebar = function () {
+        window.toggleSidebar = function () {
+            setAdminMenu(
+                !document.body.classList.contains(
+                    "el-sidebar-open"
+                )
+            );
+        };
+
+        window.closeAdminSidebar = function () {
+            setAdminMenu(false);
+        };
+
+        window.toggleCustomerMenu = function () {
+            if (!customerNav) {
+                return;
+            }
+
+            var open = !customerNav.classList.contains(
+                "el-customer-nav-open"
+            );
+
+            customerNav.classList.toggle(
+                "el-customer-nav-open",
+                open
+            );
+
+            if (customerButton) {
+                customerButton.setAttribute(
+                    "aria-expanded",
+                    open ? "true" : "false"
+                );
+            }
+        };
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
                 setAdminMenu(false);
-            };
 
-            window.toggleCustomerMenu = function () {
-                if (!customerNav) {
+                if (customerNav) {
+                    customerNav.classList.remove(
+                        "el-customer-nav-open"
+                    );
+                }
+            }
+        });
+
+        document.addEventListener("click", function (e) {
+            if (
+                customerNav &&
+                customerButton &&
+                !customerNav.contains(e.target) &&
+                !customerButton.contains(e.target)
+            ) {
+                customerNav.classList.remove(
+                    "el-customer-nav-open"
+                );
+            }
+
+            if (
+                sidebar &&
+                adminButton &&
+                window.innerWidth <= 991 &&
+                document.body.classList.contains(
+                    "el-sidebar-open"
+                ) &&
+                !sidebar.contains(e.target) &&
+                !adminButton.contains(e.target)
+            ) {
+                setAdminMenu(false);
+            }
+        });
+
+        /* ======================================
+           PATH MATCHING
+           ====================================== */
+
+        function normalize(address) {
+            try {
+                var url = new URL(
+                    address,
+                    window.location.href
+                );
+
+                return decodeURIComponent(url.pathname)
+                    .replace(/\/+/g, "/")
+                    .replace(/\/+$/, "")
+                    .toLowerCase();
+            }
+            catch (e) {
+                return "";
+            }
+        }
+
+        function lastParts(path, count) {
+            return path.split("/")
+                .filter(function (part) {
+                    return part.length > 0;
+                })
+                .slice(-count)
+                .join("/");
+        }
+
+        function samePage(current, target) {
+            if (!current || !target) {
+                return false;
+            }
+
+            if (current === target) {
+                return true;
+            }
+
+            // Allow different IIS application prefixes.
+            // Require both directory and filename to match.
+            return lastParts(current, 2) ===
+                lastParts(target, 2);
+        }
+
+        function effectivePage(current) {
+            if (current.endsWith(
+                "/admin/transactions/paytransactions.aspx"
+            )) {
+                return current.replace(
+                    /paytransactions\.aspx$/,
+                    "managetransactions.aspx"
+                );
+            }
+
+            if (current.endsWith(
+                "/customer/bookdetails.aspx"
+            )) {
+                return current.replace(
+                    /bookdetails\.aspx$/,
+                    "books.aspx"
+                );
+            }
+
+            return current;
+        }
+
+        /* ======================================
+           DETERMINE ACTIVE LINK
+           ====================================== */
+
+
+
+        function selectActiveLink() {
+            function getPageName(path) {
+                return path
+                    .split("?")[0]
+                    .split("#")[0]
+                    .replace(/\/+$/, "")
+                    .split("/")
+                    .pop()
+                    .toLowerCase()
+                    .replace(/\.aspx$/, "");
+            }
+
+            var currentPage = getPageName(
+                window.location.pathname
+            );
+
+            var isAdmin = !!document.querySelector(
+                ".el-ocean-sidebar"
+            );
+
+            var container = isAdmin
+                ? document.querySelector(".el-ocean-sidebar")
+                : document.getElementById("customerNav");
+
+            if (!container) {
+                return;
+            }
+
+            var links = container.querySelectorAll(
+                isAdmin
+                    ? "a.el-menu-link[href]"
+                    : "a.el-customer-nav-link[href]"
+            );
+
+            if (isAdmin && currentPage === "paytransactions") {
+                currentPage = "managetransactions";
+            }
+
+            if (!isAdmin && currentPage === "bookdetails") {
+                currentPage = "books";
+            }
+
+            var selected = null;
+
+            links.forEach(function (link) {
+                link.classList.remove(
+                    "active",
+                    "el-nav-current"
+                );
+
+                link.removeAttribute("aria-current");
+
+                var linkPage = getPageName(
+                    new URL(
+                        link.getAttribute("href"),
+                        window.location.href
+                    ).pathname
+                );
+
+                if (
+                    linkPage === currentPage &&
+                    linkPage !== "logout" &&
+                    !selected
+                ) {
+                    selected = link;
+                }
+            });
+
+            if (!selected) {
+                console.warn(
+                    "ELibrary: no match for",
+                    currentPage
+                );
+                return;
+            }
+
+            selected.classList.add(
+                "active",
+                "el-nav-current"
+            );
+
+            selected.setAttribute(
+                "aria-current",
+                "page"
+            );
+
+            selected.style.setProperty(
+                "background-color",
+                "#168A91",
+                "important"
+            );
+
+            selected.style.setProperty(
+                "color",
+                "#FFFFFF",
+                "important"
+            );
+
+            selected.style.setProperty(
+                "font-weight",
+                "800",
+                "important"
+            );
+
+            if (isAdmin) {
+                selected.style.setProperty(
+                    "border-left",
+                    "4px solid #B8FFF0",
+                    "important"
+                );
+            } else {
+                selected.style.setProperty(
+                    "border-bottom",
+                    "3px solid #B8FFF0",
+                    "important"
+                );
+            }
+
+            document.body.setAttribute(
+                "data-el-navigation-status",
+                "matched"
+            );
+
+            document.body.setAttribute(
+                "data-el-navigation-active",
+                selected.textContent.trim()
+            );
+
+            console.log(
+                "ELibrary navigation selected:",
+                selected.textContent.trim()
+            );
+        }
+
+
+
+        /* ======================================
+           SIDEBAR GROUPS
+           ====================================== */
+
+        var groups = document.querySelectorAll(
+            ".el-menu-group-toggle"
+        );
+
+        for (var i = 0; i < groups.length; i++) {
+            (function (button) {
+                var key = button.getAttribute(
+                    "data-el-group"
+                );
+
+                var panel = document.getElementById(
+                    "el-group-" + key
+                );
+
+                if (!panel) {
                     return;
                 }
 
-                var open =
-                    !customerNav.classList.contains(
-                        "el-customer-nav-open");
+                var saved = null;
 
-                customerNav.classList.toggle(
-                    "el-customer-nav-open", open);
-
-                if (customerMenuButton) {
-                    customerMenuButton.setAttribute(
-                        "aria-expanded",
-                        open ? "true" : "false");
+                try {
+                    saved = localStorage.getItem(
+                        "el-admin-group-" + key
+                    );
                 }
-            };
+                catch (e) { }
 
-            document.addEventListener(
-                "keydown",
-                function (event) {
-                    if (event.key === "Escape") {
-                        setAdminMenu(false);
+                var expanded = saved === "open";
 
-                        if (customerNav) {
-                            customerNav.classList.remove(
-                                "el-customer-nav-open");
-                        }
+                // Active link is already set before
+                // group initialization.
+                if (panel.querySelector(
+                    ".el-menu-link.el-current-page"
+                )) {
+                    expanded = true;
+                }
 
-                        if (customerMenuButton) {
-                            customerMenuButton.setAttribute(
-                                "aria-expanded", "false");
-                        }
-                    }
-                });
+                function apply() {
+                    panel.hidden = !expanded;
 
-            document.addEventListener(
-                "click",
-                function (event) {
-                    if (customerNav &&
-                        customerMenuButton &&
-                        !customerNav.contains(event.target) &&
-                        !customerMenuButton.contains(event.target)) {
+                    button.setAttribute(
+                        "aria-expanded",
+                        expanded ? "true" : "false"
+                    );
 
-                        customerNav.classList.remove(
-                            "el-customer-nav-open");
+                    button.classList.toggle(
+                        "is-expanded",
+                        expanded
+                    );
 
-                        customerMenuButton.setAttribute(
-                            "aria-expanded", "false");
-                    }
-
-                    if (window.innerWidth <= 991 &&
-                        sidebar &&
-                        adminMenuButton &&
-                        document.body.classList.contains(
-                            "el-sidebar-open") &&
-                        !sidebar.contains(event.target) &&
-                        !adminMenuButton.contains(event.target)) {
-
-                        setAdminMenu(false);
-                    }
-                });
-
-            var groups =
-                document.querySelectorAll(
-                    ".el-menu-group-toggle");
-
-            for (var i = 0; i < groups.length; i++) {
-                (function (button) {
-                    var key =
-                        button.getAttribute("data-el-group");
-
-                    var panel =
-                        document.getElementById(
-                            "el-group-" + key);
-
-                    if (!panel) {
-                        return;
-                    }
-
-                    var saved = null;
-
-                    try {
-                        saved = localStorage.getItem(
-                            "el-admin-group-" + key);
-                    } catch (error) {
-                        saved = null;
-                    }
-
-                    var hasActiveLink =
+                    button.classList.toggle(
+                        "el-group-current",
                         !!panel.querySelector(
-                            ".el-menu-link.active");
+                            ".el-menu-link.el-current-page"
+                        )
+                    );
+                }
 
-                    var expanded = saved === "open";
+                apply();
 
-                    if (hasActiveLink) {
-                        expanded = true;
+                button.addEventListener(
+                    "click",
+                    function () {
+                        expanded = !expanded;
+                        apply();
+
+                        try {
+                            localStorage.setItem(
+                                "el-admin-group-" + key,
+                                expanded ? "open" : "closed"
+                            );
+                        }
+                        catch (e) { }
                     }
+                );
 
-                    function apply() {
-                        panel.hidden = !expanded;
+            })(groups[i]);
+        }
 
-                        button.setAttribute(
-                            "aria-expanded",
-                            expanded ? "true" : "false");
+        /* ======================================
+           PRESERVE SIDEBAR SCROLL
+           ====================================== */
 
-                        button.classList.toggle(
-                            "is-expanded", expanded);
-                    }
+        if (sidebar) {
+            var scrollPanel = sidebar.querySelector(
+                ".el-sidebar-scroll"
+            );
 
-                    apply();
+            var storageKey =
+                "el-admin-sidebar-scroll";
 
-                    button.addEventListener(
-                        "click",
-                        function () {
-                            expanded = !expanded;
-                            apply();
-
-                            try {
-                                localStorage.setItem(
-                                    "el-admin-group-" + key,
-                                    expanded ? "open" : "closed");
-                            } catch (error) {
-                                // Navigation still works.
-                            }
-                        });
-
-                })(groups[i]);
+            function saveScroll() {
+                try {
+                    sessionStorage.setItem(
+                        storageKey,
+                        JSON.stringify({
+                            outer: sidebar.scrollTop,
+                            inner: scrollPanel
+                                ? scrollPanel.scrollTop
+                                : 0
+                        })
+                    );
+                }
+                catch (e) { }
             }
-        })();
-    </script>
+
+            try {
+                var savedScroll = JSON.parse(
+                    sessionStorage.getItem(
+                        storageKey
+                    ) || "null"
+                );
+
+                if (savedScroll) {
+                    requestAnimationFrame(function () {
+                        sidebar.scrollTop =
+                            Number(savedScroll.outer) || 0;
+
+                        if (scrollPanel) {
+                            scrollPanel.scrollTop =
+                                Number(savedScroll.inner) || 0;
+                        }
+                    });
+                }
+            }
+            catch (e) { }
+
+            sidebar.addEventListener(
+                "scroll",
+                saveScroll,
+                { passive: true }
+            );
+
+            if (scrollPanel) {
+                scrollPanel.addEventListener(
+                    "scroll",
+                    saveScroll,
+                    { passive: true }
+                );
+            }
+
+            window.addEventListener(
+                "pagehide",
+                saveScroll
+            );
+        }
+
+        /* ======================================
+           INITIALIZE NAVIGATION
+           ====================================== */
+
+        // All navigation markup is above this script,
+        // so the links are already present in the DOM.
+        selectActiveLink();
+
+        // Recheck when the browser restores a page.
+        window.addEventListener(
+            "pageshow",
+            selectActiveLink
+        );
+
+    })();
+</script>
 
 </body>
 </html>

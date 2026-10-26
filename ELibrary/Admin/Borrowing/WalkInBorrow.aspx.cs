@@ -758,6 +758,13 @@ namespace ELibrary.Admin.Borrowing
                 lblTotalDue.Text =
                     FormatPeso(borrowingFee + depositAmount);
 
+                // Default the received amount to the verified total.
+                // The librarian may still edit the amount.
+                txtAmountReceived.Text =
+                    (borrowingFee + depositAmount).ToString(
+                        "F2",
+                        CultureInfo.InvariantCulture);
+
                 PaymentPreviewVerified = true;
                 pnlPreview.Visible = true;
 
@@ -881,7 +888,7 @@ namespace ELibrary.Admin.Borrowing
                     {
                         ShowMessage(
                             "The administrator account is not " +
-                            "registered in the V2 database.",
+                            "registered in the database.",
                             false,
                             MessageArea.Payment);
                         return;

@@ -244,7 +244,7 @@ namespace ELibrary.Customer
                 if (canReserve)
                 {
                     ShowInformation(
-                        "V2 upfront payment: Borrowing fee " +
+                        "Upfront payment: Borrowing fee " +
                         FormatPeso(borrowingFee) +
                         " + refundable security deposit " +
                         FormatPeso(securityDeposit) +

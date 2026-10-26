@@ -425,7 +425,7 @@
                     ID="ddlStatus"
                     runat="server">
 
-                    <asp:ListItem Text="All Records" Value="All" />
+                    <asp:ListItem Text="All Active Records" Value="All" />
                     <asp:ListItem Text="Pending Pickup" Value="PendingPickup" />
                     <asp:ListItem Text="Payment Required" Value="PaymentRequired" />
                     <asp:ListItem Text="Ready for Pickup" Value="ReadyForPickup" />
@@ -434,10 +434,6 @@
                     <asp:ListItem Text="Overdue" Value="Overdue" />
                     <asp:ListItem Text="Return Requested" Value="ReturnRequested" />
                     <asp:ListItem Text="No Return Request" Value="NoReturnRequest" />
-                    <asp:ListItem Text="Returned" Value="Returned" />
-                    <asp:ListItem Text="Cancelled" Value="Cancelled" />
-                    <asp:ListItem Text="Lost" Value="Lost" />
-                    <asp:ListItem Text="Closed Records" Value="Closed" />
 
                 </asp:DropDownList>
 

@@ -33,15 +33,6 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
-        /// lblPendingPickups control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPendingPickups;
-
-        /// <summary>
         /// lblActiveBorrowings control.
         /// </summary>
         /// <remarks>
@@ -49,6 +40,15 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblActiveBorrowings;
+
+        /// <summary>
+        /// lblPendingPickups control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPendingPickups;
 
         /// <summary>
         /// lblOverdueBooks control.
@@ -67,6 +67,42 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblUnpaidBalance;
+
+        /// <summary>
+        /// lblDepositsHeld control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDepositsHeld;
+
+        /// <summary>
+        /// lblPendingRefunds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPendingRefunds;
+
+        /// <summary>
+        /// lblTotalRefunded control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotalRefunded;
+
+        /// <summary>
+        /// lblUnpaidReservations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUnpaidReservations;
 
         /// <summary>
         /// lblPendingReturns control.

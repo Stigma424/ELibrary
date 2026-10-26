@@ -10,597 +10,335 @@
     ContentPlaceHolderID="head"
     runat="server">
 
-    <style>
-        /* =========================================
-           UI-2 - OCEAN TEAL ADMIN DASHBOARD
-           Scoped to this page only
-        ========================================= */
-
-        .el-ocean-dashboard {
-            --dash-primary: #123B4A;
-            --dash-teal: #168A91;
-            --dash-teal-dark: #12757C;
-            --dash-background: #F0F8F9;
-            --dash-surface: #FFFFFF;
-            --dash-border: #DCE9EB;
-            --dash-text: #173544;
-            --dash-muted: #647F89;
-            --dash-gold: #F0A65A;
-            --dash-danger: #B94E49;
-            --dash-success: #237C62;
-
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            width: 100%;
-            min-width: 0;
-            padding-bottom: 35px;
-            color: var(--dash-text);
-        }
-
-        .el-ocean-dashboard *,
-        .el-ocean-dashboard *::before,
-        .el-ocean-dashboard *::after {
-            box-sizing: border-box;
-        }
-
-        /* HEADER */
-
-        .el-ocean-dashboard .od-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 18px;
-            padding: 5px 0 3px;
-        }
-
-        .el-ocean-dashboard .od-eyebrow {
-            display: block;
-            color: var(--dash-teal);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: .12em;
-            margin-bottom: 8px;
-        }
-
-        .el-ocean-dashboard .od-header h1 {
-            color: var(--dash-primary);
-            font-size: clamp(25px, 3vw, 32px);
-            font-weight: 800;
-            margin: 0 0 8px;
-            line-height: 1.2;
-        }
-
-        .el-ocean-dashboard .od-header p {
-            margin: 0;
-            color: var(--dash-muted);
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        .el-ocean-dashboard .od-refresh {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 41px;
-            padding: 10px 17px;
-            background: var(--dash-surface);
-            border: 1px solid var(--dash-border);
-            border-radius: 9px;
-            color: var(--dash-primary);
-            font-size: 12px;
-            font-weight: 750;
-            cursor: pointer;
-            transition: background .2s, border-color .2s;
-        }
-
-        .el-ocean-dashboard .od-refresh:hover {
-            background: #E5F4F5;
-            border-color: #B5D9DC;
-        }
-
-        /* MESSAGES */
-
-        .el-ocean-dashboard .od-message {
-            display: block;
-            color: var(--dash-danger);
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .el-ocean-dashboard .od-message:empty {
-            display: none;
-        }
-
-        .el-ocean-dashboard .od-message.error {
-            padding: 13px 16px;
-            background: #FFF1F0;
-            border: 1px solid #F2D5D1;
-            border-radius: 10px;
-        }
-
-        /* SUMMARY CARDS */
-
-        .el-ocean-dashboard .od-metrics {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 15px;
-        }
-
-        .el-ocean-dashboard .od-metric {
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 22px;
-            background: var(--dash-surface);
-            border: 1px solid var(--dash-border);
-            border-radius: 14px;
-            box-shadow: 0 3px 14px rgba(18,59,74,.035);
-            text-decoration: none;
-            color: inherit;
-            transition: transform .2s, box-shadow .2s;
-        }
-
-        .el-ocean-dashboard .od-metric:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(18,59,74,.075);
-            color: inherit;
-        }
-
-        .el-ocean-dashboard .od-metric-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .el-ocean-dashboard .od-metric-label {
-            color: var(--dash-muted);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .el-ocean-dashboard .od-metric-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-            border-radius: 11px;
-            background: #E6F5F5;
-            color: var(--dash-teal);
-            font-size: 20px;
-        }
-
-        .el-ocean-dashboard .od-metric-value {
-            color: var(--dash-primary);
-            font-size: clamp(25px, 2.5vw, 33px);
-            font-weight: 800;
-            line-height: 1.2;
-            overflow-wrap: anywhere;
-        }
-
-        .el-ocean-dashboard .od-metric-note {
-            color: var(--dash-muted);
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        .el-ocean-dashboard .od-metric-danger .od-metric-icon {
-            background: #FCEDEC;
-            color: var(--dash-danger);
-        }
-
-        .el-ocean-dashboard .od-metric-danger .od-metric-value {
-            color: var(--dash-danger);
-        }
-
-        .el-ocean-dashboard .od-metric-warning .od-metric-icon {
-            background: #FFF3E1;
-            color: #A56B1D;
-        }
-
-        .el-ocean-dashboard .od-metric-warning .od-metric-value {
-            color: #96601B;
-        }
-
-        /* GENERAL SECTIONS */
-
-        .el-ocean-dashboard .od-content-grid {
-            display: grid;
-            grid-template-columns:
-                minmax(0, 1.15fr)
-                minmax(0, 1fr);
-            gap: 20px;
-            align-items: stretch;
-        }
-
-        .el-ocean-dashboard .od-panel {
-            min-width: 0;
-            padding: 23px;
-            background: var(--dash-surface);
-            border: 1px solid var(--dash-border);
-            border-radius: 14px;
-            box-shadow: 0 3px 14px rgba(18,59,74,.03);
-        }
-
-        .el-ocean-dashboard .od-panel-head {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 19px;
-        }
-
-        .el-ocean-dashboard .od-panel-head h2 {
-            margin: 0 0 6px;
-            color: var(--dash-primary);
-            font-size: 17px;
-            font-weight: 800;
-        }
-
-        .el-ocean-dashboard .od-panel-head p {
-            margin: 0;
-            color: var(--dash-muted);
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .el-ocean-dashboard .od-mini-link {
-            flex-shrink: 0;
-            color: var(--dash-teal);
-            font-size: 11px;
-            font-weight: 750;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .el-ocean-dashboard .od-mini-link:hover {
-            color: var(--dash-teal-dark);
-            text-decoration: underline;
-        }
-
-        /* ACTION-REQUIRED ROWS */
-
-        .el-ocean-dashboard .od-attention-list {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .el-ocean-dashboard .od-attention-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 13px;
-            min-width: 0;
-            padding: 15px 0;
-            border-bottom: 1px solid #EDF3F4;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .el-ocean-dashboard .od-attention-item:first-child {
-            padding-top: 4px;
-        }
-
-        .el-ocean-dashboard .od-attention-item:last-child {
-            border-bottom: none;
-            padding-bottom: 3px;
-        }
-
-        .el-ocean-dashboard .od-attention-item:hover {
-            color: var(--dash-teal-dark);
-        }
-
-        .el-ocean-dashboard .od-attention-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-        }
-
-        .el-ocean-dashboard .od-attention-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            width: 40px;
-            height: 40px;
-            background: #E6F5F5;
-            border-radius: 10px;
-            color: var(--dash-teal);
-            font-size: 17px;
-            font-weight: 800;
-        }
-
-        .el-ocean-dashboard .od-attention-icon.danger {
-            background: #FCEDEC;
-            color: var(--dash-danger);
-        }
-
-        .el-ocean-dashboard .od-attention-icon.warning {
-            background: #FFF3E1;
-            color: #A56B1D;
-        }
-
-        .el-ocean-dashboard .od-attention-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 0;
-        }
-
-        .el-ocean-dashboard .od-attention-copy strong {
-            color: var(--dash-primary);
-            font-size: 12px;
-            font-weight: 750;
-        }
-
-        .el-ocean-dashboard .od-attention-copy small {
-            color: var(--dash-muted);
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .el-ocean-dashboard .od-attention-count {
-            flex-shrink: 0;
-            min-width: 42px;
-            padding: 7px 10px;
-            background: #EAF6F6;
-            color: #126E73;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 800;
-            text-align: center;
-        }
-
-        .el-ocean-dashboard .od-attention-count.danger {
-            background: #FCEDEC;
-            color: var(--dash-danger);
-        }
-
-        .el-ocean-dashboard .od-attention-count.warning {
-            background: #FFF3E1;
-            color: #96601B;
-        }
-
-        /* LIBRARY SNAPSHOT */
-
-        .el-ocean-dashboard .od-snapshot-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .el-ocean-dashboard .od-snapshot-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            padding: 13px 0;
-            border-bottom: 1px solid #EDF3F4;
-        }
-
-        .el-ocean-dashboard .od-snapshot-row:first-child {
-            padding-top: 3px;
-        }
-
-        .el-ocean-dashboard .od-snapshot-row:last-child {
-            border-bottom: none;
-        }
-
-        .el-ocean-dashboard .od-snapshot-label {
-            color: var(--dash-muted);
-            font-size: 12px;
-        }
-
-        .el-ocean-dashboard .od-snapshot-value {
-            color: var(--dash-primary);
-            font-size: 15px;
-            font-weight: 800;
-            text-align: right;
-        }
-
-        .el-ocean-dashboard .od-snapshot-value.success {
-            color: var(--dash-success);
-        }
-
-        /* SECONDARY METRICS */
-
-        .el-ocean-dashboard .od-secondary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 14px;
-        }
-
-        .el-ocean-dashboard .od-secondary-card {
-            min-width: 0;
-            padding: 18px;
-            background: #FFFFFF;
-            border: 1px solid var(--dash-border);
-            border-radius: 12px;
-        }
-
-        .el-ocean-dashboard .od-secondary-label {
-            display: block;
-            margin-bottom: 12px;
-            color: var(--dash-muted);
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .el-ocean-dashboard .od-secondary-value {
-            display: block;
-            color: var(--dash-primary);
-            font-size: 25px;
-            font-weight: 800;
-            line-height: 1.2;
-            overflow-wrap: anywhere;
-        }
-
-        .el-ocean-dashboard .od-secondary-note {
-            display: block;
-            margin-top: 8px;
-            color: var(--dash-muted);
-            font-size: 10px;
-            line-height: 1.5;
-        }
-
-        /* QUICK MANAGEMENT */
-
-        .el-ocean-dashboard .od-actions {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .el-ocean-dashboard .od-action {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-            padding: 15px;
-            background: #F7FBFB;
-            border: 1px solid #E2EDEE;
-            border-radius: 10px;
-            color: var(--dash-primary);
-            text-decoration: none;
-            transition: background .2s, border-color .2s;
-        }
-
-        .el-ocean-dashboard .od-action:hover {
-            background: #EAF6F6;
-            border-color: #B9DCDF;
-            color: var(--dash-teal-dark);
-            text-decoration: none;
-        }
-
-        .el-ocean-dashboard .od-action-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            width: 37px;
-            height: 37px;
-            border-radius: 9px;
-            background: #E3F3F4;
-            color: var(--dash-teal);
-            font-size: 18px;
-        }
-
-        .el-ocean-dashboard .od-action-name {
-            min-width: 0;
-            flex: 1;
-            font-size: 12px;
-            font-weight: 750;
-            line-height: 1.5;
-        }
-
-        .el-ocean-dashboard .od-action-arrow {
-            margin-left: auto;
-            color: #83A6AA;
-            font-size: 17px;
-        }
-
-        /* FOOTER */
-
-        .el-ocean-dashboard .od-footnote {
-            color: var(--dash-muted);
-            font-size: 11px;
-            line-height: 1.6;
-            text-align: right;
-        }
-
-        /* RESPONSIVE */
-
-        @media (max-width: 1250px) {
-            .el-ocean-dashboard .od-metrics,
-            .el-ocean-dashboard .od-secondary-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 950px) {
-            .el-ocean-dashboard .od-content-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .el-ocean-dashboard .od-actions {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 600px) {
-            .el-ocean-dashboard {
-                gap: 17px;
-            }
-
-            .el-ocean-dashboard .od-header {
-                align-items: flex-start;
-            }
-
-            .el-ocean-dashboard .od-refresh {
-                width: 100%;
-            }
-
-            .el-ocean-dashboard .od-metrics {
-                gap: 10px;
-            }
-
-            .el-ocean-dashboard .od-metric {
-                padding: 15px;
-                gap: 12px;
-            }
-
-            .el-ocean-dashboard .od-metric-icon {
-                width: 33px;
-                height: 33px;
-                font-size: 16px;
-            }
-
-            .el-ocean-dashboard .od-metric-label {
-                font-size: 11px;
-            }
-
-            .el-ocean-dashboard .od-metric-value {
-                font-size: 23px;
-            }
-
-            .el-ocean-dashboard .od-panel {
-                padding: 17px;
-            }
-
-            .el-ocean-dashboard .od-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .el-ocean-dashboard .od-secondary-card {
-                padding: 15px;
-            }
-
-            .el-ocean-dashboard .od-secondary-value {
-                font-size: 22px;
-            }
-        }
-
-        @media (max-width: 370px) {
-            .el-ocean-dashboard .od-metrics,
-            .el-ocean-dashboard .od-secondary-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .el-ocean-dashboard .od-metric,
-            .el-ocean-dashboard .od-action,
-            .el-ocean-dashboard .od-refresh {
-                transition: none;
-            }
-        }
-    </style>
+<style>
+.ad-home {
+    --ad-ink: #123B4A;
+    --ad-teal: #168A91;
+    --ad-muted: #647F89;
+    --ad-border: #DCE9EB;
+    color: var(--ad-ink);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.ad-home * {
+    box-sizing: border-box;
+}
+
+.ad-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 29px 32px;
+    border-radius: 17px;
+    background: linear-gradient(115deg, #123B4A, #17616A);
+    color: #FFFFFF;
+    margin-bottom: 24px;
+}
+
+.ad-eyebrow {
+    color: #ADE6E5;
+    letter-spacing: 1.6px;
+    font-weight: 800;
+    font-size: 10px;
+}
+
+.ad-hero h1 {
+    margin: 9px 0;
+    font-size: 30px;
+    font-weight: 850;
+    color: #FFFFFF;
+}
+
+.ad-hero p {
+    font-size: 12px;
+    line-height: 1.7;
+    margin: 0;
+    color: #D9ECEF;
+}
+
+.ad-refresh {
+    padding: 11px 17px;
+    background: #FFFFFF;
+    color: #123B4A;
+    border-radius: 9px;
+    border: none;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ad-refresh:hover {
+    background: #E3F5F3;
+}
+
+.ad-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 15px;
+    margin-bottom: 26px;
+}
+
+.ad-metric {
+    background: #FFFFFF;
+    border: 1px solid var(--ad-border);
+    border-radius: 13px;
+    padding: 22px;
+    min-width: 0;
+}
+
+.ad-metric-label {
+    color: var(--ad-muted);
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.ad-metric-value {
+    font-size: 30px;
+    line-height: 1.2;
+    margin: 12px 0 7px;
+    font-weight: 850;
+    overflow-wrap: anywhere;
+}
+
+.ad-metric-note {
+    color: #80949D;
+    font-size: 11px;
+}
+
+.ad-metric.teal .ad-metric-value {
+    color: var(--ad-teal);
+}
+
+.ad-metric.warning .ad-metric-value {
+    color: #B36A22;
+}
+
+.ad-metric.danger .ad-metric-value {
+    color: #B94E49;
+}
+
+.ad-metric.money .ad-metric-value {
+    font-size: 25px;
+}
+
+.ad-columns {
+    display: grid;
+    grid-template-columns: minmax(0,1.15fr) minmax(0,1fr);
+    gap: 17px;
+    margin-bottom: 24px;
+}
+
+.ad-panel {
+    background: #FFFFFF;
+    border: 1px solid var(--ad-border);
+    border-radius: 14px;
+    padding: 23px;
+    min-width: 0;
+}
+
+.ad-panel-head {
+    margin-bottom: 16px;
+}
+
+.ad-panel-head h2 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 6px;
+}
+
+.ad-panel-head p {
+    font-size: 11px;
+    color: var(--ad-muted);
+    margin: 0;
+}
+
+.ad-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #EDF2F4;
+    color: var(--ad-ink);
+    text-decoration: none;
+}
+
+.ad-action-row:last-child {
+    border-bottom: none;
+}
+
+.ad-action-row:hover {
+    color: var(--ad-teal);
+}
+
+.ad-action-row strong {
+    display: block;
+    font-size: 12px;
+}
+
+.ad-action-row small {
+    font-size: 10px;
+    color: var(--ad-muted);
+}
+
+.ad-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 37px;
+    padding: 7px 10px;
+    background: #EAF6F6;
+    color: #12757C;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.ad-finance-row {
+    padding: 15px 0;
+    border-bottom: 1px solid #EDF2F4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ad-finance-row:last-child {
+    border-bottom: none;
+}
+
+.ad-finance-row span {
+    color: var(--ad-muted);
+    font-size: 12px;
+}
+
+.ad-finance-row strong {
+    font-size: 16px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.ad-finance-note {
+    padding: 12px;
+    border-radius: 8px;
+    background: #F2F8F9;
+    color: #617C85;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 13px;
+}
+
+.ad-section-title {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.ad-inventory {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 10px;
+}
+
+.ad-inventory-item {
+    padding: 15px 12px;
+    background: #F4F9FA;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.ad-inventory-item strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 850;
+}
+
+.ad-inventory-item span {
+    display: block;
+    font-size: 10px;
+    color: var(--ad-muted);
+    margin-top: 5px;
+}
+
+.ad-quick-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ad-quick-actions a {
+    text-decoration: none;
+    color: #12757C;
+    background: #EDF7F7;
+    border: 1px solid #D2E9EA;
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.ad-quick-actions a:hover {
+    background: #DDF0F0;
+}
+
+.ad-message {
+    display: block;
+    color: #B94E49;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.ad-message:empty {
+    display: none;
+}
+
+@media (max-width: 1150px) {
+    .ad-metrics {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .ad-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    .ad-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+    }
+
+    .ad-hero h1 {
+        font-size: 25px;
+    }
+
+    .ad-metrics {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .ad-metric {
+        padding: 16px;
+    }
+
+    .ad-metric-value {
+        font-size: 25px;
+    }
+
+    .ad-metric.money .ad-metric-value {
+        font-size: 20px;
+    }
+
+    .ad-inventory {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+</style>
 
 </asp:Content>
 
@@ -608,559 +346,262 @@
     ContentPlaceHolderID="MainContent"
     runat="server">
 
-    <div class="el-ocean-dashboard">
-
-        <!-- DASHBOARD HEADER -->
-
-        <header class="od-header">
-            <div>
-                <span class="od-eyebrow">
-                    ADMINISTRATION / OVERVIEW
-                </span>
-
-                <h1>Dashboard</h1>
-
-                <p>
-                    Your library at a glance. Monitor important
-                    activities and manage daily operations.
-                </p>
-            </div>
-
-            <asp:Button
-                ID="btnRefresh"
-                runat="server"
-                Text="↻ Refresh Dashboard"
-                CssClass="od-refresh"
-                CausesValidation="false"
-                OnClick="btnRefresh_Click" />
-        </header>
-
-        <asp:Label
-            ID="lblMessage"
-            runat="server"
-            EnableViewState="false"
-            CssClass="od-message" />
-
-        <!-- PRIMARY OPERATIONAL METRICS -->
-
-        <section class="od-metrics"
-            aria-label="Key library statistics">
-
-            <asp:HyperLink
-                runat="server"
-                NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                CssClass="od-metric">
-
-                <div class="od-metric-top">
-                    <span class="od-metric-label">
-                        Active Borrowings
-                    </span>
-                    <span class="od-metric-icon"
-                        aria-hidden="true">▤</span>
-                </div>
-
-                <div class="od-metric-value">
-                    <asp:Label
-                        ID="lblActiveBorrowings"
-                        runat="server"
-                        Text="0" />
-                </div>
-
-                <span class="od-metric-note">
-                    Collected and not yet returned
-                </span>
-
-            </asp:HyperLink>
-
-            <asp:HyperLink
-                runat="server"
-                NavigateUrl="~/Admin/Borrowing/OverdueBooks.aspx"
-                CssClass="od-metric od-metric-danger">
-
-                <div class="od-metric-top">
-                    <span class="od-metric-label">
-                        Overdue Books
-                    </span>
-                    <span class="od-metric-icon"
-                        aria-hidden="true">!</span>
-                </div>
-
-                <div class="od-metric-value">
-                    <asp:Label
-                        ID="lblOverdueBooks"
-                        runat="server"
-                        Text="0" />
-                </div>
-
-                <span class="od-metric-note">
-                    Loans past their due dates
-                </span>
-
-            </asp:HyperLink>
-
-            <asp:HyperLink
-                runat="server"
-                NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                CssClass="od-metric od-metric-warning">
-
-                <div class="od-metric-top">
-                    <span class="od-metric-label">
-                        Pending Pickups
-                    </span>
-                    <span class="od-metric-icon"
-                        aria-hidden="true">◷</span>
-                </div>
-
-                <div class="od-metric-value">
-                    <asp:Label
-                        ID="lblPendingPickups"
-                        runat="server"
-                        Text="0" />
-                </div>
-
-                <span class="od-metric-note">
-                    Reservations awaiting collection
-                </span>
-
-            </asp:HyperLink>
-
-            <asp:HyperLink
-                runat="server"
-                NavigateUrl="~/Admin/Transactions/ManageTransactions.aspx"
-                CssClass="od-metric">
-
-                <div class="od-metric-top">
-                    <span class="od-metric-label">
-                        Outstanding Fees
-                    </span>
-                    <span class="od-metric-icon"
-                        aria-hidden="true">₱</span>
-                </div>
-
-                <div class="od-metric-value">
-                    ₱<asp:Label
-                        ID="lblTotalUnpaidBalance"
-                        runat="server"
-                        Text="0.00" />
-                </div>
-
-                <span class="od-metric-note">
-                    Total remaining customer balances
-                </span>
-
-            </asp:HyperLink>
-
-        </section>
-
-        <!-- ATTENTION / LIBRARY SNAPSHOT -->
-
-        <section class="od-content-grid">
-
-            <!-- ATTENTION REQUIRED -->
-
-            <div class="od-panel">
-
-                <div class="od-panel-head">
-                    <div>
-                        <h2>Attention Required</h2>
-                        <p>
-                            Items librarians may need to process.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="od-attention-list">
-
-                    <asp:HyperLink
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/OverdueBooks.aspx"
-                        CssClass="od-attention-item">
-
-                        <div class="od-attention-left">
-                            <span class="od-attention-icon danger"
-                                aria-hidden="true">!</span>
-
-                            <span class="od-attention-copy">
-                                <strong>Overdue Returns</strong>
-                                <small>Books past their due dates</small>
-                            </span>
-                        </div>
-
-                        <span class="od-attention-count danger">
-                            <asp:Label
-                                ID="lblAttentionOverdue"
-                                runat="server"
-                                Text="0" />
-                        </span>
-
-                    </asp:HyperLink>
-
-                    <asp:HyperLink
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                        CssClass="od-attention-item">
-
-                        <div class="od-attention-left">
-                            <span class="od-attention-icon warning"
-                                aria-hidden="true">◷</span>
-
-                            <span class="od-attention-copy">
-                                <strong>Pending Pickups</strong>
-                                <small>Reserved books awaiting pickup</small>
-                            </span>
-                        </div>
-
-                        <span class="od-attention-count warning">
-                            <asp:Label
-                                ID="lblAttentionPickups"
-                                runat="server"
-                                Text="0" />
-                        </span>
-
-                    </asp:HyperLink>
-
-                    <asp:HyperLink
-                        runat="server"
-                        NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                        CssClass="od-attention-item">
-
-                        <div class="od-attention-left">
-                            <span class="od-attention-icon"
-                                aria-hidden="true">↩</span>
-
-                            <span class="od-attention-copy">
-                                <strong>Pending Returns</strong>
-                                <small>
-                                    Waiting for librarian confirmation
-                                </small>
-                            </span>
-                        </div>
-
-                        <span class="od-attention-count">
-                            <asp:Label
-                                ID="lblPendingReturns"
-                                runat="server"
-                                Text="0" />
-                        </span>
-
-                    </asp:HyperLink>
-
-                </div>
-
-            </div>
-
-            <!-- LIBRARY INVENTORY -->
-
-            <div class="od-panel">
-
-                <div class="od-panel-head">
-                    <div>
-                        <h2>Library Snapshot</h2>
-                        <p>
-                            Inventory and membership at a glance.
-                        </p>
-                    </div>
-
-                    <asp:HyperLink
-                        runat="server"
-                        NavigateUrl="~/Admin/Books/ManageBooks.aspx"
-                        CssClass="od-mini-link"
-                        Text="Manage Books →" />
-                </div>
-
-                <div class="od-snapshot-list">
-
-                    <div class="od-snapshot-row">
-                        <span class="od-snapshot-label">
-                            Catalog Books
-                        </span>
-                        <strong class="od-snapshot-value">
-                            <asp:Label
-                                ID="lblTotalBooks"
-                                runat="server"
-                                Text="0" />
-                        </strong>
-                    </div>
-
-                    <div class="od-snapshot-row">
-                        <span class="od-snapshot-label">
-                            Total Book Copies
-                        </span>
-                        <strong class="od-snapshot-value">
-                            <asp:Label
-                                ID="lblTotalCopies"
-                                runat="server"
-                                Text="0" />
-                        </strong>
-                    </div>
-
-                    <div class="od-snapshot-row">
-                        <span class="od-snapshot-label">
-                            Available Copies
-                        </span>
-                        <strong class="od-snapshot-value success">
-                            <asp:Label
-                                ID="lblAvailableCopies"
-                                runat="server"
-                                Text="0" />
-                        </strong>
-                    </div>
-
-                    <div class="od-snapshot-row">
-                        <span class="od-snapshot-label">
-                            Registered Customers
-                        </span>
-                        <strong class="od-snapshot-value">
-                            <asp:Label
-                                ID="lblTotalCustomers"
-                                runat="server"
-                                Text="0" />
-                        </strong>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- SECONDARY STATISTICS -->
-
-        <section aria-label="Additional library statistics">
-
-            <div class="od-secondary-grid">
-
-                <div class="od-secondary-card">
-                    <span class="od-secondary-label">
-                        Collected Loans
-                    </span>
-                    <strong class="od-secondary-value">
-                        <asp:Label
-                            ID="lblCollectedLoans"
-                            runat="server"
-                            Text="0" />
-                    </strong>
-                    <span class="od-secondary-note">
-                        Current physically borrowed books
-                    </span>
-                </div>
-
-                <div class="od-secondary-card">
-                    <span class="od-secondary-label">
-                        Cancelled Reservations
-                    </span>
-                    <strong class="od-secondary-value">
-                        <asp:Label
-                            ID="lblCancelledReservations"
-                            runat="server"
-                            Text="0" />
-                    </strong>
-                    <span class="od-secondary-note">
-                        Reservations cancelled before collection
-                    </span>
-                </div>
-
-                <div class="od-secondary-card">
-                    <span class="od-secondary-label">
-                        Archived Books
-                    </span>
-                    <strong class="od-secondary-value">
-                        <asp:Label
-                            ID="lblArchivedBooks"
-                            runat="server"
-                            Text="0" />
-                    </strong>
-                    <span class="od-secondary-note">
-                        Collection records in the archive
-                    </span>
-                </div>
-
-                <div class="od-secondary-card">
-                    <span class="od-secondary-label">
-                        Pending Return Requests
-                    </span>
-                    <strong class="od-secondary-value">
-                        <asp:Label
-                            ID="lblSecondaryPendingReturns"
-                            runat="server"
-                            Text="0" />
-                    </strong>
-                    <span class="od-secondary-note">
-                        Return confirmations to review
-                    </span>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- QUICK MANAGEMENT -->
-
-        <section class="od-panel">
-
-            <div class="od-panel-head">
-                <div>
-                    <h2>Quick Management</h2>
-                    <p>
-                        Open frequently used library management tools.
-                    </p>
-                </div>
-            </div>
-
-            <div class="od-actions">
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Books/ManageBooks.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">▣</span>
-
-                    <span class="od-action-name">
-                        Manage Books
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Borrowing/ManageBorrows.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">▤</span>
-
-                    <span class="od-action-name">
-                        Manage Borrowings
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Borrowing/WalkInBorrow.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">＋</span>
-
-                    <span class="od-action-name">
-                        Walk-in Borrowing
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Transactions/ManageTransactions.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">₱</span>
-
-                    <span class="od-action-name">
-                        Transactions
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Users/ManageUsers.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">♙</span>
-
-                    <span class="od-action-name">
-                        Manage Users
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">↺</span>
-
-                    <span class="od-action-name">
-                        Borrow History
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Books/ManageGenres.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">≡</span>
-
-                    <span class="od-action-name">
-                        Manage Genres
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Archive/ArchiveBooks.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">▥</span>
-
-                    <span class="od-action-name">
-                        Archived Books
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-                <asp:HyperLink
-                    runat="server"
-                    NavigateUrl="~/Admin/Audit/AuditLogs.aspx"
-                    CssClass="od-action">
-
-                    <span class="od-action-icon"
-                        aria-hidden="true">☷</span>
-
-                    <span class="od-action-name">
-                        Audit Logs
-                    </span>
-
-                    <span class="od-action-arrow">→</span>
-
-                </asp:HyperLink>
-
-            </div>
-
-        </section>
-
-        <div class="od-footnote">
-            Dashboard values reflect the latest completed data refresh.
+<div class="ad-home">
+
+    <div class="ad-hero">
+        <div>
+            <span class="ad-eyebrow">
+                ADMINISTRATION / OVERVIEW
+            </span>
+
+            <h1>Library Overview</h1>
+
+            <p>
+                Monitor daily library activity and identify
+                operations requiring attention.
+            </p>
         </div>
 
+        <asp:Button ID="btnRefresh"
+            runat="server"
+            CssClass="ad-refresh"
+            Text="↻ Refresh"
+            OnClick="btnRefresh_Click" />
     </div>
+
+    <asp:Label ID="lblMessage"
+        runat="server"
+        CssClass="ad-message" />
+
+    <!-- FOUR PRIMARY METRICS -->
+
+    <div class="ad-metrics">
+        <div class="ad-metric teal">
+            <div class="ad-metric-label">
+                Active Borrowings
+            </div>
+            <div class="ad-metric-value">
+                <asp:Label ID="lblActiveBorrowings"
+                    runat="server" Text="0" />
+            </div>
+            <div class="ad-metric-note">
+                Books currently on loan
+            </div>
+        </div>
+
+        <div class="ad-metric danger">
+            <div class="ad-metric-label">
+                Overdue Books
+            </div>
+            <div class="ad-metric-value">
+                <asp:Label ID="lblOverdueBooks"
+                    runat="server" Text="0" />
+            </div>
+            <div class="ad-metric-note">
+                Require follow-up
+            </div>
+        </div>
+
+        <div class="ad-metric warning">
+            <div class="ad-metric-label">
+                Pending Collections
+            </div>
+            <div class="ad-metric-value">
+                <asp:Label ID="lblPendingPickups"
+                    runat="server" Text="0" />
+            </div>
+            <div class="ad-metric-note">
+                Awaiting customer pickup
+            </div>
+        </div>
+
+        <div class="ad-metric money">
+            <div class="ad-metric-label">
+                Outstanding Fees
+            </div>
+            <div class="ad-metric-value">
+                ₱<asp:Label ID="lblTotalUnpaidBalance"
+                    runat="server" Text="0.00" />
+            </div>
+            <div class="ad-metric-note">
+                Unpaid receipt balances
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTIONS AND FINANCE -->
+
+    <div class="ad-columns">
+        <section class="ad-panel">
+            <div class="ad-panel-head">
+                <h2>Requires Attention</h2>
+                <p>Operations requiring librarian action</p>
+            </div>
+
+            <a class="ad-action-row"
+                href="<%= ResolveUrl("~/Admin/Borrowing/ManageBorrows.aspx") %>">
+                <div>
+                    <strong>Return Requests</strong>
+                    <small>Confirm returned books</small>
+                </div>
+                <span class="ad-count">
+                    <asp:Label ID="lblPendingReturns"
+                        runat="server" Text="0" />
+                </span>
+            </a>
+
+            <a class="ad-action-row"
+                href="<%= ResolveUrl("~/Admin/Transactions/ManageTransactions.aspx") %>">
+                <div>
+                    <strong>Reservations Awaiting Payment</strong>
+                    <small>Check unpaid reservations</small>
+                </div>
+                <span class="ad-count">
+                    <asp:Label ID="lblAwaitingPayment"
+                        runat="server" Text="0" />
+                </span>
+            </a>
+
+            <a class="ad-action-row"
+                href="<%= ResolveUrl("~/Admin/Transactions/RefundDeposits.aspx") %>">
+                <div>
+                    <strong>Pending Deposit Refunds</strong>
+                    <small>Review refund eligibility</small>
+                </div>
+                <span class="ad-count">
+                    <asp:Label ID="lblPendingRefunds"
+                        runat="server" Text="0" />
+                </span>
+            </a>
+
+            <a class="ad-action-row"
+                href="<%= ResolveUrl("~/Admin/Borrowing/Settlements.aspx") %>">
+                <div>
+                    <strong>Expired Reservations</strong>
+                    <small>Process eligible expirations</small>
+                </div>
+                <span class="ad-count">
+                    <asp:Label ID="lblExpiredReservations"
+                        runat="server" Text="0" />
+                </span>
+            </a>
+        </section>
+
+        <section class="ad-panel">
+            <div class="ad-panel-head">
+                <h2>Finance &amp; Deposits</h2>
+                <p>Security deposit position</p>
+            </div>
+
+            <div class="ad-finance-row">
+                <span>Deposits Currently Held</span>
+                <strong>
+                    <asp:Label ID="lblDepositsHeld"
+                        runat="server" Text="₱0.00" />
+                </strong>
+            </div>
+
+            <div class="ad-finance-row">
+                <span>Total Deposits Refunded</span>
+                <strong>
+                    <asp:Label ID="lblDepositsRefunded"
+                        runat="server" Text="₱0.00" />
+                </strong>
+            </div>
+
+            <div class="ad-finance-row">
+                <span>Deposits On Hold</span>
+                <strong>
+                    <asp:Label ID="lblDepositsOnHold"
+                        runat="server" Text="0" />
+                </strong>
+            </div>
+
+            <div class="ad-finance-note">
+                Security deposits are refundable obligations.
+                They are tracked separately from borrowing
+                fees and library revenue.
+            </div>
+
+            <div style="margin-top:17px">
+                <a class="ad-quick-actions"
+                    href="<%= ResolveUrl("~/Admin/Transactions/DepositLedger.aspx") %>"
+                    style="color:#168A91;text-decoration:none;font-size:12px;font-weight:800">
+                    View Deposit Ledger →
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- LIBRARY SNAPSHOT -->
+
+    <section class="ad-panel" style="margin-bottom:24px">
+        <h2 class="ad-section-title">
+            Library at a Glance
+        </h2>
+
+        <div class="ad-inventory">
+            <div class="ad-inventory-item">
+                <strong>
+                    <asp:Label ID="lblTotalBooks"
+                        runat="server" Text="0" />
+                </strong>
+                <span>Book Titles</span>
+            </div>
+
+            <div class="ad-inventory-item">
+                <strong>
+                    <asp:Label ID="lblAvailableCopies"
+                        runat="server" Text="0" />
+                </strong>
+                <span>Available Copies</span>
+            </div>
+
+            <div class="ad-inventory-item">
+                <strong>
+                    <asp:Label ID="lblTotalCustomers"
+                        runat="server" Text="0" />
+                </strong>
+                <span>Registered Customers</span>
+            </div>
+
+            <div class="ad-inventory-item">
+                <strong>
+                    <asp:Label ID="lblArchivedBooks"
+                        runat="server" Text="0" />
+                </strong>
+                <span>Archived Titles</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK LINKS -->
+
+    <section class="ad-panel">
+        <h2 class="ad-section-title">Quick Actions</h2>
+
+        <div class="ad-quick-actions">
+            <a href="<%= ResolveUrl("~/Admin/Borrowing/ManageBorrows.aspx") %>">
+                Manage Borrowings
+            </a>
+
+            <a href="<%= ResolveUrl("~/Admin/Borrowing/WalkInBorrow.aspx") %>">
+                Walk-in Borrowing
+            </a>
+
+            <a href="<%= ResolveUrl("~/Admin/Transactions/CollectDeposits.aspx") %>">
+                Collect Deposits
+            </a>
+
+            <a href="<%= ResolveUrl("~/Admin/Transactions/RefundDeposits.aspx") %>">
+                Refund Deposits
+            </a>
+
+            <a href="<%= ResolveUrl("~/Admin/Borrowing/BorrowHistory.aspx") %>">
+                Borrow History
+            </a>
+        </div>
+    </section>
+</div>
 
 </asp:Content>

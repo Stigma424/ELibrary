@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace ELibrary
 {
@@ -17,7 +18,8 @@ namespace ELibrary
         {
             if (!AdminHelper.IsAdmin(Session))
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -27,119 +29,133 @@ namespace ELibrary
             }
         }
 
+        private static object ReadValue(
+            DataRow row,
+            string column)
+        {
+            if (!row.Table.Columns.Contains(column))
+            {
+                throw new InvalidOperationException(
+                    "Dashboard procedure is missing column: " +
+                    column);
+            }
+
+            return row[column] == DBNull.Value
+                ? 0
+                : row[column];
+        }
+
+        private static string Number(
+            DataRow row,
+            string column)
+        {
+            long value =
+                Convert.ToInt64(ReadValue(row, column));
+
+            return value.ToString("N0");
+        }
+
+        private static string Currency(
+            DataRow row,
+            string column)
+        {
+            decimal value =
+                Convert.ToDecimal(ReadValue(row, column));
+
+            return "₱" + value.ToString(
+                "N2",
+                CultureInfo.GetCultureInfo("en-PH"));
+        }
+
         private void LoadDashboard()
         {
             try
             {
+                DataTable data = new DataTable();
+
                 using (SqlConnection con =
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand("EDashboard_Admin", con))
+                    new SqlCommand(
+                        "dbo.EDashboard_Admin", con))
                 {
                     cmd.CommandType =
                         CommandType.StoredProcedure;
 
-                    con.Open();
+                    cmd.CommandTimeout = 30;
 
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(cmd))
                     {
-                        if (!reader.Read())
-                        {
-                            throw new InvalidOperationException(
-                                "The dashboard returned no statistics.");
-                        }
-
-                        // ===================================
-                        // PRIMARY METRICS
-                        // ===================================
-
-                        lblActiveBorrowings.Text =
-                            Convert.ToString(
-                                reader["ActiveBorrowings"]);
-
-                        lblOverdueBooks.Text =
-                            Convert.ToString(
-                                reader["OverdueBooks"]);
-
-                        lblPendingPickups.Text =
-                            Convert.ToString(
-                                reader["PendingPickups"]);
-
-                        lblTotalUnpaidBalance.Text =
-                            Convert.ToDecimal(
-                                reader["TotalUnpaidBalance"])
-                                .ToString("N2");
-
-                        // ===================================
-                        // ATTENTION REQUIRED
-                        // ===================================
-
-                        lblAttentionOverdue.Text =
-                            Convert.ToString(
-                                reader["OverdueBooks"]);
-
-                        lblAttentionPickups.Text =
-                            Convert.ToString(
-                                reader["PendingPickups"]);
-
-                        lblPendingReturns.Text =
-                            Convert.ToString(
-                                reader["PendingReturns"]);
-
-                        // ===================================
-                        // LIBRARY SNAPSHOT
-                        // ===================================
-
-                        lblTotalBooks.Text =
-                            Convert.ToString(
-                                reader["TotalBooks"]);
-
-                        lblTotalCopies.Text =
-                            Convert.ToString(
-                                reader["TotalCopies"]);
-
-                        lblAvailableCopies.Text =
-                            Convert.ToString(
-                                reader["AvailableCopies"]);
-
-                        lblTotalCustomers.Text =
-                            Convert.ToString(
-                                reader["TotalCustomers"]);
-
-                        // ===================================
-                        // SECONDARY STATISTICS
-                        // ===================================
-
-                        lblCollectedLoans.Text =
-                            Convert.ToString(
-                                reader["CollectedLoans"]);
-
-                        lblCancelledReservations.Text =
-                            Convert.ToString(
-                                reader["CancelledReservations"]);
-
-                        lblArchivedBooks.Text =
-                            Convert.ToString(
-                                reader["ArchivedBooks"]);
-
-                        lblSecondaryPendingReturns.Text =
-                            Convert.ToString(
-                                reader["PendingReturns"]);
-
-                        lblMessage.Text = "";
-                        lblMessage.CssClass = "od-message";
+                        adapter.Fill(data);
                     }
                 }
+
+                if (data.Rows.Count == 0)
+                {
+                    throw new InvalidOperationException(
+                        "Dashboard returned no records.");
+                }
+
+                DataRow row = data.Rows[0];
+
+                lblActiveBorrowings.Text =
+                    Number(row, "ActiveBorrowings");
+
+                lblOverdueBooks.Text =
+                    Number(row, "OverdueBooks");
+
+                lblPendingPickups.Text =
+                    Number(row, "PendingPickups");
+
+                lblTotalUnpaidBalance.Text =
+                    Convert.ToDecimal(
+                        ReadValue(row, "TotalUnpaidBalance"))
+                    .ToString(
+                        "N2",
+                        CultureInfo.GetCultureInfo("en-PH"));
+
+                lblPendingReturns.Text =
+                    Number(row, "PendingReturns");
+
+                lblAwaitingPayment.Text =
+                    Number(row, "ReservationsAwaitingPayment");
+
+                lblPendingRefunds.Text =
+                    Number(row, "PendingDepositRefunds");
+
+                lblExpiredReservations.Text =
+                    Number(row, "ExpiredReservations");
+
+                lblDepositsHeld.Text =
+                    Currency(row, "TotalDepositsHeld");
+
+                lblDepositsRefunded.Text =
+                    Currency(row, "TotalDepositsRefunded");
+
+                lblDepositsOnHold.Text =
+                    Number(row, "DepositsOnHold");
+
+                lblTotalBooks.Text =
+                    Number(row, "TotalBooks");
+
+                lblAvailableCopies.Text =
+                    Number(row, "AvailableCopies");
+
+                lblTotalCustomers.Text =
+                    Number(row, "TotalCustomers");
+
+                lblArchivedBooks.Text =
+                    Number(row, "ArchivedBooks");
+
+                lblMessage.Text = "";
             }
             catch (Exception ex)
             {
-                lblMessage.CssClass =
-                    "od-message error";
-
                 lblMessage.Text =
-                    "Unable to load dashboard: " +
-                    Server.HtmlEncode(ex.Message);
+                    Server.HtmlEncode(
+                        "Unable to load dashboard: " +
+                        ex.Message);
             }
         }
 
@@ -148,10 +164,7 @@ namespace ELibrary
             EventArgs e)
         {
             if (!AdminHelper.IsAdmin(Session))
-            {
-                Response.Redirect("~/Login.aspx");
                 return;
-            }
 
             LoadDashboard();
         }

@@ -333,7 +333,7 @@
     <header class="wi-header">
         <div>
             <span class="wi-eyebrow">
-                ADMINISTRATION / V2 BORROWING
+                ADMINISTRATION / BORROWING
             </span>
             <h1>Walk-in Borrowing</h1>
             <p>
@@ -364,7 +364,7 @@
             <span class="wi-step">01</span>
             <div>
                 <h2>Select Customer</h2>
-                <p>Search registered customers in V2.</p>
+                <p>Search registered customers.</p>
             </div>
         </div>
 

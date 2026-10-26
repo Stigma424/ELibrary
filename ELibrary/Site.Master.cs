@@ -3,9 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace ELibrary
 {
@@ -14,43 +12,35 @@ namespace ELibrary
         protected void Page_Load(object sender, EventArgs e)
         {
             int role = 0;
+            int userID = 0;
 
-            if (Session["UserID"] != null &&
-                Session["Role"] != null)
-            {
-                int.TryParse(
-                    Convert.ToString(Session["Role"]),
-                    out role);
-            }
+            int.TryParse(
+                Convert.ToString(Session["Role"]),
+                out role);
+
+            int.TryParse(
+                Convert.ToString(Session["UserID"]),
+                out userID);
 
             bool isAdmin =
-                Session["UserID"] != null &&
+                userID > 0 &&
                 role == 2 &&
                 AdminHelper.IsAdmin(Session);
 
             bool isCustomer =
-                Session["UserID"] != null &&
+                userID > 0 &&
                 role == 1;
-
-            // ======================================
-            // ADMIN LAYOUT: UNCHANGED
-            // ======================================
 
             pnlAdminSidebar.Visible = isAdmin;
             pnlAdminHeader.Visible = isAdmin;
             pnlAdminToolbar.Visible = isAdmin;
-
-            // ======================================
-            // CUSTOMER / GUEST LAYOUT
-            // ======================================
 
             pnlPublicHeader.Visible = !isAdmin;
 
             phGuestNavigation.Visible =
                 !isAdmin && !isCustomer;
 
-            phCustomerNavigation.Visible =
-                isCustomer;
+            phCustomerNavigation.Visible = isCustomer;
 
             pageBody.Attributes["class"] =
                 isAdmin
@@ -59,36 +49,17 @@ namespace ELibrary
                         ? "el-customer-mode"
                         : "el-guest-mode";
 
-            // ======================================
-            // NAVIGATION
-            // ======================================
-
-            if (isAdmin)
-            {
-                HighlightActiveAdminLink();
-            }
-
             if (isCustomer)
             {
                 lnkPublicBrand.NavigateUrl =
                     "~/CustomerHome.aspx";
-
-                HighlightActiveCustomerLink();
             }
 
-            // ======================================
-            // PROFILE PICTURE
-            // ======================================
-
-            if (isAdmin || isCustomer)
+            if ((isAdmin || isCustomer) && !IsPostBack)
             {
                 LoadHeaderProfileImage();
             }
         }
-
-        // ==========================================
-        // PROFILE IMAGE
-        // ==========================================
 
         private string GetProfileImageUrl(string path)
         {
@@ -117,146 +88,82 @@ namespace ELibrary
 
             string imagePath = null;
 
-            string connectionString =
-                ConfigurationManager.ConnectionStrings[
-                    "ElibraryConnection"].ConnectionString;
-
-            using (SqlConnection con =
-                new SqlConnection(connectionString))
-            using (SqlCommand cmd =
-                new SqlCommand("EUsers_WebOne", con))
+            try
             {
-                cmd.CommandType =
-                    CommandType.StoredProcedure;
+                string connectionString =
+                    ConfigurationManager
+                    .ConnectionStrings["ElibraryConnection"]
+                    .ConnectionString;
 
-                cmd.Parameters.Add(
-                    "@UserID", SqlDbType.Int)
-                    .Value = userID;
-
-                con.Open();
-
-                using (SqlDataReader reader =
-                    cmd.ExecuteReader())
+                using (SqlConnection con =
+                    new SqlConnection(connectionString))
+                using (SqlCommand cmd =
+                    new SqlCommand(
+                        "dbo.EUsers_WebOne", con))
                 {
-                    if (reader.Read())
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(
+                        "@UserID",
+                        SqlDbType.Int).Value = userID;
+
+                    con.Open();
+
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
                     {
-                        imagePath =
-                            Convert.ToString(
-                                reader["ProfileImagePath"]);
+                        if (reader.Read())
+                        {
+                            int index = -1;
+
+                            try
+                            {
+                                index = reader.GetOrdinal(
+                                    "ProfileImagePath");
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                index = -1;
+                            }
+
+                            if (index >= 0 &&
+                                !reader.IsDBNull(index))
+                            {
+                                imagePath =
+                                    Convert.ToString(
+                                        reader[index]);
+                            }
+                        }
                     }
                 }
             }
+            catch (SqlException)
+            {
+                // Use default avatar if lookup fails.
+            }
+            catch (InvalidOperationException)
+            {
+                // Use default avatar if lookup fails.
+            }
 
-            string resolvedPath =
+            string imageUrl =
                 GetProfileImageUrl(imagePath);
 
-            if (pnlAdminHeader.Visible)
+            if (isAdminHeaderVisible())
             {
-                imgAdminAvatar.ImageUrl =
-                    resolvedPath;
+                imgAdminAvatar.ImageUrl = imageUrl;
             }
 
             if (phCustomerNavigation.Visible)
             {
-                imgCustomerAvatar.ImageUrl =
-                    resolvedPath;
+                imgCustomerAvatar.ImageUrl = imageUrl;
             }
         }
 
-        // ==========================================
-        // ADMIN NAVIGATION: UNCHANGED
-        // ==========================================
-
-
-        private void HighlightActiveAdminLink()
+        private bool isAdminHeaderVisible()
         {
-            string currentPath =
-                VirtualPathUtility.ToAppRelative(
-                    Request.Path).ToLowerInvariant();
-
-            HyperLink[] adminLinks =
-            {
-        navAdminDashboard,
-        navManageBooks,
-        navManageGenres,
-        navManageUsers,
-        navManageBorrows,
-        navWalkInBorrow,
-        navOverdueBooks,
-        navBorrowHistory,
-        navTransactions,
-        navArchivedBooks,
-        navAuditLogs
-    };
-
-            foreach (HyperLink link in adminLinks)
-            {
-                string targetPath =
-                    VirtualPathUtility.ToAppRelative(
-                        ResolveUrl(link.NavigateUrl))
-                    .ToLowerInvariant();
-
-                if (currentPath == targetPath)
-                {
-                    link.CssClass =
-                        "el-menu-link active";
-                }
-                else
-                {
-                    link.CssClass =
-                        "el-menu-link";
-                }
-            }
-        }
-
-
-        // ==========================================
-        // CUSTOMER NAVIGATION
-        // ==========================================
-
-        private void HighlightActiveCustomerLink()
-        {
-            string currentPath =
-                VirtualPathUtility.ToAppRelative(
-                    Request.Path).ToLowerInvariant();
-
-            HyperLink[] customerLinks =
-            {
-                navCustomerDashboard,
-                navCustomerBooks,
-                navCustomerBorrows,
-                navCustomerHistory,
-                navCustomerTransactions,
-                navCustomerDepositLedger,
-                navCustomerProfile
-            };
-
-            foreach (HyperLink link in customerLinks)
-            {
-                string targetPath =
-                    VirtualPathUtility.ToAppRelative(
-                        ResolveUrl(link.NavigateUrl))
-                    .ToLowerInvariant();
-
-                if (currentPath == targetPath)
-                {
-                    link.CssClass =
-                        "el-customer-nav-link active";
-                }
-                else
-                {
-                    link.CssClass =
-                        "el-customer-nav-link";
-                }
-            }
-
-            // Book details belong to Browse Books.
-            if (currentPath ==
-                "~/customer/bookdetails.aspx")
-            {
-                navCustomerBooks.CssClass =
-                    "el-customer-nav-link active";
-            }
+            return pnlAdminHeader.Visible;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace ELibrary
 {
@@ -18,9 +19,7 @@ namespace ELibrary
             int role;
             int userID;
 
-            if (Session["UserID"] == null ||
-                Session["Role"] == null ||
-                !int.TryParse(
+            if (!int.TryParse(
                     Convert.ToString(Session["Role"]),
                     out role) ||
                 role != 1 ||
@@ -29,90 +28,141 @@ namespace ELibrary
                     out userID) ||
                 userID <= 0)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
             if (!IsPostBack)
             {
-                LoadDashboard();
+                LoadDashboard(userID);
                 LoadFeaturedBooks();
             }
         }
 
-        private void LoadDashboard()
+        private static object ReadValue(
+            DataRow row,
+            string column)
+        {
+            if (!row.Table.Columns.Contains(column))
+            {
+                throw new InvalidOperationException(
+                    "Dashboard procedure is missing column: " +
+                    column);
+            }
+
+            return row[column] == DBNull.Value
+                ? 0
+                : row[column];
+        }
+
+        private static string Number(
+            DataRow row,
+            string column)
+        {
+            long value =
+                Convert.ToInt64(ReadValue(row, column));
+
+            return value.ToString("N0");
+        }
+
+        private static string Currency(
+            DataRow row,
+            string column)
+        {
+            decimal value =
+                Convert.ToDecimal(ReadValue(row, column));
+
+            return "₱" + value.ToString(
+                "N2",
+                CultureInfo.GetCultureInfo("en-PH"));
+        }
+
+        private void LoadDashboard(int userID)
         {
             try
             {
+                DataTable data = new DataTable();
+
                 using (SqlConnection con =
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand("EDashboard_Customer", con))
+                    new SqlCommand(
+                        "dbo.EDashboard_Customer", con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
+
+                    cmd.CommandTimeout = 30;
 
                     cmd.Parameters.Add(
-                        "@UserID", SqlDbType.Int).Value =
-                        Convert.ToInt32(Session["UserID"]);
+                        "@UserID",
+                        SqlDbType.Int).Value = userID;
 
-                    con.Open();
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(cmd))
                     {
-                        if (reader.Read())
-                        {
-                            lblFullName.Text =
-                                Server.HtmlEncode(
-                                    Convert.ToString(reader["FullName"]));
-
-                            lblActiveBorrowings.Text =
-                                Convert.ToString(
-                                    reader["ActiveBorrowings"]);
-
-                            lblOverdueBooks.Text =
-                                Convert.ToString(
-                                    reader["OverdueBooks"]);
-
-                            lblPendingReturns.Text =
-                                Convert.ToString(
-                                    reader["PendingReturns"]);
-
-                            lblReturnedBooks.Text =
-                                Convert.ToString(
-                                    reader["ReturnedBooks"]);
-
-                            lblPendingPickups.Text =
-                                Convert.ToString(
-                                    reader["PendingPickups"]);
-
-                            lblCancelledReservations.Text =
-                                Convert.ToString(
-                                    reader["CancelledReservations"]);
-
-                            decimal unpaidBalance = 0;
-
-                            if (reader["UnpaidBalance"] != DBNull.Value)
-                            {
-                                unpaidBalance = Convert.ToDecimal(
-                                    reader["UnpaidBalance"]);
-                            }
-
-                            lblUnpaidBalance.Text =
-                                unpaidBalance.ToString("N2");
-
-                            lblMessage.Text = "";
-                        }
-                        else
-                        {
-                            ShowError("Customer account not found.");
-                        }
+                        adapter.Fill(data);
                     }
                 }
+
+                if (data.Rows.Count == 0)
+                {
+                    throw new InvalidOperationException(
+                        "Customer dashboard returned no data.");
+                }
+
+                DataRow row = data.Rows[0];
+
+                lblFullName.Text =
+                    Server.HtmlEncode(
+                        Convert.ToString(
+                            ReadValue(row, "FullName")));
+
+                lblActiveBorrowings.Text =
+                    Number(row, "ActiveBorrowings");
+
+                lblPendingPickups.Text =
+                    Number(row, "PendingPickups");
+
+                lblOverdueBooks.Text =
+                    Number(row, "OverdueBooks");
+
+                lblUnpaidBalance.Text =
+                    Convert.ToDecimal(
+                        ReadValue(row, "UnpaidBalance"))
+                    .ToString(
+                        "N2",
+                        CultureInfo.GetCultureInfo("en-PH"));
+
+                lblDepositsHeld.Text =
+                    Currency(row, "MyDepositsHeld");
+
+                lblPendingRefunds.Text =
+                    Number(row, "MyPendingRefunds");
+
+                lblTotalRefunded.Text =
+                    Currency(row, "MyTotalRefunded");
+
+                lblUnpaidReservations.Text =
+                    Number(row, "MyUnpaidReservations");
+
+                lblPendingReturns.Text =
+                    Number(row, "PendingReturns");
+
+                lblReturnedBooks.Text =
+                    Number(row, "ReturnedBooks");
+
+                lblCancelledReservations.Text =
+                    Number(row, "CancelledReservations");
+
+                lblMessage.Text = "";
             }
             catch (Exception ex)
             {
                 ShowError(
-                    "Unable to load dashboard: " + ex.Message);
+                    "Unable to load dashboard: " +
+                    ex.Message);
             }
         }
 
@@ -120,43 +170,65 @@ namespace ELibrary
         {
             try
             {
+                DataSet result = new DataSet();
+
                 using (SqlConnection con =
                     new SqlConnection(connectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand(@"
-                        SELECT TOP (8)
-                            B.BookID,
-                            B.Title,
-                            B.Author,
-                            B.CoverImagePath,
-                            B.AvailableCopies,
-                            G.GenreName
-                        FROM dbo.EBook AS B
-                        INNER JOIN dbo.EGenre AS G
-                            ON B.GenreID = G.GenreID
-                        WHERE B.IsArchived = 0
-                        ORDER BY B.BookID DESC;", con))
+                    new SqlCommand(
+                        "dbo.EBook_WebCatalogSearch", con))
                 {
-                    DataTable table = new DataTable();
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
+
+                    cmd.CommandTimeout = 30;
+
+                    cmd.Parameters.Add(
+                        "@Search",
+                        SqlDbType.VarChar,
+                        255).Value = DBNull.Value;
+
+                    cmd.Parameters.Add(
+                        "@GenreID",
+                        SqlDbType.Int).Value = DBNull.Value;
+
+                    cmd.Parameters.Add(
+                        "@PageNumber",
+                        SqlDbType.Int).Value = 1;
+
+                    cmd.Parameters.Add(
+                        "@PageSize",
+                        SqlDbType.Int).Value = 4;
 
                     using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
                     {
-                        adapter.Fill(table);
+                        adapter.Fill(result);
                     }
-
-                    rptFeaturedBooks.DataSource = table;
-                    rptFeaturedBooks.DataBind();
-
-                    pnlFeaturedBooks.Visible =
-                        table.Rows.Count > 0;
-
-                    pnlNoFeaturedBooks.Visible =
-                        table.Rows.Count == 0;
                 }
+
+                if (result.Tables.Count < 2)
+                {
+                    throw new InvalidOperationException(
+                        "Book catalog returned incomplete data.");
+                }
+
+                DataTable books = result.Tables[1];
+
+                rptFeaturedBooks.DataSource = books;
+                rptFeaturedBooks.DataBind();
+
+                pnlFeaturedBooks.Visible =
+                    books.Rows.Count > 0;
+
+                pnlNoFeaturedBooks.Visible =
+                    books.Rows.Count == 0;
             }
             catch (Exception ex)
             {
+                rptFeaturedBooks.DataSource = null;
+                rptFeaturedBooks.DataBind();
+
                 pnlFeaturedBooks.Visible = false;
                 pnlNoFeaturedBooks.Visible = true;
 
@@ -168,11 +240,10 @@ namespace ELibrary
 
         private void ShowError(string message)
         {
-            lblMessage.CssClass =
-                "el-customer-message text-danger";
-
             lblMessage.Text =
                 Server.HtmlEncode(message);
+
+            lblMessage.CssClass = "ch-message";
         }
 
         protected string GetCoverUrl(object value)
@@ -196,43 +267,48 @@ namespace ELibrary
             int bookID;
 
             if (!int.TryParse(
-                Convert.ToString(value), out bookID))
+                Convert.ToString(value),
+                out bookID))
             {
-                return ResolveUrl("~/Customer/Books.aspx");
+                return ResolveUrl(
+                    "~/Customer/Books.aspx");
             }
 
             return ResolveUrl(
-                "~/Customer/BookDetails.aspx?BookID=" + bookID);
+                "~/Customer/BookDetails.aspx?BookID=" +
+                bookID);
         }
 
         protected string GetAvailabilityText(object value)
         {
-            int availableCopies;
+            int copies;
 
             if (!int.TryParse(
-                Convert.ToString(value), out availableCopies))
+                Convert.ToString(value),
+                out copies))
             {
-                availableCopies = 0;
+                copies = 0;
             }
 
-            return availableCopies > 0
+            return copies > 0
                 ? "Available"
                 : "Unavailable";
         }
 
         protected string GetAvailabilityClass(object value)
         {
-            int availableCopies;
+            int copies;
 
             if (!int.TryParse(
-                Convert.ToString(value), out availableCopies))
+                Convert.ToString(value),
+                out copies))
             {
-                availableCopies = 0;
+                copies = 0;
             }
 
-            return availableCopies > 0
-                ? "el-book-status available"
-                : "el-book-status unavailable";
+            return copies > 0
+                ? "ch-status"
+                : "ch-status unavailable";
         }
     }
 }

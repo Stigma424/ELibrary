@@ -346,7 +346,7 @@ namespace ELibrary.Admin.Borrowing
             {
                 ShowMessage(
                     "Unable to load borrowing records. " +
-                    "Check the V2 admin-search procedure.",
+                    "Check the admin-search procedure.",
                     false);
             }
         }

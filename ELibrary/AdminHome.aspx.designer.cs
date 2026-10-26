@@ -69,24 +69,6 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblTotalUnpaidBalance;
 
         /// <summary>
-        /// lblAttentionOverdue control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAttentionOverdue;
-
-        /// <summary>
-        /// lblAttentionPickups control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAttentionPickups;
-
-        /// <summary>
         /// lblPendingReturns control.
         /// </summary>
         /// <remarks>
@@ -96,6 +78,60 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblPendingReturns;
 
         /// <summary>
+        /// lblAwaitingPayment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAwaitingPayment;
+
+        /// <summary>
+        /// lblPendingRefunds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPendingRefunds;
+
+        /// <summary>
+        /// lblExpiredReservations control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblExpiredReservations;
+
+        /// <summary>
+        /// lblDepositsHeld control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDepositsHeld;
+
+        /// <summary>
+        /// lblDepositsRefunded control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDepositsRefunded;
+
+        /// <summary>
+        /// lblDepositsOnHold control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDepositsOnHold;
+
+        /// <summary>
         /// lblTotalBooks control.
         /// </summary>
         /// <remarks>
@@ -103,15 +139,6 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTotalBooks;
-
-        /// <summary>
-        /// lblTotalCopies control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalCopies;
 
         /// <summary>
         /// lblAvailableCopies control.
@@ -132,24 +159,6 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.Label lblTotalCustomers;
 
         /// <summary>
-        /// lblCollectedLoans control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCollectedLoans;
-
-        /// <summary>
-        /// lblCancelledReservations control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCancelledReservations;
-
-        /// <summary>
         /// lblArchivedBooks control.
         /// </summary>
         /// <remarks>
@@ -157,14 +166,5 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblArchivedBooks;
-
-        /// <summary>
-        /// lblSecondaryPendingReturns control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSecondaryPendingReturns;
     }
 }
