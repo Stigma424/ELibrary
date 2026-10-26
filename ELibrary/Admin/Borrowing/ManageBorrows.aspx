@@ -11,505 +11,316 @@
     runat="server">
 
 <style>
-/* ==============================================
-   INTERNSHIPELIB - OCEAN TEAL
-   MANAGE BORROWINGS UI-3C
-============================================== */
-
 .el-admin-borrowing {
-    --br-primary: #123B4A;
-    --br-accent: #168A91;
-    --br-hover: #12757C;
-    --br-muted: #647F89;
-    --br-border: #DCE9EB;
-    --br-soft: #F5FAFA;
-    --br-danger: #B94E49;
-    color: var(--br-primary);
-    display: flex;
-    flex-direction: column;
-    gap: 21px;
-    min-width: 0;
+    color: #172b43;
 }
-
 .el-admin-borrowing * {
     box-sizing: border-box;
 }
-
 .el-admin-borrowing .br-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
-    padding: 4px 0;
+    gap: 16px;
+    margin-bottom: 22px;
 }
-
 .el-admin-borrowing .br-eyebrow {
-    display: block;
-    color: var(--br-accent);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: .12em;
-    margin-bottom: 8px;
+    color: #2f6ba0;
 }
-
-.el-admin-borrowing .br-header h1 {
+.el-admin-borrowing h1 {
     font-size: 29px;
-    font-weight: 800;
-    margin: 0 0 7px;
-    color: var(--br-primary);
+    font-weight: 750;
+    margin: 7px 0;
 }
-
 .el-admin-borrowing .br-header p,
 .el-admin-borrowing .br-panel-head p {
-    color: var(--br-muted);
-    font-size: 12px;
-    line-height: 1.7;
-    margin: 0;
+    color: #718096;
+    margin: 5px 0 0;
+    line-height: 1.6;
 }
-
 .el-admin-borrowing .br-links {
     display: flex;
-    gap: 9px;
     flex-wrap: wrap;
+    gap: 8px;
 }
-
 .el-admin-borrowing .br-btn {
     display: inline-flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     min-height: 40px;
     padding: 9px 15px;
-    color: var(--br-primary);
-    border: 1px solid var(--br-border);
-    border-radius: 9px;
-    background: #FFFFFF;
-    font-size: 12px;
-    font-weight: 750;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background .2s, border-color .2s;
-}
-
-.el-admin-borrowing .br-btn:hover {
-    background: #EAF5F6;
-    border-color: #B4DADD;
-    color: var(--br-primary);
-}
-
-.el-admin-borrowing .br-btn-primary {
-    background: var(--br-accent);
-    border-color: var(--br-accent);
-    color: #FFFFFF;
-}
-
-.el-admin-borrowing .br-btn-primary:hover {
-    color: #FFFFFF;
-    background: var(--br-hover);
-    border-color: var(--br-hover);
-}
-
-.el-admin-borrowing .br-btn:disabled {
-    opacity: .45;
-    cursor: default;
-}
-
-.el-admin-borrowing .br-panel {
-    min-width: 0;
-    padding: 23px;
-    border-radius: 14px;
-    background: #FFFFFF;
-    border: 1px solid var(--br-border);
-    box-shadow: 0 3px 14px rgba(18,59,74,.035);
-    scroll-margin-top: 95px;
-}
-
-.el-admin-borrowing .br-panel-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 13px;
-    margin-bottom: 19px;
-}
-
-.el-admin-borrowing .br-panel-head h2 {
-    margin: 0 0 5px;
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--br-primary);
-}
-
-.el-admin-borrowing .br-tag {
-    display: inline-flex;
-    padding: 7px 11px;
+    border: 1px solid #dce5ee;
     border-radius: 8px;
-    background: #E9F6F6;
-    color: #126E73;
-    font-size: 11px;
-    font-weight: 750;
+    background: #fff;
+    color: #172b43;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
 }
-
+.el-admin-borrowing .br-btn:hover {
+    background: #f1f6fb;
+}
+.el-admin-borrowing .br-btn-primary {
+    background: #2f6ba0;
+    color: #fff;
+    border-color: #2f6ba0;
+}
+.el-admin-borrowing .br-btn-primary:hover {
+    background: #235680;
+    color: #fff;
+}
+.el-admin-borrowing .br-panel {
+    background: #fff;
+    border: 1px solid #e4ebf3;
+    border-radius: 13px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 3px 14px rgba(23,43,67,.04);
+}
+.el-admin-borrowing .br-panel-head {
+    margin-bottom: 17px;
+}
+.el-admin-borrowing .br-panel-head h2 {
+    font-size: 19px;
+    font-weight: 750;
+    margin: 0;
+}
 .el-admin-borrowing .br-filters {
     display: grid;
     grid-template-columns:
         minmax(200px, 2fr)
         repeat(2, minmax(150px, 1fr))
         auto;
-    align-items: end;
     gap: 12px;
+    align-items: end;
+    background: #f8fafc;
+    border: 1px solid #e4ebf3;
+    border-radius: 10px;
     padding: 16px;
-    background: var(--br-soft);
-    border: 1px solid var(--br-border);
-    border-radius: 11px;
 }
-
 .el-admin-borrowing .br-field {
     min-width: 0;
 }
-
 .el-admin-borrowing .br-field label {
     display: block;
-    color: #375968;
     font-size: 12px;
     font-weight: 700;
+    color: #43566b;
     margin-bottom: 7px;
 }
-
 .el-admin-borrowing .br-field input,
-.el-admin-borrowing .br-field select,
-.el-admin-borrowing .br-field textarea {
+.el-admin-borrowing .br-field select {
     display: block;
     width: 100%;
-    min-height: 41px;
-    padding: 9px 12px;
-    border: 1px solid #CFE1E4;
+    min-height: 40px;
+    padding: 9px 11px;
+    border: 1px solid #dce5ee;
     border-radius: 8px;
-    background: #FFFFFF;
-    color: var(--br-primary);
+    background: #fff;
+    color: #172b43;
+    font-size: 13px;
+}
+.el-admin-borrowing .br-field input:focus,
+.el-admin-borrowing .br-field select:focus {
+    outline: none;
+    border-color: #2f6ba0;
+    box-shadow: 0 0 0 3px rgba(47,107,160,.12);
+}
+.el-admin-borrowing .br-count {
+    font-size: 12px;
+    color: #718096;
+    margin: 12px 0;
+}
+.el-admin-borrowing .br-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.el-admin-borrowing .br-table {
+    width: 100%;
+    min-width: 1320px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.el-admin-borrowing .br-table th {
+    background: #f4f7fb;
+    color: #52647a;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    text-align: left;
+    white-space: nowrap;
+    padding: 13px 12px;
+    border-bottom: 1px solid #e4ebf3;
+}
+.el-admin-borrowing .br-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid #edf1f5;
+    vertical-align: middle;
+}
+.el-admin-borrowing .br-table tr:hover td {
+    background: #f9fbfe;
+}
+.el-admin-borrowing .br-pill {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 750;
+    background: #e8eef7;
+    color: #365678;
+    white-space: nowrap;
+}
+.el-admin-borrowing .br-pill.warning {
+    background: #fff1ce;
+    color: #8a6100;
+}
+.el-admin-borrowing .br-pill.danger {
+    background: #ffe6e6;
+    color: #a82e2e;
+}
+.el-admin-borrowing .br-pill.success {
+    background: #e6f7ec;
+    color: #237c4e;
+}
+.el-admin-borrowing .br-message {
+    display: block;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+.el-admin-borrowing .br-message:empty {
+    display: none;
+}
+.el-admin-borrowing .br-message.text-danger {
+    color: #bd4141;
+}
+.el-admin-borrowing .br-message.text-success {
+    color: #237c4e;
+}
+.el-admin-borrowing .br-action {
+    display: inline-block;
+    border-radius: 7px;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    margin: 3px 4px 3px 0;
+}
+.el-admin-borrowing .br-collect {
+    background: #e8f1fa;
+    color: #245e91;
+    border-color: #cbdff0;
+}
+.el-admin-borrowing .br-return {
+    background: #e6f7ec;
+    color: #237c4e;
+    border-color: #ccebd9;
+}
+.el-admin-borrowing .br-cancel {
+    background: #fff0f0;
+    color: #a83b3b;
+    border-color: #f3d2d2;
+}
+.el-admin-borrowing .br-lost {
+    background: #fff1e6;
+    color: #9a4a12;
+    border-color: #f4d6bd;
+}
+.el-admin-borrowing .br-lost-input,
+.el-admin-borrowing .br-reason {
+    display: block;
+    width: 190px;
+    max-width: 100%;
+    margin: 5px 0;
+    padding: 8px 10px;
+    border: 1px solid #dce5ee;
+    border-radius: 7px;
     font-size: 12px;
 }
-
-.el-admin-borrowing .br-field textarea {
-    min-height: 105px;
-    resize: vertical;
+.el-admin-borrowing .br-reason {
+    width: 200px;
 }
-
-.el-admin-borrowing .br-field input:focus,
-.el-admin-borrowing .br-field select:focus,
-.el-admin-borrowing .br-field textarea:focus {
-    outline: none;
-    border-color: var(--br-accent);
-    box-shadow: 0 0 0 3px rgba(22,138,145,.12);
+.el-admin-borrowing .br-muted {
+    color: #8391a3;
+    font-size: 12px;
 }
-
 .el-admin-borrowing .br-filter-actions {
     display: flex;
     gap: 8px;
     align-items: center;
 }
-
-.el-admin-borrowing .br-result-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 15px 0 13px;
-    color: var(--br-muted);
-    font-size: 12px;
-}
-
-.el-admin-borrowing .br-table-scroll {
-    width: 100%;
-    overflow-x: auto;
-    border: 1px solid var(--br-border);
-    border-radius: 10px;
-    -webkit-overflow-scrolling: touch;
-}
-
-.el-admin-borrowing .br-table {
-    width: 100%;
-    min-width: 880px;
-    border-collapse: collapse;
-    background: #FFFFFF;
-    font-size: 12px;
-}
-
-.el-admin-borrowing .br-table th {
-    text-align: left;
-    padding: 14px 12px;
-    background: var(--br-soft);
-    color: #496B75;
-    border-bottom: 1px solid var(--br-border);
-    font-size: 11px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-.el-admin-borrowing .br-table td {
-    padding: 14px 12px;
-    vertical-align: middle;
-    border-bottom: 1px solid #EDF3F4;
-    color: #47616D;
-}
-
-.el-admin-borrowing .br-table tr:hover td {
-    background: #F9FCFC;
-}
-
-.el-admin-borrowing .br-record-main {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    min-width: 155px;
-}
-
-.el-admin-borrowing .br-record-main strong {
-    color: var(--br-primary);
-    font-size: 12px;
-    font-weight: 800;
-    overflow-wrap: anywhere;
-}
-
-.el-admin-borrowing .br-record-main small {
-    color: var(--br-muted);
-    font-size: 11px;
-    overflow-wrap: anywhere;
-}
-
-.el-admin-borrowing .br-pill {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 999px;
-    color: #126E73;
-    background: #E7F5F5;
-    font-size: 11px;
-    font-weight: 750;
-    white-space: nowrap;
-}
-
-.el-admin-borrowing .br-pill.warning {
-    color: #96601B;
-    background: #FFF2D9;
-}
-
-.el-admin-borrowing .br-pill.danger {
-    color: #A63D39;
-    background: #FCE9E7;
-}
-
-.el-admin-borrowing .br-pill.success {
-    color: #237C62;
-    background: #E6F6EE;
-}
-
-.el-admin-borrowing .br-pill.neutral {
-    color: #59717C;
-    background: #EDF2F4;
-}
-
-.el-admin-borrowing .br-row-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 7px;
-    min-width: 170px;
-}
-
-.el-admin-borrowing .br-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 32px;
-    padding: 7px 10px;
-    border: 1px solid #CDE7E9;
-    border-radius: 7px;
-    color: #126E73;
-    background: #E9F6F6;
-    font-size: 11px;
-    font-weight: 750;
-    line-height: 1.4;
-    text-decoration: none;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.el-admin-borrowing .br-action:hover {
-    background: #DDF0F1;
-    color: #0F6065;
-}
-
-.el-admin-borrowing .br-action.success {
-    color: #237C62;
-    background: #E6F6EE;
-    border-color: #C8E8D7;
-}
-
-.el-admin-borrowing .br-action.danger {
-    color: #B94E49;
-    background: #FFF4F3;
-    border-color: #F2D8D5;
-}
-
-.el-admin-borrowing .br-action.danger:hover {
-    background: #FBE7E5;
-}
-
-.el-admin-borrowing .br-muted {
-    color: #82969D;
-    font-size: 11px;
-}
-
 .el-admin-borrowing .br-pager {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     gap: 12px;
-    padding: 20px 0 0;
-    font-size: 12px;
-    color: var(--br-muted);
+    padding: 18px 0 2px;
 }
-
-/* LOCAL OPERATION FEEDBACK */
-
-.el-admin-borrowing .br-message {
-    display: block;
+.el-admin-borrowing .br-pager .br-btn:disabled {
+    opacity: .45;
+    cursor: default;
+}
+.el-admin-borrowing .br-v2-money {
     font-size: 12px;
     line-height: 1.7;
-    margin-bottom: 16px;
-    scroll-margin-top: 100px;
+    min-width: 160px;
 }
-
-.el-admin-borrowing .br-message:empty {
-    display: none;
-}
-
-.el-admin-borrowing .br-message.success {
-    padding: 13px 16px;
-    color: #236747;
-    background: #E9F7F1;
-    border: 1px solid #C8E8D7;
-    border-left: 4px solid #28845B;
-    border-radius: 8px;
-}
-
-.el-admin-borrowing .br-message.error {
-    padding: 13px 16px;
-    color: #9E3E39;
-    background: #FFF0EF;
-    border: 1px solid #F2D3CF;
-    border-left: 4px solid #C34D46;
-    border-radius: 8px;
-}
-
-/* SELECTED OPERATION FORM */
-
-.el-admin-borrowing .br-operation-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 18px;
-}
-
-.el-admin-borrowing .br-operation-record {
-    padding: 14px 16px;
-    margin-bottom: 17px;
-    background: var(--br-soft);
-    border: 1px solid var(--br-border);
-    border-radius: 9px;
-    font-size: 12px;
-    color: var(--br-muted);
-}
-
-.el-admin-borrowing .br-operation-record strong {
-    color: var(--br-primary);
-    font-size: 15px;
-}
-
-.el-admin-borrowing .br-operation-form {
-    max-width: 620px;
-}
-
-.el-admin-borrowing .br-operation-form .br-field {
-    margin-bottom: 17px;
-}
-
-.el-admin-borrowing .br-warning {
-    padding: 14px 16px;
-    margin-bottom: 18px;
-    color: #875C29;
-    background: #FFF8EF;
-    border: 1px solid #F2D9C0;
-    border-radius: 9px;
-    font-size: 12px;
-    line-height: 1.7;
-}
-
-.el-admin-borrowing .br-danger-warning {
-    color: #934642;
-    background: #FFF5F3;
-    border-color: #F1D8D5;
-}
-
-.el-admin-borrowing .br-operation-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding-top: 7px;
-}
-
-.el-admin-borrowing .br-help {
+.el-admin-borrowing .br-v2-money strong {
     display: block;
-    margin-top: 7px;
-    color: var(--br-muted);
+}
+.el-admin-borrowing .br-v2-hint {
+    display: block;
+    color: #647F89;
     font-size: 11px;
-    line-height: 1.6;
+    margin: 5px 0;
 }
-
-@media(max-width:1200px) {
+.el-admin-borrowing .br-v2-refund {
+    margin-top: 10px;
+    display: grid;
+    gap: 7px;
+    max-width: 210px;
+}
+.el-admin-borrowing .br-v2-refund select,
+.el-admin-borrowing .br-v2-refund input[type=text] {
+    width: 100%;
+    min-height: 36px;
+    padding: 8px;
+    border: 1px solid #ccdfe2;
+    border-radius: 8px;
+    font-size: 12px;
+}
+.el-admin-borrowing .br-v2-refund label {
+    display: block;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.el-admin-borrowing .br-pay-warning {
+    display: block;
+    margin: 8px 0;
+    color: #8a6100;
+    font-size: 11px;
+}
+@media (max-width: 900px) {
     .el-admin-borrowing .br-filters {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-    }
-
-    .el-admin-borrowing .br-filter-actions {
-        grid-column: 1 / -1;
+        grid-template-columns: 1fr 1fr;
     }
 }
-
-@media(max-width:650px) {
-    .el-admin-borrowing .br-header h1 {
-        font-size: 24px;
-    }
-
-    .el-admin-borrowing .br-panel {
-        padding: 15px;
-    }
-
+@media (max-width: 600px) {
     .el-admin-borrowing .br-filters {
         grid-template-columns: 1fr;
     }
-
+    .el-admin-borrowing .br-header h1 {
+        font-size: 25px;
+    }
     .el-admin-borrowing .br-filter-actions {
-        grid-column: auto;
-    }
-
-    .el-admin-borrowing .br-links,
-    .el-admin-borrowing .br-operation-actions {
-        width: 100%;
-    }
-
-    .el-admin-borrowing .br-links .br-btn,
-    .el-admin-borrowing .br-operation-actions .br-btn {
-        flex: 1;
-    }
-}
-
-@media(prefers-reduced-motion:reduce) {
-    .el-admin-borrowing .br-btn {
-        transition: none;
+        flex-wrap: wrap;
     }
 }
 </style>
@@ -521,27 +332,27 @@
 
 <div class="el-admin-borrowing">
 
-    <!-- PAGE HEADER -->
+    <div class="br-header">
 
-    <header class="br-header">
         <div>
             <span class="br-eyebrow">
-                ADMINISTRATION / BORROWING MANAGEMENT
+                ADMINISTRATION / BORROWING
             </span>
 
             <h1>Manage Borrowings</h1>
 
             <p>
-                Process pickups, confirm returns, and
-                manage active library loans.
+                Manage pending pickups, active loans,
+                cancellations, and book returns.
             </p>
         </div>
 
         <div class="br-links">
+
             <asp:Button
                 ID="btnRefresh"
                 runat="server"
-                Text="↻ Refresh"
+                Text="Refresh"
                 CssClass="br-btn br-btn-primary"
                 CausesValidation="false"
                 OnClick="btnRefresh_Click" />
@@ -559,38 +370,27 @@
                 NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
                 CssClass="br-btn"
                 Text="Borrowing History" />
+
         </div>
-    </header>
+    </div>
 
-    <!-- BORROWING RECORDS -->
+    <asp:Label
+        ID="lblMessage"
+        runat="server"
+        EnableViewState="false"
+        CssClass="br-message text-danger" />
 
-    <section id="borrowingRecords" class="br-panel">
+    <section class="br-panel">
 
         <div class="br-panel-head">
-            <div>
-                <h2>Reservations &amp; Active Loans</h2>
-                <p>
-                    Select a borrowing to process its
-                    collection, return, cancellation, or loss.
-                </p>
-            </div>
+            <h2>Reservations and Borrowings</h2>
 
-            <span class="br-tag">
-                Active Operations
-            </span>
+            <p>
+                Confirm collection after full payment,
+                cancel reservations, process returns,
+                or report lost books.
+            </p>
         </div>
-
-        <!-- LIST / DIRECT ACTION NOTIFICATIONS -->
-
-        <asp:Label
-            ID="lblMessage"
-            runat="server"
-            EnableViewState="false"
-            CssClass="br-message"
-            role="status"
-            aria-live="polite" />
-
-        <!-- SEARCH -->
 
         <asp:Panel
             ID="pnlFilters"
@@ -599,6 +399,7 @@
             CssClass="br-filters">
 
             <div class="br-field">
+
                 <asp:Label
                     runat="server"
                     AssociatedControlID="txtSearch"
@@ -608,11 +409,13 @@
                     ID="txtSearch"
                     runat="server"
                     MaxLength="255"
-                    autocomplete="off"
-                    placeholder="ID, customer, email or book..." />
+                    placeholder="ID, customer, email, book..."
+                    autocomplete="off" />
+
             </div>
 
             <div class="br-field">
+
                 <asp:Label
                     runat="server"
                     AssociatedControlID="ddlStatus"
@@ -622,38 +425,26 @@
                     ID="ddlStatus"
                     runat="server">
 
-                    <asp:ListItem
-                        Text="All Active Records"
-                        Value="All" />
-
-                    <asp:ListItem
-                        Text="Pending Pickup"
-                        Value="PendingPickup" />
-
-                    <asp:ListItem
-                        Text="Active Loans"
-                        Value="Active" />
-
-                    <asp:ListItem
-                        Text="Borrowed"
-                        Value="Borrowed" />
-
-                    <asp:ListItem
-                        Text="Overdue"
-                        Value="Overdue" />
-
-                    <asp:ListItem
-                        Text="Return Requested"
-                        Value="ReturnRequested" />
-
-                    <asp:ListItem
-                        Text="No Return Request"
-                        Value="NoReturnRequest" />
+                    <asp:ListItem Text="All Records" Value="All" />
+                    <asp:ListItem Text="Pending Pickup" Value="PendingPickup" />
+                    <asp:ListItem Text="Payment Required" Value="PaymentRequired" />
+                    <asp:ListItem Text="Ready for Pickup" Value="ReadyForPickup" />
+                    <asp:ListItem Text="Active Loans" Value="Active" />
+                    <asp:ListItem Text="Borrowed" Value="Borrowed" />
+                    <asp:ListItem Text="Overdue" Value="Overdue" />
+                    <asp:ListItem Text="Return Requested" Value="ReturnRequested" />
+                    <asp:ListItem Text="No Return Request" Value="NoReturnRequest" />
+                    <asp:ListItem Text="Returned" Value="Returned" />
+                    <asp:ListItem Text="Cancelled" Value="Cancelled" />
+                    <asp:ListItem Text="Lost" Value="Lost" />
+                    <asp:ListItem Text="Closed Records" Value="Closed" />
 
                 </asp:DropDownList>
+
             </div>
 
             <div class="br-field">
+
                 <asp:Label
                     runat="server"
                     AssociatedControlID="ddlSort"
@@ -663,30 +454,18 @@
                     ID="ddlSort"
                     runat="server">
 
-                    <asp:ListItem
-                        Text="Default Order"
-                        Value="Default" />
-
-                    <asp:ListItem
-                        Text="Highest ID First"
-                        Value="IDDesc" />
-
-                    <asp:ListItem
-                        Text="Lowest ID First"
-                        Value="IDAsc" />
-
-                    <asp:ListItem
-                        Text="Due Date (Earliest)"
-                        Value="DueAsc" />
-
-                    <asp:ListItem
-                        Text="Due Date (Latest)"
-                        Value="DueDesc" />
+                    <asp:ListItem Text="Default Order" Value="Default" />
+                    <asp:ListItem Text="Highest ID First" Value="IDDesc" />
+                    <asp:ListItem Text="Lowest ID First" Value="IDAsc" />
+                    <asp:ListItem Text="Due Date (Earliest)" Value="DueAsc" />
+                    <asp:ListItem Text="Due Date (Latest)" Value="DueDesc" />
 
                 </asp:DropDownList>
+
             </div>
 
             <div class="br-filter-actions">
+
                 <asp:Button
                     ID="btnApply"
                     runat="server"
@@ -698,25 +477,24 @@
                 <asp:Button
                     ID="btnClearFilters"
                     runat="server"
-                    Text="Clear"
+                    Text="Clear Filters"
                     CssClass="br-btn"
                     CausesValidation="false"
                     OnClick="btnClearFilters_Click" />
+
             </div>
+
         </asp:Panel>
 
-        <div class="br-result-bar">
-            <asp:Label
-                ID="lblResultCount"
-                runat="server"
-                Text="Showing borrowings" />
+        <p class="br-count">
+            Press Enter or Apply to search and filter.
+            Pending pickups appear first by default.
+        </p>
 
-            <span>
-                Press Enter or Apply to search and filter.
-            </span>
-        </div>
-
-        <!-- COMPACT BORROWING TABLE -->
+        <asp:Label
+            ID="lblResultCount"
+            runat="server"
+            CssClass="br-count" />
 
         <div class="br-table-scroll">
 
@@ -726,7 +504,7 @@
                 AutoGenerateColumns="False"
                 GridLines="None"
                 CssClass="br-table"
-                EmptyDataText="No matching active borrowings found."
+                EmptyDataText="No matching borrowing records found."
                 OnRowCommand="gvBorrows_RowCommand">
 
                 <Columns>
@@ -735,64 +513,42 @@
                         DataField="BorrowLogID"
                         HeaderText="Borrow ID" />
 
-                    <asp:TemplateField HeaderText="Customer">
+                    <asp:BoundField
+                        DataField="FullName"
+                        HeaderText="Customer" />
+
+                    <asp:BoundField
+                        DataField="Email"
+                        HeaderText="Email" />
+
+                    <asp:BoundField
+                        DataField="Title"
+                        HeaderText="Book" />
+
+                    <asp:BoundField
+                        DataField="Author"
+                        HeaderText="Author" />
+
+                    <asp:BoundField
+                        DataField="DateBorrowed"
+                        HeaderText="Reserved / Borrowed"
+                        DataFormatString="{0:MM/dd/yyyy}" />
+
+                    <asp:TemplateField HeaderText="Due Date">
                         <ItemTemplate>
-                            <div class="br-record-main">
-                                <strong>
-                                    <%#: Eval("FullName") %>
-                                </strong>
-
-                                <small>
-                                    <%#: Eval("Email") %>
-                                </small>
-                            </div>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-
-                    <asp:TemplateField HeaderText="Book">
-                        <ItemTemplate>
-                            <div class="br-record-main">
-                                <strong>
-                                    <%#: Eval("Title") %>
-                                </strong>
-
-                                <small>
-                                    <%#: Eval("Author") %>
-                                </small>
-                            </div>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-
-                    <asp:TemplateField HeaderText="Dates">
-                        <ItemTemplate>
-                            <div class="br-record-main">
-                                <small>
-                                    Reserved:
-                                    <%# Convert.ToDateTime(
-                                        Eval("DateBorrowed"))
-                                        .ToString("MMM dd, yyyy") %>
-                                </small>
-
-                                <small>
-                                    Due:
-                                    <%# Eval("DueDate") == DBNull.Value
-                                        ? "Not assigned"
-                                        : Convert.ToDateTime(
-                                            Eval("DueDate"))
-                                            .ToString("MMM dd, yyyy") %>
-                                </small>
-                            </div>
+                            <%# Eval("DueDate") == DBNull.Value
+                                ? "Not assigned"
+                                : Convert.ToDateTime(
+                                    Eval("DueDate")).ToString("MM/dd/yyyy") %>
                         </ItemTemplate>
                     </asp:TemplateField>
 
                     <asp:TemplateField HeaderText="Collection">
                         <ItemTemplate>
                             <span class='<%#
-                                Convert.ToString(
-                                    Eval("CollectionStatus")) == "Pending"
+                                Convert.ToString(Eval("CollectionStatus")) == "Pending"
                                 ? "br-pill warning"
-                                : Convert.ToString(
-                                    Eval("CollectionStatus")) == "Cancelled"
+                                : Convert.ToString(Eval("CollectionStatus")) == "Cancelled"
                                 ? "br-pill danger"
                                 : "br-pill success" %>'>
                                 <%#: Eval("CollectionStatus") %>
@@ -800,128 +556,240 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Loan">
+                    <asp:TemplateField HeaderText="Loan Status">
                         <ItemTemplate>
                             <span class='<%#
-                                Convert.ToString(
-                                    Eval("Status")) == "Overdue"
-                                ? "br-pill danger"
-                                : "br-pill" %>'>
+                                Convert.ToString(Eval("Status")) == "Overdue"
+                                ? "br-pill danger" : "br-pill" %>'>
                                 <%#: Eval("Status") %>
                             </span>
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Return">
+                    <asp:TemplateField HeaderText="Return Status">
                         <ItemTemplate>
                             <asp:Label
                                 ID="lblReturnStatus"
                                 runat="server"
-                                CssClass="br-pill neutral"
+                                CssClass="br-pill"
                                 Text='<%#
-                                    Convert.ToString(
-                                        Eval("CollectionStatus")) == "Pending"
+                                    Convert.ToString(Eval("CollectionStatus")) == "Pending"
                                     ? "Awaiting Pickup"
-                                    : Convert.ToString(
-                                        Eval("CollectionStatus")) == "Cancelled"
-                                    ? "N/A"
-                                    : Convert.ToString(
-                                        Eval("Status")) == "Returned"
+                                    : Convert.ToString(Eval("CollectionStatus")) == "Cancelled"
+                                    ? "Not Applicable"
+                                    : Convert.ToString(Eval("Status")) == "Returned"
                                     ? "Completed"
-                                    : Convert.ToBoolean(
-                                        Eval("ReturnRequested"))
-                                    ? "Requested"
+                                    : Convert.ToString(Eval("Status")) == "Lost"
+                                    ? "Lost"
+                                    : Convert.ToBoolean(Eval("ReturnRequested"))
+                                    ? "Return Requested"
                                     : "Not Requested" %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Actions">
+                    <asp:TemplateField HeaderText="V2 Upfront Payment">
                         <ItemTemplate>
-                            <div class="br-row-actions">
 
-                                <!-- PENDING PICKUP -->
-                                <asp:PlaceHolder
-                                    ID="phPending"
-                                    runat="server"
-                                    Visible='<%#
-                                        Convert.ToString(
-                                            Eval("CollectionStatus")) == "Pending"
-                                        && Convert.ToString(
-                                            Eval("Status")) == "Borrowed" %>'>
+                            <div class="br-v2-money">
 
-                                    <asp:Button
-                                        ID="btnConfirmCollection"
-                                        runat="server"
-                                        Text="Collect"
-                                        CssClass="br-action"
-                                        CommandName="ConfirmCollection"
-                                        CommandArgument='<%# Eval("BorrowLogID") %>'
-                                        CausesValidation="false"
-                                        OnClientClick="return confirm('Confirm that the customer collected this book? The borrowing period will begin now.');" />
+                                <strong>
+                                    Borrowing Fee:
+                                    <%# Money(Eval("BorrowingFeeSnapshot")) %>
+                                </strong>
 
-                                    <asp:Button
-                                        ID="btnOpenCancel"
-                                        runat="server"
-                                        Text="Cancel"
-                                        CssClass="br-action danger"
-                                        CommandName="OpenCancellation"
-                                        CommandArgument='<%# Eval("BorrowLogID") %>'
-                                        CausesValidation="false" />
+                                <span>
+                                    Remaining Fee:
+                                    <%# Money(Eval("BorrowingFeeBalance")) %>
+                                </span>
 
-                                </asp:PlaceHolder>
+                                <strong>
+                                    Security Deposit:
+                                    <%# Money(Eval("DepositRequired")) %>
+                                </strong>
 
-                                <!-- COLLECTED ACTIVE LOANS -->
-                                <asp:PlaceHolder
-                                    ID="phActive"
-                                    runat="server"
-                                    Visible='<%#
-                                        Convert.ToString(
-                                            Eval("CollectionStatus")) == "Collected"
-                                        && (
-                                            Convert.ToString(
-                                                Eval("Status")) == "Borrowed"
-                                            || Convert.ToString(
-                                                Eval("Status")) == "Overdue"
-                                        ) %>'>
+                                <span>
+                                    Deposit Received:
+                                    <%# Money(Eval("DepositReceived")) %>
+                                </span>
 
-                                    <asp:Button
-                                        ID="btnConfirmReturn"
-                                        runat="server"
-                                        Text="Return"
-                                        CssClass="br-action success"
-                                        CommandName="ConfirmReturn"
-                                        CommandArgument='<%# Eval("BorrowLogID") %>'
-                                        CausesValidation="false"
-                                        OnClientClick="return confirm('Confirm that the physical book has been returned?');" />
+                                <span class="br-v2-hint">
+                                    Deposit:
+                                    <%#: Eval("DepositStatus") %>
+                                </span>
 
-                                    <asp:Button
-                                        ID="btnOpenLost"
-                                        runat="server"
-                                        Text="Mark Lost"
-                                        CssClass="br-action danger"
-                                        CommandName="OpenLost"
-                                        CommandArgument='<%# Eval("BorrowLogID") %>'
-                                        CausesValidation="false" />
-
-                                </asp:PlaceHolder>
+                                <span class="br-v2-hint">
+                                    Payment:
+                                    <%#: Eval("UpfrontPaymentStatus") %>
+                                </span>
 
                                 <asp:Label
-                                    ID="lblClosed"
+                                    ID="lblPaymentReadiness"
                                     runat="server"
-                                    CssClass="br-muted"
-                                    Text="No actions"
-                                    Visible='<%#
-                                        Convert.ToString(
-                                            Eval("CollectionStatus")) == "Cancelled"
-                                        || (
-                                            Convert.ToString(
-                                                Eval("Status")) != "Borrowed"
-                                            && Convert.ToString(
-                                                Eval("Status")) != "Overdue"
-                                        ) %>' />
+                                    CssClass='<%#
+                                        Convert.ToString(Eval("CollectionStatus")) != "Pending"
+                                        ? "br-pill"
+                                        : Convert.ToBoolean(Eval("ReadyForPickup"))
+                                        ? "br-pill success"
+                                        : "br-pill warning" %>'
+                                    Text='<%#
+                                        Convert.ToString(Eval("CollectionStatus")) != "Pending"
+                                        ? "Collected / Closed"
+                                        : Convert.ToBoolean(Eval("ReadyForPickup"))
+                                        ? "Ready for Pickup"
+                                        : "Payment Required" %>' />
 
                             </div>
+
                         </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Actions">
+
+                        <ItemTemplate>
+
+                            <asp:PlaceHolder
+                                ID="phPending"
+                                runat="server"
+                                Visible='<%#
+                                    Convert.ToString(Eval("CollectionStatus")) == "Pending"
+                                    && Convert.ToString(Eval("Status")) == "Borrowed" %>'>
+
+                                <asp:Button
+                                    ID="btnConfirmCollection"
+                                    runat="server"
+                                    Text="Confirm Collection"
+                                    Visible='<%# Convert.ToBoolean(Eval("ReadyForPickup")) %>'
+                                    CssClass="br-action br-collect"
+                                    CommandName="ConfirmCollection"
+                                    CommandArgument='<%# Eval("BorrowLogID") %>'
+                                    CausesValidation="false"
+                                    OnClientClick="return confirm('Confirm that the customer physically collected the book? The seven-day loan will start now.');" />
+
+                                <asp:Label
+                                    runat="server"
+                                    CssClass="br-pay-warning"
+                                    Visible='<%# !Convert.ToBoolean(Eval("ReadyForPickup")) %>'
+                                    Text="Payment must be completed before pickup." />
+
+                                <asp:TextBox
+                                    ID="txtCancellationReason"
+                                    runat="server"
+                                    CssClass="br-reason"
+                                    MaxLength="500"
+                                    placeholder="Cancellation reason (required)" />
+
+                                <asp:PlaceHolder
+                                    ID="phPaidRefund"
+                                    runat="server"
+                                    Visible='<%#
+                                        Convert.ToDecimal(Eval("TotalUpfrontReceived")) > 0 %>'>
+
+                                    <div class="br-v2-refund">
+
+                                        <span class="br-v2-hint">
+                                            Received:
+                                            <%# Money(Eval("TotalUpfrontReceived")) %>
+                                            — refund before cancellation.
+                                        </span>
+
+                                        <asp:DropDownList
+                                            ID="ddlRefundMethod"
+                                            runat="server">
+
+                                            <asp:ListItem Value="" Text="Refund method" />
+                                            <asp:ListItem Value="Cash" Text="Cash" />
+                                            <asp:ListItem Value="GCash" Text="GCash" />
+                                            <asp:ListItem Value="Card" Text="Card" />
+                                            <asp:ListItem Value="Bank Transfer" Text="Bank Transfer" />
+
+                                        </asp:DropDownList>
+
+                                        <asp:TextBox
+                                            ID="txtRefundReference"
+                                            runat="server"
+                                            MaxLength="100"
+                                            placeholder="Refund reference (optional)" />
+
+                                        <asp:CheckBox
+                                            ID="chkRefundConfirmed"
+                                            runat="server"
+                                            Text=" I confirm the full received amount was refunded." />
+
+                                    </div>
+                                </asp:PlaceHolder>
+
+                                <asp:Button
+                                    ID="btnCancelReservation"
+                                    runat="server"
+                                    Text="Cancel Reservation"
+                                    CssClass="br-action br-cancel"
+                                    CommandName="CancelReservation"
+                                    CommandArgument='<%# Eval("BorrowLogID") %>'
+                                    CausesValidation="false"
+                                    OnClientClick="return confirm('Process this reservation cancellation? The system will check the current payment status.');" />
+
+                            </asp:PlaceHolder>
+
+                            <asp:PlaceHolder
+                                ID="phActive"
+                                runat="server"
+                                Visible='<%#
+                                    Convert.ToString(Eval("CollectionStatus")) == "Collected"
+                                    && (
+                                        Convert.ToString(Eval("Status")) == "Borrowed"
+                                        || Convert.ToString(Eval("Status")) == "Overdue"
+                                    ) %>'>
+
+                                <asp:Button
+                                    ID="btnConfirmReturn"
+                                    runat="server"
+                                    Text="Return Book"
+                                    CssClass="br-action br-return"
+                                    CommandName="ConfirmReturn"
+                                    CommandArgument='<%# Eval("BorrowLogID") %>'
+                                    CausesValidation="false"
+                                    OnClientClick="return confirm('Confirm the physical book was returned in acceptable condition?');" />
+
+                                <asp:TextBox
+                                    ID="txtLostReason"
+                                    runat="server"
+                                    CssClass="br-lost-input"
+                                    TextMode="MultiLine"
+                                    Rows="2"
+                                    MaxLength="500"
+                                    placeholder="Lost-book reason (required)" />
+
+                                <asp:TextBox
+                                    ID="txtReplacementFee"
+                                    runat="server"
+                                    CssClass="br-lost-input"
+                                    MaxLength="15"
+                                    placeholder="Replacement fee (PHP)" />
+
+                                <asp:Button
+                                    ID="btnMarkLost"
+                                    runat="server"
+                                    Text="Mark Lost"
+                                    CssClass="br-action br-lost"
+                                    CommandName="MarkLost"
+                                    CommandArgument='<%# Eval("BorrowLogID") %>'
+                                    CausesValidation="false"
+                                    OnClientClick="return confirm('Mark this book lost, assess its replacement fee, and place the deposit on hold?');" />
+
+                            </asp:PlaceHolder>
+
+                            <asp:Label
+                                ID="lblClosed"
+                                runat="server"
+                                CssClass="br-muted"
+                                Text="No actions"
+                                Visible='<%#
+                                    Convert.ToString(Eval("CollectionStatus")) == "Cancelled"
+                                    || Convert.ToString(Eval("Status")) == "Returned"
+                                    || Convert.ToString(Eval("Status")) == "Lost" %>' />
+
+                        </ItemTemplate>
+
                     </asp:TemplateField>
 
                 </Columns>
@@ -929,9 +797,8 @@
 
         </div>
 
-        <!-- PAGINATION -->
-
         <div class="br-pager">
+
             <asp:Button
                 ID="btnPrevious"
                 runat="server"
@@ -952,226 +819,10 @@
                 CssClass="br-btn"
                 CausesValidation="false"
                 OnClick="btnNext_Click" />
+
         </div>
 
     </section>
 
-    <!-- SELECTED ACTION PANEL -->
-
-    <asp:Panel
-        ID="pnlSelectedAction"
-        runat="server"
-        Visible="false"
-        ClientIDMode="Static"
-        CssClass="br-panel">
-
-        <div class="br-operation-header">
-
-            <div class="br-panel-head" style="margin-bottom:0;">
-                <div>
-                    <h2>
-                        <asp:Label
-                            ID="lblActionTitle"
-                            runat="server"
-                            Text="Selected Borrowing Action" />
-                    </h2>
-
-                    <p>
-                        <asp:Label
-                            ID="lblActionDescription"
-                            runat="server" />
-                    </p>
-                </div>
-            </div>
-
-            <asp:Button
-                ID="btnCloseAction"
-                runat="server"
-                Text="Close"
-                CssClass="br-btn"
-                CausesValidation="false"
-                OnClick="btnCloseAction_Click" />
-        </div>
-
-        <div class="br-operation-record">
-            Selected Borrowing
-            <strong>
-                #<asp:Label
-                    ID="lblSelectedBorrowID"
-                    runat="server"
-                    Text="0" />
-            </strong>
-        </div>
-
-        <!-- NOTIFICATION BESIDE SELECTED ACTION -->
-
-        <asp:Label
-            ID="lblActionMessage"
-            runat="server"
-            EnableViewState="false"
-            CssClass="br-message"
-            role="status"
-            aria-live="polite" />
-
-        <!-- CANCELLATION FORM -->
-
-        <asp:Panel
-            ID="pnlCancellationForm"
-            runat="server"
-            Visible="false"
-            CssClass="br-operation-form">
-
-            <div class="br-field">
-                <label for="<%= txtCancellationReason.ClientID %>">
-                    Cancellation Reason *
-                </label>
-
-                <asp:TextBox
-                    ID="txtCancellationReason"
-                    runat="server"
-                    TextMode="MultiLine"
-                    Rows="4"
-                    MaxLength="500"
-                    placeholder="Explain why this reservation is being cancelled" />
-
-                <small class="br-help">
-                    The reason will be recorded with the cancellation.
-                </small>
-            </div>
-
-            <div class="br-warning">
-                Cancelling this reservation will restore
-                one available book copy. Confirm that the
-                selected record is the correct reservation.
-            </div>
-
-            <div class="br-operation-actions">
-
-                <asp:Button
-                    ID="btnConfirmCancellation"
-                    runat="server"
-                    Text="Confirm Cancellation"
-                    CssClass="br-btn br-btn-primary"
-                    CausesValidation="false"
-                    OnClick="btnConfirmCancellation_Click"
-                    OnClientClick="return confirm('Cancel this reservation and restore one available copy?');" />
-
-                <asp:Button
-                    ID="btnCancelCancellation"
-                    runat="server"
-                    Text="Back to Borrowings"
-                    CssClass="br-btn"
-                    CausesValidation="false"
-                    OnClick="btnCloseAction_Click" />
-
-            </div>
-
-        </asp:Panel>
-
-        <!-- LOST BOOK FORM -->
-
-        <asp:Panel
-            ID="pnlLostBookForm"
-            runat="server"
-            Visible="false"
-            CssClass="br-operation-form">
-
-            <div class="br-field">
-                <label for="<%= txtReplacementFee.ClientID %>">
-                    Replacement Fee (PHP) *
-                </label>
-
-                <asp:TextBox
-                    ID="txtReplacementFee"
-                    runat="server"
-                    MaxLength="15"
-                    autocomplete="off"
-                    placeholder="e.g. 500.00" />
-
-                <small class="br-help">
-                    Enter an amount greater than zero,
-                    with up to two decimal places.
-                </small>
-            </div>
-
-            <div class="br-field">
-                <label for="<%= txtLostReason.ClientID %>">
-                    Loss Reason *
-                </label>
-
-                <asp:TextBox
-                    ID="txtLostReason"
-                    runat="server"
-                    TextMode="MultiLine"
-                    Rows="4"
-                    MaxLength="500"
-                    placeholder="Describe how the book was lost" />
-            </div>
-
-            <div class="br-warning br-danger-warning">
-                Marking a borrowed book as lost permanently
-                decreases total inventory by one. Available
-                copies will not be deducted again.
-                A replacement fee will be recorded,
-                but no payment is collected by this action.
-            </div>
-
-            <div class="br-operation-actions">
-
-                <asp:Button
-                    ID="btnConfirmLost"
-                    runat="server"
-                    Text="Confirm Lost Book"
-                    CssClass="br-btn br-btn-primary"
-                    CausesValidation="false"
-                    OnClick="btnConfirmLost_Click"
-                    OnClientClick="return confirm('Mark this borrowed book as LOST and record its replacement fee?');" />
-
-                <asp:Button
-                    ID="btnCancelLost"
-                    runat="server"
-                    Text="Back to Borrowings"
-                    CssClass="br-btn"
-                    CausesValidation="false"
-                    OnClick="btnCloseAction_Click" />
-
-            </div>
-        </asp:Panel>
-
-    </asp:Panel>
-
 </div>
-
-<!-- SCROLL TO THE RELEVANT SECTION -->
-
-<asp:HiddenField
-    ID="hfFocusTarget"
-    runat="server"
-    ClientIDMode="Static" />
-
-<script type="text/javascript">
-(function () {
-    var input = document.getElementById('hfFocusTarget');
-
-    if (!input || !input.value) {
-        return;
-    }
-
-    var target = document.getElementById(input.value);
-
-    if (!target) {
-        return;
-    }
-
-    window.requestAnimationFrame(function () {
-        target.scrollIntoView({
-            behavior: window.matchMedia(
-                '(prefers-reduced-motion: reduce)').matches
-                ? 'auto' : 'smooth',
-            block: 'start'
-        });
-    });
-})();
-</script>
-
 </asp:Content>

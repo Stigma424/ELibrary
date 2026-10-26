@@ -382,6 +382,8 @@
                         NavigateUrl="~/Admin/Borrowing/BorrowHistory.aspx"
                         CssClass="el-menu-link"
                         Text="Borrow History" />
+
+                    <asp:HyperLink ID="navSettlements" runat="server" NavigateUrl="~/Admin/Borrowing/Settlements.aspx" CssClass="el-menu-link" Text="Expired and Lost Settlements" />
                 </div>
 
                 <!-- FINANCE -->
@@ -404,6 +406,18 @@
                         NavigateUrl="~/Admin/Transactions/ManageTransactions.aspx"
                         CssClass="el-menu-link"
                         Text="Manage Transactions" />
+
+                    <asp:HyperLink ID="navCollectDeposits" runat="server"
+                        NavigateUrl="~/Admin/Transactions/CollectDeposits.aspx"
+                        CssClass="el-menu-link" Text="Collect Deposits" />
+
+                    <asp:HyperLink ID="navRefundDeposits" runat="server"
+                        NavigateUrl="~/Admin/Transactions/RefundDeposits.aspx"
+                        CssClass="el-menu-link" Text="Refund Deposits" />
+
+                    <asp:HyperLink ID="navDepositLedger" runat="server"
+                        NavigateUrl="~/Admin/Transactions/DepositLedger.aspx"
+                        CssClass="el-menu-link" Text="Deposit Ledger" />
                 </div>
 
                 <!-- USERS -->
@@ -588,6 +602,8 @@
                             NavigateUrl="~/Customer/MyTransactions.aspx"
                             CssClass="el-customer-nav-link"
                             Text="Transactions" />
+
+                        <asp:HyperLink ID="navCustomerDepositLedger" runat="server" NavigateUrl="~/Admin/Transactions/DepositLedger.aspx" CssClass="el-customer-nav-link" Text="Deposits" />
 
                         <asp:HyperLink ID="navCustomerProfile"
                             runat="server"

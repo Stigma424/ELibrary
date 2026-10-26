@@ -10,6 +10,10 @@ namespace ELibrary.Admin.Transactions
 {
     public partial class PayTransaction : System.Web.UI.Page
     {
+        // ==========================================
+        // SHARED V2 DATABASE CONNECTION
+        // ==========================================
+
         private string ConnectionString
         {
             get
@@ -51,7 +55,7 @@ namespace ELibrary.Admin.Transactions
                     return 0;
                 }
 
-                return userID;
+                return userID > 0 ? userID : 0;
             }
         }
 
@@ -66,7 +70,13 @@ namespace ELibrary.Admin.Transactions
             if (!AdminHelper.IsAdmin(Session) ||
                 AdminUserID <= 0)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect(
+                    "~/Login.aspx",
+                    false);
+
+                Context.ApplicationInstance
+                    .CompleteRequest();
+
                 return;
             }
 
@@ -78,14 +88,15 @@ namespace ELibrary.Admin.Transactions
 
             if (!IsPostBack)
             {
-                lblReceiptID.Text = ReceiptID.ToString();
+                lblReceiptID.Text =
+                    ReceiptID.ToString();
 
                 LoadReceipt(true);
             }
         }
 
         // ==========================================
-        // LOCAL NOTIFICATIONS
+        // MESSAGE HELPERS
         // ==========================================
 
         private void ShowMessage(
@@ -114,41 +125,90 @@ namespace ELibrary.Admin.Transactions
             pnlPaymentFields.Enabled = enabled;
         }
 
+        private string FormatMoney(decimal amount)
+        {
+            return amount.ToString(
+                "N2",
+                CultureInfo.GetCultureInfo("en-PH"));
+        }
+
         // ==========================================
-        // READ CURRENT RECEIPT
+        // STORED PROCEDURE HELPER
         // ==========================================
 
-        private decimal ReadCurrentBalance()
+        private SqlCommand CreateProcedure(
+            string procedureName,
+            SqlConnection connection)
         {
+            SqlCommand command =
+                new SqlCommand(
+                    procedureName,
+                    connection);
+
+            command.CommandType =
+                CommandType.StoredProcedure;
+
+            command.CommandTimeout = 30;
+
+            return command;
+        }
+
+        // ==========================================
+        // READ PAYMENT CONTEXT
+        // ==========================================
+
+        private DataRow GetPaymentContext()
+        {
+            DataTable table = new DataTable();
+
             using (SqlConnection con =
                 new SqlConnection(ConnectionString))
             using (SqlCommand cmd =
-                new SqlCommand("EReceipt_WebOne", con))
+                CreateProcedure(
+                    "dbo.EReceipt_WebPaymentContext",
+                    con))
             {
-                cmd.CommandType =
-                    CommandType.StoredProcedure;
-
                 cmd.Parameters.Add(
                     "@ReceiptID",
                     SqlDbType.Int).Value =
                     ReceiptID;
 
-                con.Open();
+                cmd.Parameters.Add(
+                    "@AdminUserID",
+                    SqlDbType.Int).Value =
+                    AdminUserID;
 
-                using (SqlDataReader reader =
-                    cmd.ExecuteReader())
+                using (SqlDataAdapter adapter =
+                    new SqlDataAdapter(cmd))
                 {
-                    if (!reader.Read())
-                    {
-                        throw new InvalidOperationException(
-                            "The selected receipt was not found.");
-                    }
-
-                    return Convert.ToDecimal(
-                        reader["Balance"]);
+                    adapter.Fill(table);
                 }
             }
+
+            if (table.Rows.Count != 1)
+            {
+                throw new InvalidOperationException(
+                    "The selected receipt was not found.");
+            }
+
+            return table.Rows[0];
         }
+
+        // ==========================================
+        // CURRENT BALANCE
+        // ==========================================
+
+        private decimal ReadCurrentBalance()
+        {
+            DataRow context = GetPaymentContext();
+
+            return Convert.ToDecimal(
+                context["Balance"]);
+        }
+
+        // ==========================================
+        // DISPLAY CURRENT RECEIPT
+        // ==========================================
 
         private void LoadReceipt(
             bool setDefaultAmount)
@@ -157,80 +217,119 @@ namespace ELibrary.Admin.Transactions
 
             try
             {
-                using (SqlConnection con =
-                    new SqlConnection(ConnectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand("EReceipt_WebOne", con))
+                DataRow context =
+                    GetPaymentContext();
+
+                lblCustomer.Text =
+                    HttpUtility.HtmlEncode(
+                        Convert.ToString(
+                            context["FullName"]));
+
+                lblBook.Text =
+                    HttpUtility.HtmlEncode(
+                        Convert.ToString(
+                            context["Title"]));
+
+                string feeType =
+                    Convert.ToString(
+                        context["FeeType"]);
+
+                lblFeeType.Text =
+                    HttpUtility.HtmlEncode(feeType);
+
+                lblReceiptID.Text =
+                    ReceiptID.ToString();
+
+                decimal balance =
+                    Convert.ToDecimal(
+                        context["Balance"]);
+
+                lblBalance.Text =
+                    FormatMoney(balance);
+
+                if (setDefaultAmount)
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
-                    cmd.Parameters.Add(
-                        "@ReceiptID",
-                        SqlDbType.Int).Value =
-                        ReceiptID;
-
-                    con.Open();
-
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
-                    {
-                        if (!reader.Read())
-                        {
-                            SetPaymentAvailability(false);
-
-                            ShowMessage(
-                                "The selected receipt was not found.",
-                                "error");
-                            return;
-                        }
-
-                        lblCustomer.Text =
-                            HttpUtility.HtmlEncode(
-                                Convert.ToString(
-                                    reader["FullName"]));
-
-                        lblBook.Text =
-                            HttpUtility.HtmlEncode(
-                                Convert.ToString(
-                                    reader["Title"]));
-
-                        lblFeeType.Text =
-                            HttpUtility.HtmlEncode(
-                                Convert.ToString(
-                                    reader["FeeType"]));
-
-                        decimal balance =
-                            Convert.ToDecimal(
-                                reader["Balance"]);
-
-                        lblBalance.Text =
-                            balance.ToString("N2");
-
-                        if (setDefaultAmount)
-                        {
-                            txtAmountPaid.Text =
-                                balance > 0
-                                ? balance.ToString(
-                                    "0.00",
-                                    CultureInfo.InvariantCulture)
-                                : "";
-                        }
-
-                        if (balance <= 0)
-                        {
-                            SetPaymentAvailability(false);
-
-                            ShowMessage(
-                                "This receipt has already been settled.",
-                                "info");
-                        }
-                        else
-                        {
-                            SetPaymentAvailability(true);
-                        }
-                    }
+                    txtAmountPaid.Text =
+                        balance > 0
+                        ? balance.ToString(
+                            "0.00",
+                            CultureInfo.InvariantCulture)
+                        : "";
                 }
+
+                bool canPay =
+                    Convert.ToBoolean(
+                        context["CanRecordPayment"]);
+
+                if (!canPay)
+                {
+                    SetPaymentAvailability(false);
+
+                    ShowMessage(
+                        Convert.ToString(
+                            context["PaymentMessage"]),
+                        "info");
+
+                    return;
+                }
+
+                SetPaymentAvailability(true);
+
+                string collectionStatus =
+                    Convert.ToString(
+                        context["CollectionStatus"]);
+
+                string borrowChannel =
+                    Convert.ToString(
+                        context["BorrowChannel"]);
+
+                // V2: a borrowing fee can be paid
+                // before physical book collection.
+                if (collectionStatus == "Pending" &&
+                    borrowChannel == "Online" &&
+                    feeType == "Borrowing Fee")
+                {
+                    decimal depositRequired =
+                        Convert.ToDecimal(
+                            context["DepositRequired"]);
+
+                    decimal depositReceived =
+                        Convert.ToDecimal(
+                            context["DepositReceived"]);
+
+                    ShowMessage(
+                        "Online reservation: the borrowing " +
+                        "fee is payable before pickup. " +
+                        "Security deposit required: PHP " +
+                        FormatMoney(depositRequired) +
+                        ". Deposit received: PHP " +
+                        FormatMoney(depositReceived) +
+                        ". Deposit payments are recorded " +
+                        "separately under Collect Security Deposits.",
+                        "info");
+
+                    return;
+                }
+
+                if (collectionStatus == "Collected")
+                {
+                    // This includes outstanding late
+                    // and replacement fees.
+                    ShowMessage(
+                        "This receipt is eligible for payment. " +
+                        "Any refundable security deposit is " +
+                        "managed separately from this fee.",
+                        "info");
+                }
+            }
+            catch (SqlException ex)
+            {
+                SetPaymentAvailability(false);
+
+                ShowMessage(
+                    "Unable to load payment details: " +
+                    ex.Message,
+                    "error");
             }
             catch (Exception)
             {
@@ -238,9 +337,78 @@ namespace ELibrary.Admin.Transactions
 
                 ShowMessage(
                     "Unable to load payment information. " +
-                    "Return to Manage Transactions and try again.",
+                    "Return to Manage Transactions and " +
+                    "review the receipt.",
                     "error");
             }
+        }
+
+        // ==========================================
+        // VALIDATE AMOUNT
+        // ==========================================
+
+        private bool TryReadPaymentAmount(
+            out decimal amountPaid)
+        {
+            amountPaid = 0m;
+
+            if (!decimal.TryParse(
+                (txtAmountPaid.Text ?? "").Trim(),
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out amountPaid))
+            {
+                ShowMessage(
+                    "Enter a valid payment amount, " +
+                    "such as 250.00.",
+                    "error");
+
+                return false;
+            }
+
+            if (amountPaid <= 0)
+            {
+                ShowMessage(
+                    "Payment amount must be greater than zero.",
+                    "error");
+
+                return false;
+            }
+
+            if (amountPaid > 99999999.99m)
+            {
+                ShowMessage(
+                    "Payment amount exceeds the allowed maximum.",
+                    "error");
+
+                return false;
+            }
+
+            if (decimal.Round(
+                amountPaid, 2) != amountPaid)
+            {
+                ShowMessage(
+                    "Payment amount cannot exceed " +
+                    "two decimal places.",
+                    "error");
+
+                return false;
+            }
+
+            return true;
+        }
+
+        // ==========================================
+        // VALIDATE PAYMENT METHOD
+        // ==========================================
+
+        private bool IsValidPaymentMethod(
+            string method)
+        {
+            return method == "Cash" ||
+                   method == "GCash" ||
+                   method == "Card" ||
+                   method == "Bank Transfer";
         }
 
         // ==========================================
@@ -256,7 +424,13 @@ namespace ELibrary.Admin.Transactions
             if (!AdminHelper.IsAdmin(Session) ||
                 AdminUserID <= 0)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect(
+                    "~/Login.aspx",
+                    false);
+
+                Context.ApplicationInstance
+                    .CompleteRequest();
+
                 return;
             }
 
@@ -265,93 +439,77 @@ namespace ELibrary.Admin.Transactions
                 ShowMessage(
                     "Please correct the payment information.",
                     "error");
+
                 return;
             }
 
             if (ReceiptID <= 0)
             {
                 ShowMessage(
-                    "Invalid receipt. Return to Manage Transactions.",
+                    "Invalid receipt. Return to " +
+                    "Manage Transactions.",
                     "error");
+
                 return;
             }
-
-            // ======================================
-            // VALIDATE AMOUNT
-            // ======================================
 
             decimal amountPaid;
 
-            if (!decimal.TryParse(
-                (txtAmountPaid.Text ?? "").Trim(),
-                NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture,
+            if (!TryReadPaymentAmount(
                 out amountPaid))
             {
-                ShowMessage(
-                    "Enter a valid payment amount, such as 250.00.",
-                    "error");
                 return;
             }
-
-            if (amountPaid <= 0)
-            {
-                ShowMessage(
-                    "Payment amount must be greater than zero.",
-                    "error");
-                return;
-            }
-
-            if (amountPaid > 99999999.99m)
-            {
-                ShowMessage(
-                    "Payment amount exceeds the allowed maximum.",
-                    "error");
-                return;
-            }
-
-            if (decimal.Round(amountPaid, 2) != amountPaid)
-            {
-                ShowMessage(
-                    "Payment amount cannot exceed two decimal places.",
-                    "error");
-                return;
-            }
-
-            // ======================================
-            // VALIDATE METHOD
-            // ======================================
 
             string paymentMethod =
                 ddlPaymentMethod.SelectedValue;
 
-            if (paymentMethod != "Cash" &&
-                paymentMethod != "GCash" &&
-                paymentMethod != "Card" &&
-                paymentMethod != "Bank Transfer")
+            if (!IsValidPaymentMethod(paymentMethod))
             {
                 ShowMessage(
                     "Please select a valid payment method.",
                     "error");
+
                 return;
             }
 
             // ======================================
-            // CHECK CURRENT BALANCE
+            // RECHECK PAYMENT ELIGIBILITY
             // ======================================
 
-            decimal currentBalance;
+            DataRow context;
 
             try
             {
-                currentBalance = ReadCurrentBalance();
+                context = GetPaymentContext();
             }
             catch (Exception)
             {
                 ShowMessage(
-                    "Unable to verify the current outstanding " +
-                    "balance. Please try again.",
+                    "Unable to verify the receipt's " +
+                    "latest status. No payment was submitted.",
                     "error");
+
+                return;
+            }
+
+            bool canPay =
+                Convert.ToBoolean(
+                    context["CanRecordPayment"]);
+
+            decimal currentBalance =
+                Convert.ToDecimal(
+                    context["Balance"]);
+
+            if (!canPay)
+            {
+                LoadReceipt(false);
+
+                ShowMessage(
+                    Convert.ToString(
+                        context["PaymentMessage"]),
+                    "error");
+
                 return;
             }
 
@@ -366,25 +524,27 @@ namespace ELibrary.Admin.Transactions
                     "This receipt has already been settled. " +
                     "No additional payment was recorded.",
                     "info");
+
                 return;
             }
 
             if (amountPaid > currentBalance)
             {
                 lblBalance.Text =
-                    currentBalance.ToString("N2");
+                    FormatMoney(currentBalance);
 
                 ShowMessage(
-                    "Payment exceeds the current outstanding " +
-                    "balance of PHP " +
-                    currentBalance.ToString("N2") +
+                    "Payment exceeds the current " +
+                    "outstanding balance of PHP " +
+                    FormatMoney(currentBalance) +
                     ". Please adjust the amount.",
                     "error");
+
                 return;
             }
 
             // ======================================
-            // DATABASE PAYMENT
+            // EXECUTE V2 PAYMENT PROCEDURE
             // ======================================
 
             try
@@ -392,11 +552,10 @@ namespace ELibrary.Admin.Transactions
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand("EReceipt_WebPost", con))
+                    CreateProcedure(
+                        "dbo.EReceipt_WebPost",
+                        con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
                     cmd.Parameters.Add(
                         "@ReceiptID",
                         SqlDbType.Int).Value =
@@ -424,27 +583,19 @@ namespace ELibrary.Admin.Transactions
 
                     con.Open();
 
-                    // The stored procedure is responsible
-                    // for the atomic database transaction,
-                    // outstanding balance, and payment log.
+                    // SQL Server performs the atomic update,
+                    // payment history and audit logging.
                     cmd.ExecuteScalar();
                 }
             }
             catch (SqlException ex)
             {
-                // Refresh from SQL because the balance
-                // may have changed since page load.
-                try
-                {
-                    LoadReceipt(false);
-                }
-                catch
-                {
-                    // Retain the original payment error.
-                }
+                // A SQL rejection is handled by the V2
+                // payment procedure's transaction.
+                LoadReceipt(false);
 
                 ShowMessage(
-                    "Unable to record payment: " +
+                    "Payment rejected: " +
                     ex.Message,
                     "error");
 
@@ -452,13 +603,17 @@ namespace ELibrary.Admin.Transactions
             }
             catch (Exception)
             {
+                // The outcome of an interrupted SQL
+                // connection may be uncertain.
+                // Do not automatically resubmit payment.
+                SetPaymentAvailability(false);
+
                 ShowMessage(
-                    "The payment result could not be confirmed. " +
-                    "Check Manage Transactions and the individual " +
+                    "The payment result could not be " +
+                    "confirmed. Review the receipt's " +
                     "payment history before retrying.",
                     "error");
 
-                SetPaymentAvailability(false);
                 return;
             }
 
@@ -466,30 +621,68 @@ namespace ELibrary.Admin.Transactions
             // SUCCESS
             // ======================================
 
-            // The procedure completed successfully.
-            // Disable resubmission on this page.
             SetPaymentAvailability(false);
             txtAmountPaid.Text = "";
 
             string confirmation =
                 "Payment of PHP " +
-                amountPaid.ToString("N2") +
+                FormatMoney(amountPaid) +
                 " recorded successfully using " +
-                paymentMethod +
-                ".";
+                paymentMethod + ".";
 
             try
             {
+                DataRow updated =
+                    GetPaymentContext();
+
                 decimal remainingBalance =
-                    ReadCurrentBalance();
+                    Convert.ToDecimal(
+                        updated["Balance"]);
 
                 lblBalance.Text =
-                    remainingBalance.ToString("N2");
+                    FormatMoney(remainingBalance);
 
                 confirmation +=
                     " Remaining balance: PHP " +
-                    remainingBalance.ToString("N2") +
+                    FormatMoney(remainingBalance) +
                     ".";
+
+                string feeType =
+                    Convert.ToString(
+                        updated["FeeType"]);
+
+                string collectionStatus =
+                    Convert.ToString(
+                        updated["CollectionStatus"]);
+
+                if (feeType == "Borrowing Fee" &&
+                    collectionStatus == "Pending")
+                {
+                    decimal depositRequired =
+                        Convert.ToDecimal(
+                            updated["DepositRequired"]);
+
+                    decimal depositReceived =
+                        Convert.ToDecimal(
+                            updated["DepositReceived"]);
+
+                    if (remainingBalance == 0 &&
+                        depositReceived == depositRequired &&
+                        depositRequired > 0)
+                    {
+                        confirmation +=
+                            " Both upfront payment requirements " +
+                            "are satisfied. The reservation is " +
+                            "ready for librarian pickup confirmation.";
+                    }
+                    else
+                    {
+                        confirmation +=
+                            " The customer must complete both " +
+                            "the borrowing fee and security " +
+                            "deposit before pickup.";
+                    }
+                }
             }
             catch (Exception)
             {
@@ -498,13 +691,12 @@ namespace ELibrary.Admin.Transactions
                     "to review the updated balance.";
             }
 
-            ShowMessage(
-                confirmation,
-                "success");
+            Session["PaymentSuccessMessage"] = confirmation;
+            ReturnToTransactions();
         }
 
         // ==========================================
-        // CANCEL / RETURN
+        // BACK TO MANAGE TRANSACTIONS
         // ==========================================
 
         protected void btnCancel_Click(
@@ -520,7 +712,8 @@ namespace ELibrary.Admin.Transactions
                 "~/Admin/Transactions/ManageTransactions.aspx",
                 false);
 
-            Context.ApplicationInstance.CompleteRequest();
+            Context.ApplicationInstance
+                .CompleteRequest();
         }
     }
 }

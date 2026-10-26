@@ -227,6 +227,7 @@ namespace ELibrary
                 navCustomerBorrows,
                 navCustomerHistory,
                 navCustomerTransactions,
+                navCustomerDepositLedger,
                 navCustomerProfile
             };
 

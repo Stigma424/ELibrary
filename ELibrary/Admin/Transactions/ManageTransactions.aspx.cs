@@ -26,18 +26,14 @@ namespace ELibrary.Admin.Transactions
             get
             {
                 int id;
-
-                return Session["UserID"] != null &&
-                    int.TryParse(
-                        Convert.ToString(Session["UserID"]),
-                        out id)
-                    ? id
-                    : 0;
+                return int.TryParse(
+                    Convert.ToString(Session["UserID"]),
+                    out id) && id > 0 ? id : 0;
             }
         }
 
         // ==========================================
-        // HISTORY SEARCH STATE
+        // HISTORY FILTER STATE
         // ==========================================
 
         private string HistorySearch
@@ -77,7 +73,7 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // UNPAID SEARCH STATE
+        // UNPAID FILTER STATE
         // ==========================================
 
         private string UnpaidSearch
@@ -111,7 +107,7 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // SELECTED RECEIPT
+        // SELECTED PAYMENT HISTORY
         // ==========================================
 
         private int SelectedReceiptID
@@ -121,7 +117,7 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // PAGE LOAD
+        // PAGE INITIALIZATION
         // ==========================================
 
         protected void Page_Load(object sender, EventArgs e)
@@ -129,7 +125,8 @@ namespace ELibrary.Admin.Transactions
             if (!AdminHelper.IsAdmin(Session) ||
                 AdminUserID <= 0)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -138,13 +135,18 @@ namespace ELibrary.Admin.Transactions
                 LoadFeeTypes();
                 LoadTransactions();
                 LoadUnpaidFees();
+
+                string paymentSuccess = Session["PaymentSuccessMessage"] as string;
+                Session.Remove("PaymentSuccessMessage");
+                if (!string.IsNullOrWhiteSpace(paymentSuccess))
+                    ShowMessage(paymentSuccess, MessageArea.Transactions);
             }
 
             hfFocusTarget.Value = "";
         }
 
         // ==========================================
-        // LOCAL MESSAGES
+        // MESSAGES
         // ==========================================
 
         private enum MessageArea
@@ -181,7 +183,8 @@ namespace ELibrary.Admin.Transactions
 
             label.Text = Server.HtmlEncode(message);
             label.CssClass = "fn-message error";
-            hfFocusTarget.Value = target;
+
+            FocusSection(target);
         }
 
         private void FocusSection(string target)
@@ -192,134 +195,139 @@ namespace ELibrary.Admin.Transactions
             }
         }
 
+        private SqlCommand Procedure(
+            string name,
+            SqlConnection connection)
+        {
+            SqlCommand command =
+                new SqlCommand(name, connection);
+
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandTimeout = 30;
+
+            return command;
+        }
+
         // ==========================================
-        // FEE TYPE FILTER OPTIONS
+        // FEE TYPES — STORED PROCEDURE ONLY
         // ==========================================
 
         private void LoadFeeTypes()
         {
             try
             {
+                DataSet data = new DataSet();
+
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
+                using (SqlCommand cmd = Procedure(
+                    "dbo.EReceipt_WebAdminFeeTypes", con))
                 {
-                    con.Open();
+                    cmd.Parameters.Add(
+                        "@AdminUserID",
+                        SqlDbType.Int).Value = AdminUserID;
 
-                    using (SqlCommand cmd = new SqlCommand(
-                        @"SELECT DISTINCT FeeType
-                          FROM dbo.EReceipt
-                          WHERE FeeType IS NOT NULL
-                            AND LTRIM(RTRIM(FeeType)) <> ''
-                          ORDER BY FeeType;", con))
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(cmd))
                     {
-                        while (reader.Read())
-                        {
-                            string feeType =
-                                Convert.ToString(reader["FeeType"]);
-
-                            ddlHistoryFee.Items.Add(
-                                new ListItem(feeType, feeType));
-                        }
+                        adapter.Fill(data);
                     }
+                }
 
-                    using (SqlCommand cmd = new SqlCommand(
-                        @"SELECT DISTINCT FeeType
-                          FROM dbo.EReceipt
-                          WHERE Balance > 0
-                            AND FeeType IS NOT NULL
-                            AND LTRIM(RTRIM(FeeType)) <> ''
-                          ORDER BY FeeType;", con))
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string feeType =
-                                Convert.ToString(reader["FeeType"]);
+                if (data.Tables.Count != 2)
+                {
+                    throw new InvalidOperationException(
+                        "Fee filter procedure must return two result sets.");
+                }
 
-                            ddlUnpaidFee.Items.Add(
-                                new ListItem(feeType, feeType));
-                        }
-                    }
+                ddlHistoryFee.Items.Clear();
+                ddlHistoryFee.Items.Add(
+                    new ListItem("All Fee Types", ""));
+
+                foreach (DataRow row in data.Tables[0].Rows)
+                {
+                    string feeType =
+                        Convert.ToString(row["FeeType"]);
+
+                    ddlHistoryFee.Items.Add(
+                        new ListItem(feeType, feeType));
+                }
+
+                ddlUnpaidFee.Items.Clear();
+                ddlUnpaidFee.Items.Add(
+                    new ListItem("All Fee Types", ""));
+
+                foreach (DataRow row in data.Tables[1].Rows)
+                {
+                    string feeType =
+                        Convert.ToString(row["FeeType"]);
+
+                    ddlUnpaidFee.Items.Add(
+                        new ListItem(feeType, feeType));
                 }
             }
             catch (Exception ex)
             {
                 ShowMessage(
-                    "Unable to load fee types: " +
-                    ex.Message,
+                    "Unable to load fee types: " + ex.Message,
                     MessageArea.Transactions);
             }
         }
 
         // ==========================================
-        // LOAD TRANSACTION HISTORY
+        // TRANSACTION HISTORY — SERVER PAGINATION
         // ==========================================
 
         private void LoadTransactions()
         {
             try
             {
-                DataSet ds = new DataSet();
+                DataSet data = new DataSet();
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EReceipt_WebAdminSearch", con))
+                using (SqlCommand cmd = Procedure(
+                    "dbo.EReceipt_WebAdminSearch", con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    cmd.Parameters.Add(
+                        "@Search", SqlDbType.VarChar, 255)
+                        .Value = DbValue(HistorySearch);
 
                     cmd.Parameters.Add(
-                        "@Search",
-                        SqlDbType.VarChar, 255).Value =
-                        DbValue(HistorySearch);
+                        "@FeeType", SqlDbType.VarChar, 50)
+                        .Value = DbValue(HistoryFee);
 
                     cmd.Parameters.Add(
-                        "@FeeType",
-                        SqlDbType.VarChar, 50).Value =
-                        DbValue(HistoryFee);
+                        "@PaymentMethod", SqlDbType.VarChar, 30)
+                        .Value = DbValue(HistoryMethod);
 
                     cmd.Parameters.Add(
-                        "@PaymentMethod",
-                        SqlDbType.VarChar, 30).Value =
-                        DbValue(HistoryMethod);
+                        "@Sort", SqlDbType.VarChar, 20)
+                        .Value = HistorySort;
 
                     cmd.Parameters.Add(
-                        "@Sort",
-                        SqlDbType.VarChar, 20).Value =
-                        HistorySort;
+                        "@PageNumber", SqlDbType.Int)
+                        .Value = HistoryPage;
 
                     cmd.Parameters.Add(
-                        "@PageNumber",
-                        SqlDbType.Int).Value =
-                        HistoryPage;
+                        "@PageSize", SqlDbType.Int)
+                        .Value = PageSize;
 
-                    cmd.Parameters.Add(
-                        "@PageSize",
-                        SqlDbType.Int).Value =
-                        PageSize;
-
-                    using (SqlDataAdapter da =
+                    using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
                     {
-                        da.Fill(ds);
+                        adapter.Fill(data);
                     }
                 }
 
-                if (ds.Tables.Count < 2)
+                if (data.Tables.Count < 2)
                 {
                     throw new InvalidOperationException(
                         "Transaction search returned incomplete data.");
                 }
 
-                int count = ReadFilteredCount(ds);
-
-                HistoryTotalPages =
-                    CalculateTotalPages(count);
+                int count = ReadFilteredCount(data);
+                HistoryTotalPages = CalculateTotalPages(count);
 
                 if (HistoryPage > HistoryTotalPages)
                 {
@@ -328,21 +336,15 @@ namespace ELibrary.Admin.Transactions
                     return;
                 }
 
-                gvTransactions.DataSource =
-                    ds.Tables[1];
-
+                gvTransactions.DataSource = data.Tables[1];
                 gvTransactions.DataBind();
 
-                lblHistoryCount.Text =
-                    BuildCountText(
-                        count,
-                        HistoryPage,
-                        "transactions");
+                lblHistoryCount.Text = BuildCountText(
+                    count, HistoryPage, "transactions");
 
                 lblHistoryPage.Text = string.Format(
                     "Page {0} of {1}",
-                    HistoryPage,
-                    HistoryTotalPages);
+                    HistoryPage, HistoryTotalPages);
 
                 btnHistoryPrevious.Visible =
                     HistoryTotalPages > 1;
@@ -375,66 +377,55 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // LOAD UNPAID FEES
+        // OUTSTANDING FEES — SERVER PAGINATION
         // ==========================================
 
         private void LoadUnpaidFees()
         {
             try
             {
-                DataSet ds = new DataSet();
+                DataSet data = new DataSet();
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EReceipt_WebAdminUnpaidSearch", con))
+                using (SqlCommand cmd = Procedure(
+                    "dbo.EReceipt_WebAdminUnpaidSearch", con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    cmd.Parameters.Add(
+                        "@Search", SqlDbType.VarChar, 255)
+                        .Value = DbValue(UnpaidSearch);
 
                     cmd.Parameters.Add(
-                        "@Search",
-                        SqlDbType.VarChar, 255).Value =
-                        DbValue(UnpaidSearch);
+                        "@FeeType", SqlDbType.VarChar, 50)
+                        .Value = DbValue(UnpaidFee);
 
                     cmd.Parameters.Add(
-                        "@FeeType",
-                        SqlDbType.VarChar, 50).Value =
-                        DbValue(UnpaidFee);
+                        "@Sort", SqlDbType.VarChar, 20)
+                        .Value = UnpaidSort;
 
                     cmd.Parameters.Add(
-                        "@Sort",
-                        SqlDbType.VarChar, 20).Value =
-                        UnpaidSort;
+                        "@PageNumber", SqlDbType.Int)
+                        .Value = UnpaidPage;
 
                     cmd.Parameters.Add(
-                        "@PageNumber",
-                        SqlDbType.Int).Value =
-                        UnpaidPage;
+                        "@PageSize", SqlDbType.Int)
+                        .Value = PageSize;
 
-                    cmd.Parameters.Add(
-                        "@PageSize",
-                        SqlDbType.Int).Value =
-                        PageSize;
-
-                    using (SqlDataAdapter da =
+                    using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
                     {
-                        da.Fill(ds);
+                        adapter.Fill(data);
                     }
                 }
 
-                if (ds.Tables.Count < 2)
+                if (data.Tables.Count < 2)
                 {
                     throw new InvalidOperationException(
                         "Unpaid fee search returned incomplete data.");
                 }
 
-                int count = ReadFilteredCount(ds);
-
-                UnpaidTotalPages =
-                    CalculateTotalPages(count);
+                int count = ReadFilteredCount(data);
+                UnpaidTotalPages = CalculateTotalPages(count);
 
                 if (UnpaidPage > UnpaidTotalPages)
                 {
@@ -443,19 +434,15 @@ namespace ELibrary.Admin.Transactions
                     return;
                 }
 
-                gvUnpaid.DataSource = ds.Tables[1];
+                gvUnpaid.DataSource = data.Tables[1];
                 gvUnpaid.DataBind();
 
-                lblUnpaidCount.Text =
-                    BuildCountText(
-                        count,
-                        UnpaidPage,
-                        "unpaid fees");
+                lblUnpaidCount.Text = BuildCountText(
+                    count, UnpaidPage, "unpaid fees");
 
                 lblUnpaidPage.Text = string.Format(
                     "Page {0} of {1}",
-                    UnpaidPage,
-                    UnpaidTotalPages);
+                    UnpaidPage, UnpaidTotalPages);
 
                 btnUnpaidPrevious.Visible =
                     UnpaidTotalPages > 1;
@@ -488,7 +475,7 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // INDIVIDUAL PAYMENT HISTORY
+        // INDIVIDUAL RECEIPT PAYMENT HISTORY
         // ==========================================
 
         private void LoadPaymentHistory()
@@ -501,46 +488,41 @@ namespace ELibrary.Admin.Transactions
 
             try
             {
-                DataTable dt = new DataTable();
+                DataTable table = new DataTable();
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
-                using (SqlCommand cmd = new SqlCommand(
-                    "EReceiptPaymentHistory_WebAdminByReceipt",
+                using (SqlCommand cmd = Procedure(
+                    "dbo.EReceiptPaymentHistory_WebAdminByReceipt",
                     con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    cmd.Parameters.Add(
+                        "@ReceiptID", SqlDbType.Int)
+                        .Value = SelectedReceiptID;
 
                     cmd.Parameters.Add(
-                        "@ReceiptID",
-                        SqlDbType.Int).Value =
-                        SelectedReceiptID;
+                        "@AdminUserID", SqlDbType.Int)
+                        .Value = AdminUserID;
 
-                    cmd.Parameters.Add(
-                        "@AdminUserID",
-                        SqlDbType.Int).Value =
-                        AdminUserID;
-
-                    using (SqlDataAdapter da =
+                    using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
                     {
-                        da.Fill(dt);
+                        adapter.Fill(table);
                     }
                 }
 
-                gvPaymentHistory.DataSource = dt;
+                gvPaymentHistory.DataSource = table;
                 gvPaymentHistory.DataBind();
 
                 lblSelectedReceipt.Text =
                     "Receipt ID: " + SelectedReceiptID;
 
                 lblPaymentHistoryMessage.Text =
-                    dt.Rows.Count == 0
+                    table.Rows.Count == 0
                     ? "No individual payments have been recorded for this receipt."
                     : string.Format(
                         "{0} individual payment(s) recorded.",
-                        dt.Rows.Count);
+                        table.Rows.Count);
 
                 pnlPaymentHistory.Visible = true;
             }
@@ -553,7 +535,6 @@ namespace ELibrary.Admin.Transactions
                     "Receipt ID: " + SelectedReceiptID;
 
                 lblPaymentHistoryMessage.Text = "";
-
                 pnlPaymentHistory.Visible = true;
 
                 ShowMessage(
@@ -563,14 +544,16 @@ namespace ELibrary.Admin.Transactions
             }
         }
 
+        // ==========================================
+        // PAYMENT HISTORY BUTTONS
+        // ==========================================
+
         protected void btnViewHistory_Command(
             object sender,
             CommandEventArgs e)
         {
             if (e.CommandName != "ViewPayments")
-            {
                 return;
-            }
 
             int receiptID;
 
@@ -607,7 +590,7 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // TRANSACTION SEARCH EVENTS
+        // HISTORY FILTER ACTIONS
         // ==========================================
 
         protected void btnHistoryApply_Click(
@@ -664,9 +647,7 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (HistoryPage > 1)
-            {
                 HistoryPage--;
-            }
 
             LoadTransactions();
             LoadUnpaidFees();
@@ -680,9 +661,7 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (HistoryPage < HistoryTotalPages)
-            {
                 HistoryPage++;
-            }
 
             LoadTransactions();
             LoadUnpaidFees();
@@ -692,7 +671,7 @@ namespace ELibrary.Admin.Transactions
         }
 
         // ==========================================
-        // UNPAID SEARCH EVENTS
+        // UNPAID FILTER ACTIONS
         // ==========================================
 
         protected void btnUnpaidApply_Click(
@@ -722,7 +701,6 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             txtUnpaidSearch.Text = "";
-
             ddlUnpaidFee.SelectedValue = "";
             ddlUnpaidSort.SelectedValue = "Default";
 
@@ -744,9 +722,7 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (UnpaidPage > 1)
-            {
                 UnpaidPage--;
-            }
 
             LoadTransactions();
             LoadUnpaidFees();
@@ -760,9 +736,7 @@ namespace ELibrary.Admin.Transactions
             EventArgs e)
         {
             if (UnpaidPage < UnpaidTotalPages)
-            {
                 UnpaidPage++;
-            }
 
             LoadTransactions();
             LoadUnpaidFees();
@@ -780,14 +754,13 @@ namespace ELibrary.Admin.Transactions
             CommandEventArgs e)
         {
             if (e.CommandName != "PayFee")
-            {
                 return;
-            }
 
             if (!AdminHelper.IsAdmin(Session) ||
                 AdminUserID <= 0)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -804,12 +777,12 @@ namespace ELibrary.Admin.Transactions
             }
 
             Response.Redirect(
-                "~/Admin/Transactions/PayTransactions.aspx?ReceiptID="
-                + receiptID);
+                "~/Admin/Transactions/PayTransactions.aspx?ReceiptID=" +
+                receiptID);
         }
 
         // ==========================================
-        // UTILITY METHODS
+        // SHARED UTILITY METHODS
         // ==========================================
 
         private object DbValue(string value)
@@ -819,15 +792,13 @@ namespace ELibrary.Admin.Transactions
                 : value.Trim();
         }
 
-        private int ReadFilteredCount(DataSet ds)
+        private int ReadFilteredCount(DataSet data)
         {
-            if (ds.Tables[0].Rows.Count == 0)
-            {
+            if (data.Tables[0].Rows.Count == 0)
                 return 0;
-            }
 
             return Convert.ToInt32(
-                ds.Tables[0].Rows[0]["FilteredCount"]);
+                data.Tables[0].Rows[0]["FilteredCount"]);
         }
 
         private int CalculateTotalPages(int count)

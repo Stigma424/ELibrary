@@ -13,25 +13,22 @@ namespace ELibrary.Admin.Borrowing
     {
         private const int PageSize = 10;
 
+        // All database operations use stored procedures.
+        // Web.config points this connection to ELibrary000_V2.
         private string ConnectionString
         {
             get
             {
-                return ConfigurationManager
-                    .ConnectionStrings["ElibraryConnection"]
-                    .ConnectionString;
+                return ConfigurationManager.ConnectionStrings[
+                    "ElibraryConnection"].ConnectionString;
             }
         }
-
-        // ==========================================
-        // APPLIED SEARCH STATE
-        // ==========================================
 
         private string AppliedSearch
         {
             get
             {
-                return (string)(
+                return Convert.ToString(
                     ViewState["AppliedSearch"] ?? "");
             }
             set
@@ -44,7 +41,7 @@ namespace ELibrary.Admin.Borrowing
         {
             get
             {
-                return (string)(
+                return Convert.ToString(
                     ViewState["AppliedStatus"] ?? "All");
             }
             set
@@ -57,7 +54,7 @@ namespace ELibrary.Admin.Borrowing
         {
             get
             {
-                return (string)(
+                return Convert.ToString(
                     ViewState["AppliedSort"] ?? "Default");
             }
             set
@@ -70,7 +67,8 @@ namespace ELibrary.Admin.Borrowing
         {
             get
             {
-                return (int)(ViewState["CurrentPage"] ?? 1);
+                return Convert.ToInt32(
+                    ViewState["CurrentPage"] ?? 1);
             }
             set
             {
@@ -82,7 +80,8 @@ namespace ELibrary.Admin.Borrowing
         {
             get
             {
-                return (int)(ViewState["TotalPages"] ?? 1);
+                return Convert.ToInt32(
+                    ViewState["TotalPages"] ?? 1);
             }
             set
             {
@@ -94,39 +93,23 @@ namespace ELibrary.Admin.Borrowing
         {
             get
             {
-                return Convert.ToInt32(Session["UserID"]);
+                int userID;
+
+                if (!int.TryParse(
+                    Convert.ToString(Session["UserID"]),
+                    out userID))
+                {
+                    throw new InvalidOperationException(
+                        "Administrator session is invalid.");
+                }
+
+                return userID;
             }
         }
 
         // ==========================================
-        // SELECTED OPERATION STATE
+        // PAGE INITIALIZATION
         // ==========================================
-
-        private int SelectedBorrowID
-        {
-            get
-            {
-                return (int)(
-                    ViewState["SelectedBorrowID"] ?? 0);
-            }
-            set
-            {
-                ViewState["SelectedBorrowID"] = value;
-            }
-        }
-
-        private string SelectedActionMode
-        {
-            get
-            {
-                return (string)(
-                    ViewState["SelectedActionMode"] ?? "");
-            }
-            set
-            {
-                ViewState["SelectedActionMode"] = value;
-            }
-        }
 
         protected void Page_Load(
             object sender,
@@ -134,312 +117,193 @@ namespace ELibrary.Admin.Borrowing
         {
             if (!AdminHelper.IsAdmin(Session))
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
-            RemoveClosedStatusFilters();
-
             if (!IsPostBack)
             {
-                CloseSelectedAction();
+                AppliedSearch = "";
+                AppliedStatus = "All";
+                AppliedSort = "Default";
+                CurrentPage = 1;
+
                 ProcessOverdue();
                 LoadBorrows();
             }
-            else
-            {
-                RestoreSelectedActionVisibility();
-            }
-
-            hfFocusTarget.Value = "";
-        }
-
-        private void RemoveClosedStatusFilters()
-        {
-            string[] closedStatuses =
-            {
-                "Returned",
-                "Cancelled",
-                "Closed",
-                "Lost"
-            };
-
-            foreach (string status in closedStatuses)
-            {
-                ListItem item =
-                    ddlStatus.Items.FindByValue(status);
-
-                if (item != null)
-                {
-                    ddlStatus.Items.Remove(item);
-                }
-            }
-
-            if (!IsPostBack &&
-                ddlStatus.Items.FindByValue("All") != null)
-            {
-                ddlStatus.SelectedValue = "All";
-            }
         }
 
         // ==========================================
-        // SECTION FOCUS / LOCAL MESSAGES
+        // UI HELPERS
         // ==========================================
-
-        private void FocusSection(string sectionID)
-        {
-            hfFocusTarget.Value = sectionID;
-        }
 
         private void ShowMessage(
             string message,
             bool success)
         {
+            lblMessage.CssClass = success
+                ? "br-message text-success"
+                : "br-message text-danger";
+
             lblMessage.Text =
                 Server.HtmlEncode(message);
-
-            lblMessage.CssClass = success
-                ? "br-message success"
-                : "br-message error";
-
-            FocusSection("borrowingRecords");
         }
 
-        private void ShowActionMessage(
-            string message,
-            bool success)
+        public string Money(object value)
         {
-            pnlSelectedAction.Visible = true;
+            decimal amount =
+                value == null || value == DBNull.Value
+                ? 0m
+                : Convert.ToDecimal(value);
 
-            lblActionMessage.Text =
-                Server.HtmlEncode(message);
-
-            lblActionMessage.CssClass = success
-                ? "br-message success"
-                : "br-message error";
-
-            FocusSection("pnlSelectedAction");
+            return "₱" + amount.ToString(
+                "N2",
+                CultureInfo.GetCultureInfo("en-PH"));
         }
 
-        // ==========================================
-        // SELECTED ACTION VISIBILITY
-        // ==========================================
-
-        private void RestoreSelectedActionVisibility()
+        private SqlCommand CreateProcedure(
+            string procedureName,
+            SqlConnection connection)
         {
-            string mode = SelectedActionMode;
+            SqlCommand cmd =
+                new SqlCommand(procedureName, connection);
 
-            pnlSelectedAction.Visible =
-                mode == "Cancel" ||
-                mode == "Lost" ||
-                mode == "Result";
+            cmd.CommandType =
+                CommandType.StoredProcedure;
 
-            pnlCancellationForm.Visible =
-                mode == "Cancel";
+            cmd.CommandTimeout = 30;
 
-            pnlLostBookForm.Visible =
-                mode == "Lost";
+            return cmd;
         }
 
-        private void OpenSelectedAction(
-            int borrowLogID,
-            string mode)
+        private static void AddDecimalParameter(
+            SqlCommand command,
+            string name,
+            decimal value)
         {
-            SelectedBorrowID = borrowLogID;
-            SelectedActionMode = mode;
+            SqlParameter parameter =
+                command.Parameters.Add(
+                    name,
+                    SqlDbType.Decimal);
 
-            lblSelectedBorrowID.Text =
-                borrowLogID.ToString();
+            parameter.Precision = 10;
+            parameter.Scale = 2;
+            parameter.Value = value;
+        }
 
-            lblActionMessage.Text = "";
-
-            txtCancellationReason.Text = "";
-            txtReplacementFee.Text = "";
-            txtLostReason.Text = "";
-
-            if (mode == "Cancel")
+        private void ExecuteProcedure(
+            string procedureName,
+            Action<SqlCommand> configure)
+        {
+            using (SqlConnection con =
+                new SqlConnection(ConnectionString))
+            using (SqlCommand cmd =
+                CreateProcedure(procedureName, con))
             {
-                lblActionTitle.Text =
-                    "Cancel Reservation";
+                configure(cmd);
 
-                lblActionDescription.Text =
-                    "Provide a reason before cancelling " +
-                    "the selected pending pickup.";
+                con.Open();
+
+                cmd.ExecuteNonQuery();
             }
-            else if (mode == "Lost")
-            {
-                lblActionTitle.Text =
-                    "Record Lost Book";
-
-                lblActionDescription.Text =
-                    "Record the replacement fee and reason " +
-                    "for the selected active loan.";
-            }
-
-            RestoreSelectedActionVisibility();
-
-            FocusSection("pnlSelectedAction");
-        }
-
-        private void ShowCompletedAction(
-            int borrowLogID,
-            string title,
-            string message)
-        {
-            SelectedBorrowID = borrowLogID;
-            SelectedActionMode = "Result";
-
-            lblSelectedBorrowID.Text =
-                borrowLogID.ToString();
-
-            lblActionTitle.Text = title;
-
-            lblActionDescription.Text =
-                "This operation has been processed.";
-
-            txtCancellationReason.Text = "";
-            txtReplacementFee.Text = "";
-            txtLostReason.Text = "";
-
-            RestoreSelectedActionVisibility();
-
-            ShowActionMessage(message, true);
-        }
-
-        private void CloseSelectedAction()
-        {
-            SelectedBorrowID = 0;
-            SelectedActionMode = "";
-
-            pnlSelectedAction.Visible = false;
-            pnlCancellationForm.Visible = false;
-            pnlLostBookForm.Visible = false;
-
-            lblSelectedBorrowID.Text = "0";
-            lblActionMessage.Text = "";
-
-            txtCancellationReason.Text = "";
-            txtReplacementFee.Text = "";
-            txtLostReason.Text = "";
-        }
-
-        protected void btnCloseAction_Click(
-            object sender,
-            EventArgs e)
-        {
-            CloseSelectedAction();
-
-            FocusSection("borrowingRecords");
         }
 
         // ==========================================
-        // PROCESS OVERDUE
+        // OVERDUE PROCESSING
         // ==========================================
 
         private void ProcessOverdue()
         {
             try
             {
-                using (SqlConnection con =
-                    new SqlConnection(ConnectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebProcessOverdue",
-                        con))
-                {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                ExecuteProcedure(
+                    "dbo.EBorrowLog_WebProcessOverdue",
+                    cmd =>
+                    {
+                        // Existing V1 procedure is preserved.
+                    });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ShowMessage(
-                    "Unable to update overdue status: " +
-                    ex.Message,
+                    "Unable to update overdue borrowing statuses.",
                     false);
             }
         }
 
         // ==========================================
-        // LOAD ACTIVE BORROWINGS
+        // DATABASE SEARCH AND PAGINATION
         // ==========================================
 
         private void LoadBorrows()
         {
             try
             {
-                DataSet ds = new DataSet();
+                DataSet results = new DataSet();
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebAdminSearch",
+                    CreateProcedure(
+                        "dbo.EBorrowLog_WebAdminSearch",
                         con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
                     cmd.Parameters.Add(
                         "@Search",
                         SqlDbType.VarChar,
                         255).Value =
-                        string.IsNullOrWhiteSpace(
-                            AppliedSearch)
+                        string.IsNullOrWhiteSpace(AppliedSearch)
                         ? (object)DBNull.Value
                         : AppliedSearch;
 
                     cmd.Parameters.Add(
                         "@Status",
                         SqlDbType.VarChar,
-                        20).Value =
-                        AppliedStatus;
+                        20).Value = AppliedStatus;
 
                     cmd.Parameters.Add(
                         "@Sort",
                         SqlDbType.VarChar,
-                        20).Value =
-                        AppliedSort;
+                        20).Value = AppliedSort;
 
                     cmd.Parameters.Add(
                         "@PageNumber",
-                        SqlDbType.Int).Value =
-                        CurrentPage;
+                        SqlDbType.Int).Value = CurrentPage;
 
                     cmd.Parameters.Add(
                         "@PageSize",
-                        SqlDbType.Int).Value =
-                        PageSize;
+                        SqlDbType.Int).Value = PageSize;
 
                     using (SqlDataAdapter adapter =
                         new SqlDataAdapter(cmd))
                     {
-                        adapter.Fill(ds);
+                        adapter.Fill(results);
                     }
                 }
 
-                if (ds.Tables.Count < 2)
+                if (results.Tables.Count < 2)
                 {
                     throw new InvalidOperationException(
-                        "Borrow search returned incomplete data.");
+                        "Admin search returned incomplete data.");
                 }
 
-                int filteredCount =
-                    ds.Tables[0].Rows.Count == 0
-                    ? 0
-                    : Convert.ToInt32(
-                        ds.Tables[0]
-                            .Rows[0]["FilteredCount"]);
+                int filteredCount = 0;
+
+                if (results.Tables[0].Rows.Count > 0)
+                {
+                    filteredCount = Convert.ToInt32(
+                        results.Tables[0].Rows[0][
+                            "FilteredCount"]);
+                }
 
                 TotalPages = Math.Max(
                     1,
                     (int)Math.Ceiling(
-                        filteredCount /
-                        (double)PageSize));
+                        filteredCount / (double)PageSize));
 
+                // The selected page may become invalid after
+                // cancellation, return, or filter changes.
                 if (CurrentPage > TotalPages)
                 {
                     CurrentPage = TotalPages;
@@ -448,14 +312,14 @@ namespace ELibrary.Admin.Borrowing
                 }
 
                 gvBorrows.DataSource =
-                    ds.Tables[1];
+                    results.Tables[1];
 
                 gvBorrows.DataBind();
 
-                int first = filteredCount == 0
+                int first =
+                    filteredCount == 0
                     ? 0
-                    : (CurrentPage - 1) *
-                        PageSize + 1;
+                    : (CurrentPage - 1) * PageSize + 1;
 
                 int last = Math.Min(
                     CurrentPage * PageSize,
@@ -472,29 +336,23 @@ namespace ELibrary.Admin.Borrowing
                     CurrentPage,
                     TotalPages);
 
-                btnPrevious.Visible =
-                    TotalPages > 1;
+                btnPrevious.Visible = TotalPages > 1;
+                btnNext.Visible = TotalPages > 1;
 
-                btnNext.Visible =
-                    TotalPages > 1;
-
-                btnPrevious.Enabled =
-                    CurrentPage > 1;
-
-                btnNext.Enabled =
-                    CurrentPage < TotalPages;
+                btnPrevious.Enabled = CurrentPage > 1;
+                btnNext.Enabled = CurrentPage < TotalPages;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ShowMessage(
-                    "Unable to load borrowings: " +
-                    ex.Message,
+                    "Unable to load borrowing records. " +
+                    "Check the V2 admin-search procedure.",
                     false);
             }
         }
 
         // ==========================================
-        // FILTERS / PAGINATION
+        // SEARCH / FILTER BUTTONS
         // ==========================================
 
         protected void btnApply_Click(
@@ -512,14 +370,7 @@ namespace ELibrary.Admin.Borrowing
 
             CurrentPage = 1;
 
-            CloseSelectedAction();
             LoadBorrows();
-
-            if (string.IsNullOrEmpty(
-                hfFocusTarget.Value))
-            {
-                FocusSection("borrowingRecords");
-            }
         }
 
         protected void btnClearFilters_Click(
@@ -537,70 +388,88 @@ namespace ELibrary.Admin.Borrowing
 
             CurrentPage = 1;
 
-            CloseSelectedAction();
             LoadBorrows();
-
-            if (string.IsNullOrEmpty(
-                hfFocusTarget.Value))
-            {
-                FocusSection("borrowingRecords");
-            }
-        }
-
-        protected void btnPrevious_Click(
-            object sender,
-            EventArgs e)
-        {
-            if (CurrentPage > 1)
-            {
-                CurrentPage--;
-                CloseSelectedAction();
-                LoadBorrows();
-            }
-
-            if (string.IsNullOrEmpty(
-                hfFocusTarget.Value))
-            {
-                FocusSection("borrowingRecords");
-            }
-        }
-
-        protected void btnNext_Click(
-            object sender,
-            EventArgs e)
-        {
-            if (CurrentPage < TotalPages)
-            {
-                CurrentPage++;
-                CloseSelectedAction();
-                LoadBorrows();
-            }
-
-            if (string.IsNullOrEmpty(
-                hfFocusTarget.Value))
-            {
-                FocusSection("borrowingRecords");
-            }
         }
 
         protected void btnRefresh_Click(
             object sender,
             EventArgs e)
         {
-            CloseSelectedAction();
-
             ProcessOverdue();
-            LoadBorrows();
 
-            if (string.IsNullOrEmpty(
-                hfFocusTarget.Value))
-            {
-                FocusSection("borrowingRecords");
-            }
+            LoadBorrows();
         }
 
         // ==========================================
-        // GRID COMMANDS
+        // PAGINATION
+        // ==========================================
+
+        protected void btnPrevious_Click(
+            object sender,
+            EventArgs e)
+        {
+            if (CurrentPage <= 1)
+                return;
+
+            CurrentPage--;
+
+            LoadBorrows();
+        }
+
+        protected void btnNext_Click(
+            object sender,
+            EventArgs e)
+        {
+            if (CurrentPage >= TotalPages)
+                return;
+
+            CurrentPage++;
+
+            LoadBorrows();
+        }
+
+        // ==========================================
+        // READ ACTION INFORMATION
+        // ==========================================
+
+        private DataRow GetActionInfo(
+            int borrowLogID)
+        {
+            DataTable table = new DataTable();
+
+            using (SqlConnection con =
+                new SqlConnection(ConnectionString))
+            using (SqlCommand cmd =
+                CreateProcedure(
+                    "dbo.EBorrowLog_WebAdminActionInfo",
+                    con))
+            {
+                cmd.Parameters.Add(
+                    "@BorrowLogID",
+                    SqlDbType.Int).Value = borrowLogID;
+
+                cmd.Parameters.Add(
+                    "@AdminUserID",
+                    SqlDbType.Int).Value = AdminUserID;
+
+                using (SqlDataAdapter adapter =
+                    new SqlDataAdapter(cmd))
+                {
+                    adapter.Fill(table);
+                }
+            }
+
+            if (table.Rows.Count != 1)
+            {
+                throw new InvalidOperationException(
+                    "Borrowing action information was not found.");
+            }
+
+            return table.Rows[0];
+        }
+
+        // ==========================================
+        // GRID ACTION ROUTING
         // ==========================================
 
         protected void gvBorrows_RowCommand(
@@ -613,12 +482,12 @@ namespace ELibrary.Admin.Borrowing
                 return;
             }
 
-            string command = e.CommandName;
+            string action = e.CommandName;
 
-            if (command != "ConfirmCollection" &&
-                command != "OpenCancellation" &&
-                command != "ConfirmReturn" &&
-                command != "OpenLost")
+            if (action != "ConfirmCollection" &&
+                action != "CancelReservation" &&
+                action != "ConfirmReturn" &&
+                action != "MarkLost")
             {
                 return;
             }
@@ -626,8 +495,7 @@ namespace ELibrary.Admin.Borrowing
             int borrowLogID;
 
             if (!int.TryParse(
-                Convert.ToString(
-                    e.CommandArgument),
+                Convert.ToString(e.CommandArgument),
                 out borrowLogID) ||
                 borrowLogID <= 0)
             {
@@ -637,70 +505,171 @@ namespace ELibrary.Admin.Borrowing
                 return;
             }
 
-            if (command == "OpenCancellation")
-            {
-                OpenSelectedAction(
-                    borrowLogID,
-                    "Cancel");
-
-                return;
-            }
-
-            if (command == "OpenLost")
-            {
-                OpenSelectedAction(
-                    borrowLogID,
-                    "Lost");
-
-                return;
-            }
-
-            // Direct actions preserve their original
-            // confirmation prompts and procedures.
-            CloseSelectedAction();
-
-            if (command == "ConfirmCollection")
+            if (action == "ConfirmCollection")
             {
                 ConfirmCollection(borrowLogID);
                 return;
             }
 
-            if (command == "ConfirmReturn")
+            if (action == "ConfirmReturn")
             {
                 ConfirmReturn(borrowLogID);
+                return;
+            }
+
+            // Row controls are used only for actions
+            // requiring additional librarian input.
+            Control source =
+                e.CommandSource as Control;
+
+            GridViewRow row =
+                source == null
+                ? null
+                : source.NamingContainer as GridViewRow;
+
+            if (row == null)
+            {
+                ShowMessage(
+                    "Unable to identify the borrowing row.",
+                    false);
+                return;
+            }
+
+            if (action == "CancelReservation")
+            {
+                TextBox reasonBox =
+                    row.FindControl(
+                        "txtCancellationReason") as TextBox;
+
+                string reason =
+                    reasonBox == null
+                    ? ""
+                    : (reasonBox.Text ?? "").Trim();
+
+                if (reason.Length == 0 ||
+                    reason.Length > 500)
+                {
+                    ShowMessage(
+                        "A cancellation reason is required " +
+                        "(maximum 500 characters).",
+                        false);
+                    return;
+                }
+
+                CancelReservation(
+                    borrowLogID,
+                    reason,
+                    row);
+
+                return;
+            }
+
+            if (action == "MarkLost")
+            {
+                TextBox reasonBox =
+                    row.FindControl("txtLostReason")
+                    as TextBox;
+
+                TextBox feeBox =
+                    row.FindControl("txtReplacementFee")
+                    as TextBox;
+
+                string reason =
+                    reasonBox == null
+                    ? ""
+                    : (reasonBox.Text ?? "").Trim();
+
+                decimal replacementFee = 0m;
+
+                if (reason.Length == 0 ||
+                    reason.Length > 500)
+                {
+                    ShowMessage(
+                        "Enter a lost-book reason, " +
+                        "up to 500 characters.",
+                        false);
+                    return;
+                }
+
+                bool validFee =
+                    feeBox != null &&
+                    decimal.TryParse(
+                        (feeBox.Text ?? "").Trim(),
+                        NumberStyles.AllowDecimalPoint,
+                        CultureInfo.InvariantCulture,
+                        out replacementFee);
+
+                if (!validFee)
+                {
+                    ShowMessage(
+                        "Enter a valid replacement fee, " +
+                        "such as 500.00.",
+                        false);
+                    return;
+                }
+
+                if (replacementFee <= 0 ||
+                    replacementFee > 99999999.99m ||
+                    decimal.Round(
+                        replacementFee, 2) != replacementFee)
+                {
+                    ShowMessage(
+                        "Replacement fee must be positive " +
+                        "and have at most two decimal places.",
+                        false);
+                    return;
+                }
+
+                MarkLost(
+                    borrowLogID,
+                    reason,
+                    replacementFee);
             }
         }
 
         // ==========================================
-        // CONFIRM COLLECTION
+        // CONFIRM ONLINE COLLECTION
         // ==========================================
 
-        private void ConfirmCollection(int borrowLogID)
+        private void ConfirmCollection(
+            int borrowLogID)
         {
             try
             {
+                DataRow actionInfo =
+                    GetActionInfo(borrowLogID);
+
+                bool canCollect =
+                    Convert.ToBoolean(
+                        actionInfo["CanConfirmCollection"]);
+
+                if (!canCollect)
+                {
+                    ShowMessage(
+                        "Collection is blocked. " +
+                        "The customer must fully pay the " +
+                        "borrowing fee and refundable deposit.",
+                        false);
+                    return;
+                }
+
                 DateTime collectionDate;
                 DateTime dueDate;
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebConfirmCollection",
+                    CreateProcedure(
+                        "dbo.EBorrowLog_WebConfirmCollection",
                         con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
                     cmd.Parameters.Add(
                         "@BorrowLogID",
-                        SqlDbType.Int).Value =
-                        borrowLogID;
+                        SqlDbType.Int).Value = borrowLogID;
 
                     cmd.Parameters.Add(
                         "@AdminUserID",
-                        SqlDbType.Int).Value =
-                        AdminUserID;
+                        SqlDbType.Int).Value = AdminUserID;
 
                     con.Open();
 
@@ -710,8 +679,7 @@ namespace ELibrary.Admin.Borrowing
                         if (!reader.Read())
                         {
                             throw new InvalidOperationException(
-                                "Collection confirmation " +
-                                "was not returned.");
+                                "No collection result was returned.");
                         }
 
                         collectionDate =
@@ -727,7 +695,7 @@ namespace ELibrary.Admin.Borrowing
                 LoadBorrows();
 
                 ShowMessage(
-                    "Collection confirmed for reservation #" +
+                    "Collection confirmed for borrowing #" +
                     borrowLogID +
                     ". Collected: " +
                     collectionDate.ToString(
@@ -735,7 +703,7 @@ namespace ELibrary.Admin.Borrowing
                     ". Due date: " +
                     dueDate.ToString(
                         "MM/dd/yyyy hh:mm tt") +
-                    ". No additional book copy was deducted.",
+                    ". The seven-day loan has started.",
                     true);
             }
             catch (SqlException ex)
@@ -743,188 +711,234 @@ namespace ELibrary.Admin.Borrowing
                 LoadBorrows();
 
                 ShowMessage(
-                    ex.Message,
+                    "Collection rejected: " + ex.Message,
                     false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 LoadBorrows();
 
                 ShowMessage(
-                    "Unable to confirm collection: " +
-                    ex.Message,
+                    "Collection could not be confirmed. " +
+                    "Review the borrowing record before retrying.",
                     false);
             }
         }
 
         // ==========================================
-        // CANCEL RESERVATION
+        // UNPAID AND PAID CANCELLATIONS
         // ==========================================
-
-        protected void btnConfirmCancellation_Click(
-            object sender,
-            EventArgs e)
-        {
-            if (!AdminHelper.IsAdmin(Session))
-            {
-                Response.Redirect("~/Login.aspx");
-                return;
-            }
-
-            if (SelectedActionMode != "Cancel" ||
-                SelectedBorrowID <= 0)
-            {
-                ShowMessage(
-                    "Please select a reservation first.",
-                    false);
-                return;
-            }
-
-            string reason =
-                (txtCancellationReason.Text ?? "")
-                    .Trim();
-
-            if (string.IsNullOrWhiteSpace(reason))
-            {
-                ShowActionMessage(
-                    "Please enter a cancellation reason.",
-                    false);
-                return;
-            }
-
-            if (reason.Length > 500)
-            {
-                ShowActionMessage(
-                    "Cancellation reason cannot exceed " +
-                    "500 characters.",
-                    false);
-                return;
-            }
-
-            CancelReservation(
-                SelectedBorrowID,
-                reason);
-        }
 
         private void CancelReservation(
             int borrowLogID,
-            string reason)
+            string reason,
+            GridViewRow row)
         {
             try
             {
-                using (SqlConnection con =
-                    new SqlConnection(ConnectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebCancelReservation",
-                        con))
+                DataRow actionInfo =
+                    GetActionInfo(borrowLogID);
+
+                bool paid =
+                    Convert.ToBoolean(
+                        actionInfo["RequiresPaidCancellation"]);
+
+                bool canCancelUnpaid =
+                    Convert.ToBoolean(
+                        actionInfo["CanCancelUnpaid"]);
+
+                if (!paid && !canCancelUnpaid)
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
-                    cmd.Parameters.Add(
-                        "@BorrowLogID",
-                        SqlDbType.Int).Value =
-                        borrowLogID;
-
-                    cmd.Parameters.Add(
-                        "@ActorUserID",
-                        SqlDbType.Int).Value =
-                        AdminUserID;
-
-                    cmd.Parameters.Add(
-                        "@CancellationReason",
-                        SqlDbType.NVarChar,
-                        500).Value =
-                        reason;
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
+                    ShowMessage(
+                        "This reservation cannot be cancelled " +
+                        "in its current state.",
+                        false);
+                    return;
                 }
 
-                LoadBorrows();
+                string procedure = paid
+                    ? "dbo.EBorrowLog_WebCancelPaidReservation"
+                    : "dbo.EBorrowLog_WebCancelReservation";
 
-                ShowCompletedAction(
-                    borrowLogID,
-                    "Reservation Cancelled",
-                    "Reservation #" +
-                    borrowLogID +
-                    " cancelled successfully. " +
-                    "One available book copy was restored.");
-            }
-            catch (SqlException ex)
-            {
-                ShowActionMessage(
-                    ex.Message,
-                    false);
-            }
-            catch (Exception ex)
-            {
-                ShowActionMessage(
-                    "Unable to cancel reservation: " +
-                    ex.Message,
-                    false);
-            }
-        }
+                string refundMethod = "";
+                string refundReference = "";
 
-        // ==========================================
-        // CONFIRM RETURN
-        // ==========================================
-
-        private void ConfirmReturn(int borrowLogID)
-        {
-            try
-            {
-                int customerUserID;
-
-                using (SqlConnection con =
-                    new SqlConnection(ConnectionString))
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebOne",
-                        con))
+                if (paid)
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
+                    DropDownList methodControl =
+                        row.FindControl("ddlRefundMethod")
+                        as DropDownList;
 
-                    cmd.Parameters.Add(
-                        "@BorrowLogID",
-                        SqlDbType.Int).Value =
-                        borrowLogID;
+                    TextBox referenceControl =
+                        row.FindControl("txtRefundReference")
+                        as TextBox;
 
-                    con.Open();
+                    CheckBox confirmationControl =
+                        row.FindControl("chkRefundConfirmed")
+                        as CheckBox;
 
-                    using (SqlDataReader reader =
-                        cmd.ExecuteReader())
+                    if (methodControl == null ||
+                        confirmationControl == null)
                     {
-                        if (!reader.Read())
-                        {
-                            ShowMessage(
-                                "Borrowing record was not found.",
-                                false);
-                            return;
-                        }
+                        ShowMessage(
+                            "Refund controls are not available. " +
+                            "Refresh the borrowing list.",
+                            false);
+                        return;
+                    }
 
-                        customerUserID =
-                            Convert.ToInt32(
-                                reader["UserID"]);
+                    refundMethod =
+                        methodControl.SelectedValue;
+
+                    if (refundMethod != "Cash" &&
+                        refundMethod != "GCash" &&
+                        refundMethod != "Card" &&
+                        refundMethod != "Bank Transfer")
+                    {
+                        ShowMessage(
+                            "Select a valid refund method.",
+                            false);
+                        return;
+                    }
+
+                    if (!confirmationControl.Checked)
+                    {
+                        ShowMessage(
+                            "Confirm that the received money " +
+                            "was actually refunded.",
+                            false);
+                        return;
+                    }
+
+                    refundReference =
+                        referenceControl == null
+                        ? ""
+                        : (referenceControl.Text ?? "").Trim();
+
+                    if (refundReference.Length > 100)
+                    {
+                        ShowMessage(
+                            "Refund reference must not exceed " +
+                            "100 characters.",
+                            false);
+                        return;
                     }
                 }
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebPostReturn",
-                        con))
+                    CreateProcedure(procedure, con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
                     cmd.Parameters.Add(
                         "@BorrowLogID",
-                        SqlDbType.Int).Value =
-                        borrowLogID;
+                        SqlDbType.Int).Value = borrowLogID;
+
+                    cmd.Parameters.Add(
+                        "@CancellationReason",
+                        SqlDbType.NVarChar,
+                        500).Value = reason;
+
+                    if (paid)
+                    {
+                        cmd.Parameters.Add(
+                            "@AdminUserID",
+                            SqlDbType.Int).Value = AdminUserID;
+
+                        cmd.Parameters.Add(
+                            "@RefundMethod",
+                            SqlDbType.VarChar,
+                            30).Value = refundMethod;
+
+                        cmd.Parameters.Add(
+                            "@ReferenceNo",
+                            SqlDbType.VarChar,
+                            100).Value =
+                            refundReference.Length == 0
+                            ? (object)DBNull.Value
+                            : refundReference;
+                    }
+                    else
+                    {
+                        cmd.Parameters.Add(
+                            "@ActorUserID",
+                            SqlDbType.Int).Value = AdminUserID;
+                    }
+
+                    con.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                LoadBorrows();
+
+                ShowMessage(
+                    paid
+                    ? "Paid reservation cancelled. " +
+                      "The verified refunds were recorded " +
+                      "and reserved stock was released."
+                    : "Unpaid reservation cancelled " +
+                      "and reserved stock was released.",
+                    true);
+            }
+            catch (SqlException ex)
+            {
+                LoadBorrows();
+
+                ShowMessage(
+                    "Cancellation rejected: " + ex.Message,
+                    false);
+            }
+            catch (Exception)
+            {
+                LoadBorrows();
+
+                ShowMessage(
+                    "Unable to cancel the reservation. " +
+                    "Review its latest financial status.",
+                    false);
+            }
+        }
+
+        // ==========================================
+        // CONFIRM PHYSICAL BOOK RETURN
+        // ==========================================
+
+        private void ConfirmReturn(
+            int borrowLogID)
+        {
+            try
+            {
+                DataRow actionInfo =
+                    GetActionInfo(borrowLogID);
+
+                if (!Convert.ToBoolean(
+                    actionInfo["CanReturn"]))
+                {
+                    ShowMessage(
+                        "Only active, physically collected " +
+                        "books can be returned.",
+                        false);
+                    return;
+                }
+
+                int customerUserID =
+                    Convert.ToInt32(
+                        actionInfo["UserID"]);
+
+                decimal lateFee = 0m;
+                int daysOverdue = 0;
+
+                using (SqlConnection con =
+                    new SqlConnection(ConnectionString))
+                using (SqlCommand cmd =
+                    CreateProcedure(
+                        "dbo.EBorrowLog_WebPostReturn",
+                        con))
+                {
+                    cmd.Parameters.Add(
+                        "@BorrowLogID",
+                        SqlDbType.Int).Value = borrowLogID;
 
                     cmd.Parameters.Add(
                         "@UserID",
@@ -933,21 +947,35 @@ namespace ELibrary.Admin.Borrowing
 
                     cmd.Parameters.Add(
                         "@AdminUserID",
-                        SqlDbType.Int).Value =
-                        AdminUserID;
+                        SqlDbType.Int).Value = AdminUserID;
 
                     con.Open();
-                    cmd.ExecuteNonQuery();
+
+                    using (SqlDataReader reader =
+                        cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            lateFee =
+                                Convert.ToDecimal(
+                                    reader["LateFee"]);
+
+                            daysOverdue =
+                                Convert.ToInt32(
+                                    reader["DaysOverdue"]);
+                        }
+                    }
                 }
 
                 LoadBorrows();
 
                 ShowMessage(
-                    "Book return confirmed successfully " +
-                    "for borrowing #" +
+                    "Book return confirmed for borrowing #" +
                     borrowLogID +
-                    ". One available copy was restored " +
-                    "and applicable fees were processed.",
+                    ". Overdue days: " + daysOverdue +
+                    ". Late fee: " + Money(lateFee) +
+                    ". The borrowing fee was not charged again. " +
+                    "The deposit is awaiting refund processing.",
                     true);
             }
             catch (SqlException ex)
@@ -955,195 +983,100 @@ namespace ELibrary.Admin.Borrowing
                 LoadBorrows();
 
                 ShowMessage(
-                    ex.Message,
+                    "Return rejected: " + ex.Message,
                     false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 LoadBorrows();
 
                 ShowMessage(
-                    "Unable to confirm return: " +
-                    ex.Message,
+                    "Unable to confirm the return. " +
+                    "Check the borrowing record before retrying.",
                     false);
             }
         }
 
         // ==========================================
-        // LOST BOOK VALIDATION
+        // MARK LOST BOOK
         // ==========================================
 
-        protected void btnConfirmLost_Click(
-            object sender,
-            EventArgs e)
-        {
-            if (!AdminHelper.IsAdmin(Session))
-            {
-                Response.Redirect("~/Login.aspx");
-                return;
-            }
-
-            if (SelectedActionMode != "Lost" ||
-                SelectedBorrowID <= 0)
-            {
-                ShowMessage(
-                    "Please select an active borrowing first.",
-                    false);
-                return;
-            }
-
-            string reason =
-                (txtLostReason.Text ?? "").Trim();
-
-            string feeText =
-                (txtReplacementFee.Text ?? "").Trim();
-
-            if (string.IsNullOrWhiteSpace(reason))
-            {
-                ShowActionMessage(
-                    "Please enter a reason for the lost book.",
-                    false);
-                return;
-            }
-
-            if (reason.Length > 500)
-            {
-                ShowActionMessage(
-                    "Loss reason cannot exceed 500 characters.",
-                    false);
-                return;
-            }
-
-            decimal replacementFee;
-
-            if (!decimal.TryParse(
-                feeText,
-                NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture,
-                out replacementFee))
-            {
-                ShowActionMessage(
-                    "Enter a valid replacement fee, " +
-                    "for example 500.00.",
-                    false);
-                return;
-            }
-
-            if (replacementFee <= 0 ||
-                replacementFee > 99999999.99m)
-            {
-                ShowActionMessage(
-                    "Replacement fee must be greater than zero " +
-                    "and within the allowed amount.",
-                    false);
-                return;
-            }
-
-            if (decimal.Round(
-                replacementFee,
-                2) != replacementFee)
-            {
-                ShowActionMessage(
-                    "Replacement fee can have at most " +
-                    "two decimal places.",
-                    false);
-                return;
-            }
-
-            MarkCustomerBookLost(
-                SelectedBorrowID,
-                reason,
-                replacementFee);
-        }
-
-        // ==========================================
-        // PROCESS LOST BOOK
-        // ==========================================
-
-        private void MarkCustomerBookLost(
+        private void MarkLost(
             int borrowLogID,
             string reason,
             decimal replacementFee)
         {
             try
             {
+                DataRow actionInfo =
+                    GetActionInfo(borrowLogID);
+
+                if (!Convert.ToBoolean(
+                    actionInfo["CanMarkLost"]))
+                {
+                    ShowMessage(
+                        "Only active collected books can " +
+                        "be marked lost.",
+                        false);
+                    return;
+                }
+
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
                 using (SqlCommand cmd =
-                    new SqlCommand(
-                        "EBorrowLog_WebPostLost",
+                    CreateProcedure(
+                        "dbo.EBorrowLog_WebPostLost",
                         con))
                 {
-                    cmd.CommandType =
-                        CommandType.StoredProcedure;
-
                     cmd.Parameters.Add(
                         "@BorrowLogID",
-                        SqlDbType.Int).Value =
-                        borrowLogID;
+                        SqlDbType.Int).Value = borrowLogID;
 
                     cmd.Parameters.Add(
                         "@AdminUserID",
-                        SqlDbType.Int).Value =
-                        AdminUserID;
+                        SqlDbType.Int).Value = AdminUserID;
 
                     cmd.Parameters.Add(
                         "@LostReason",
                         SqlDbType.NVarChar,
-                        500).Value =
-                        reason;
+                        500).Value = reason;
 
-                    SqlParameter feeParameter =
-                        cmd.Parameters.Add(
-                            "@ReplacementFeeAmount",
-                            SqlDbType.Decimal);
-
-                    feeParameter.Precision = 10;
-                    feeParameter.Scale = 2;
-
-                    feeParameter.Value =
-                        replacementFee;
+                    AddDecimalParameter(
+                        cmd,
+                        "@ReplacementFeeAmount",
+                        replacementFee);
 
                     con.Open();
 
-                    // Existing SQL procedure manages:
-                    // 1. Collected-loan validation
-                    // 2. Duplicate-loss protection
-                    // 3. Inventory adjustment
-                    // 4. Lost-book metadata
-                    // 5. Replacement fee
-                    // 6. Audit trail and associated
-                    //    receipt behavior
                     cmd.ExecuteNonQuery();
                 }
 
-                // Active-only search excludes lost loans.
                 LoadBorrows();
 
-                ShowCompletedAction(
-                    borrowLogID,
-                    "Lost Book Recorded",
-                    "Borrowing #" +
-                    borrowLogID +
-                    " was marked lost successfully. " +
-                    "Replacement fee recorded: PHP " +
-                    replacementFee.ToString("N2") +
-                    ". Total book copies decreased by one. " +
-                    "Available copies were not deducted again. " +
-                    "No payment was recorded.");
+                ShowMessage(
+                    "Borrowing #" + borrowLogID +
+                    " was marked lost. Replacement fee: " +
+                    Money(replacementFee) +
+                    ". Total book copies were reduced by one, " +
+                    "and the refundable security deposit " +
+                    "was placed on hold.",
+                    true);
             }
             catch (SqlException ex)
             {
-                ShowActionMessage(
-                    "Unable to mark book as lost: " +
-                    ex.Message,
+                LoadBorrows();
+
+                ShowMessage(
+                    "Lost-book action rejected: " + ex.Message,
                     false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ShowActionMessage(
-                    "Unable to mark book as lost: " +
-                    ex.Message,
+                LoadBorrows();
+
+                ShowMessage(
+                    "Unable to mark this borrowing as lost. " +
+                    "Check the borrowing record before retrying.",
                     false);
             }
         }

@@ -114,6 +114,15 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.HyperLink navBorrowHistory;
 
         /// <summary>
+        /// navSettlements control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navSettlements;
+
+        /// <summary>
         /// navTransactions control.
         /// </summary>
         /// <remarks>
@@ -121,6 +130,33 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink navTransactions;
+
+        /// <summary>
+        /// navCollectDeposits control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navCollectDeposits;
+
+        /// <summary>
+        /// navRefundDeposits control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navRefundDeposits;
+
+        /// <summary>
+        /// navDepositLedger control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navDepositLedger;
 
         /// <summary>
         /// navManageUsers control.
@@ -247,6 +283,15 @@ namespace ELibrary
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink navCustomerTransactions;
+
+        /// <summary>
+        /// navCustomerDepositLedger control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navCustomerDepositLedger;
 
         /// <summary>
         /// navCustomerProfile control.

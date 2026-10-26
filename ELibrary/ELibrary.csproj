@@ -107,9 +107,13 @@
     <Content Include="Admin\Borrowing\BorrowHistory.aspx" />
     <Content Include="Admin\Borrowing\ManageBorrows.aspx" />
     <Content Include="Admin\Borrowing\OverdueBooks.aspx" />
+    <Content Include="Admin\Borrowing\Settlements.aspx" />
     <Content Include="Admin\Borrowing\WalkInBorrow.aspx" />
+    <Content Include="Admin\Transactions\CollectDeposits.aspx" />
+    <Content Include="Admin\Transactions\DepositLedger.aspx" />
     <Content Include="Admin\Transactions\ManageTransactions.aspx" />
     <Content Include="Admin\Transactions\PayTransactions.aspx" />
+    <Content Include="Admin\Transactions\RefundDeposits.aspx" />
     <Content Include="Admin\Users\ManageUsers.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -266,12 +270,33 @@
     <Compile Include="Admin\Borrowing\OverdueBooks.aspx.designer.cs">
       <DependentUpon>OverdueBooks.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Admin\Borrowing\Settlements.aspx.cs">
+      <DependentUpon>Settlements.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Borrowing\Settlements.aspx.designer.cs">
+      <DependentUpon>Settlements.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Admin\Borrowing\WalkInBorrow.aspx.cs">
       <DependentUpon>WalkInBorrow.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Admin\Borrowing\WalkInBorrow.aspx.designer.cs">
       <DependentUpon>WalkInBorrow.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Transactions\CollectDeposits.aspx.cs">
+      <DependentUpon>CollectDeposits.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Transactions\CollectDeposits.aspx.designer.cs">
+      <DependentUpon>CollectDeposits.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Transactions\DepositLedger.aspx.cs">
+      <DependentUpon>DepositLedger.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Transactions\DepositLedger.aspx.designer.cs">
+      <DependentUpon>DepositLedger.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Transactions\ManageTransactions.aspx.cs">
       <DependentUpon>ManageTransactions.aspx</DependentUpon>
@@ -286,6 +311,13 @@
     </Compile>
     <Compile Include="Admin\Transactions\PayTransactions.aspx.designer.cs">
       <DependentUpon>PayTransactions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Transactions\RefundDeposits.aspx.cs">
+      <DependentUpon>RefundDeposits.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Transactions\RefundDeposits.aspx.designer.cs">
+      <DependentUpon>RefundDeposits.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Users\ManageUsers.aspx.cs">
       <DependentUpon>ManageUsers.aspx</DependentUpon>
