@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
+        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+	<AutoRefresh>0</AutoRefresh>
+	<DataSources>
+		<DataSource Name="SecurityDepositsSource">
+			<ConnectionProperties>
+				<DataProvider>System.Data.DataSet</DataProvider>
+				<ConnectString>Local Report Data</ConnectString>
+			</ConnectionProperties>
+			<rd:DataSourceID>f819801e-0ae8-42bf-a2a1-55738e9f2002</rd:DataSourceID>
+		</DataSource>
+	</DataSources>
+
+	<DataSets>
+		<DataSet Name="SecurityDepositsDataSet">
+			<Fields>
+				<Field Name="TransactionDate">
+					<DataField>TransactionDate</DataField>
+					<rd:TypeName>System.DateTime</rd:TypeName>
+				</Field>
+				<Field Name="ReferenceNo">
+					<DataField>ReferenceNo</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="BookTitle">
+					<DataField>BookTitle</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="CustomerName">
+					<DataField>CustomerName</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="TransactionType">
+					<DataField>TransactionType</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="PaymentMethod">
+					<DataField>PaymentMethod</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="ProcessedBy">
+					<DataField>ProcessedBy</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="SignedAmount">
+					<DataField>SignedAmount</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+			</Fields>
+			<Query>
+				<DataSourceName>SecurityDepositsSource</DataSourceName>
+				<CommandText>Local Report Data</CommandText>
+			</Query>
+		</DataSet>
+	</DataSets>
+
+	<Body>
+		<ReportItems>
+			<Textbox Name="txtBrand">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>ELIBRARY / SECURITY DEPOSIT REPORTS</Value>
+								<Style>
+									<FontFamily>Segoe UI</FontFamily>
+									<FontSize>9pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>0.1in</Top>
+				<Left>0.1in</Left>
+				<Height>0.25in</Height>
+				<Width>8in</Width>
+				<Style/>
+			</Textbox>
+
+			<Textbox Name="txtTitle">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>Security Deposit Transactions</Value>
+								<Style>
+									<FontFamily>Segoe UI</FontFamily>
+									<FontSize>20pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>0.45in</Top>
+				<Left>0.1in</Left>
+				<Height>0.5in</Height>
+				<Width>8.9in</Width>
+				<Style/>
+			</Textbox>
+
+			<Textbox Name="txtPeriod">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>="Transaction period: " &amp; Parameters!Period.Value</Value>
+								<Style>
+									<FontSize>10pt</FontSize>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.05in</Top>
+				<Left>0.1in</Left>
+				<Height>0.3in</Height>
+				<Width>8.9in</Width>
+				<Style/>
+			</Textbox>
+
+			<Textbox Name="txtFilters">
+				<CanGrow>true</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!Filters.Value</Value>
+								<Style>
+									<FontSize>9pt</FontSize>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.42in</Top>
+				<Left>0.1in</Left>
+				<Height>0.34in</Height>
+				<Width>8.9in</Width>
+				<Style/>
+			</Textbox>
+
+			<Textbox Name="txtSummary">
+				<CanGrow>true</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>="Collected: " &amp; Parameters!TotalCollected.Value &amp; "     Refunded: " &amp; Parameters!TotalRefunded.Value &amp; "     Net Movement: " &amp; Parameters!NetMovement.Value</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.88in</Top>
+				<Left>0.1in</Left>
+				<Height>0.37in</Height>
+				<Width>8.9in</Width>
+				<Style/>
+			</Textbox>
+
+			<Tablix Name="tblSecurityDeposits">
+				<TablixBody>
+					<TablixColumns>
+						<TablixColumn>
+							<Width>1.05in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.3in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.75in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.5in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.0in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.1in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.1in</Width>
+						</TablixColumn>
+					</TablixColumns>
+
+					<TablixRows>
+						<TablixRow>
+							<Height>0.43in</Height>
+							<TablixCells>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hDate">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>DATE</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>5pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hReference">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>REFERENCE</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>5pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hBook">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>BOOK TITLE</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>5pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hCustomer">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>CUSTOMER</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>5pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hType">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>TYPE</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>5pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hMethod">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>METHOD</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>5pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hAmount">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>AMOUNT</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingRight>5pt</PaddingRight>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+							</TablixCells>
+						</TablixRow>
+
+						<TablixRow>
+							<Height>0.44in</Height>
+							<TablixCells>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vDate">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!TransactionDate.Value,"MM/dd/yyyy")</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vReference">
+											<CanGrow>true</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!ReferenceNo.Value</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<Color>#647F89</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vBook">
+											<CanGrow>true</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!BookTitle.Value</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vCustomer">
+											<CanGrow>true</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!CustomerName.Value</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vType">
+											<CanGrow>true</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!TransactionType.Value</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>=IIF(Fields!TransactionType.Value="Refund","#B94E49","#168A91")</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vMethod">
+											<CanGrow>true</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!PaymentMethod.Value</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<Color>#647F89</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vAmount">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!SignedAmount.Value,"N2")</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>=IIF(Fields!SignedAmount.Value &lt; 0,"#B94E49","#123B4A")</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>5pt</PaddingRight>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+							</TablixCells>
+						</TablixRow>
+					</TablixRows>
+				</TablixBody>
+
+				<TablixColumnHierarchy>
+					<TablixMembers>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+					</TablixMembers>
+				</TablixColumnHierarchy>
+
+				<TablixRowHierarchy>
+					<TablixMembers>
+						<TablixMember>
+							<KeepWithGroup>After</KeepWithGroup>
+							<RepeatOnNewPage>true</RepeatOnNewPage>
+						</TablixMember>
+						<TablixMember>
+							<Group Name="DepositTransactionDetails"/>
+						</TablixMember>
+					</TablixMembers>
+				</TablixRowHierarchy>
+
+				<DataSetName>SecurityDepositsDataSet</DataSetName>
+				<Top>2.48in</Top>
+				<Left>0.1in</Left>
+				<Height>0.87in</Height>
+				<Width>8.8in</Width>
+				<Style/>
+			</Tablix>
+		</ReportItems>
+		<Height>3.6in</Height>
+		<Style/>
+	</Body>
+
+	<ReportParameters>
+		<ReportParameter Name="Period">
+			<DataType>String</DataType>
+			<Prompt>Period</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="Filters">
+			<DataType>String</DataType>
+			<Prompt>Filters</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="TotalCollected">
+			<DataType>String</DataType>
+			<Prompt>Collected</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="TotalRefunded">
+			<DataType>String</DataType>
+			<Prompt>Refunded</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="NetMovement">
+			<DataType>String</DataType>
+			<Prompt>Net Movement</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="GeneratedOn">
+			<DataType>String</DataType>
+			<Prompt>Generated On</Prompt>
+		</ReportParameter>
+	</ReportParameters>
+
+	<Width>9.0in</Width>
+
+	<Page>
+		<PageFooter>
+			<Height>0.35in</Height>
+			<PrintOnFirstPage>true</PrintOnFirstPage>
+			<PrintOnLastPage>true</PrintOnLastPage>
+			<ReportItems>
+				<Textbox Name="footer">
+					<CanGrow>false</CanGrow>
+					<Paragraphs>
+						<Paragraph>
+							<TextRuns>
+								<TextRun>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Style>
+										<FontSize>8pt</FontSize>
+										<Color>#647F89</Color>
+									</Style>
+								</TextRun>
+							</TextRuns>
+							<Style/>
+						</Paragraph>
+					</Paragraphs>
+					<Top>0.08in</Top>
+					<Left>0.1in</Left>
+					<Height>0.2in</Height>
+					<Width>8in</Width>
+					<Style/>
+				</Textbox>
+			</ReportItems>
+			<Style/>
+		</PageFooter>
+		<PageHeight>8.5in</PageHeight>
+		<PageWidth>11in</PageWidth>
+		<LeftMargin>0.5in</LeftMargin>
+		<RightMargin>0.5in</RightMargin>
+		<TopMargin>0.45in</TopMargin>
+		<BottomMargin>0.45in</BottomMargin>
+		<ColumnSpacing>0.13in</ColumnSpacing>
+		<Style/>
+	</Page>
+
+	<Language>en-US</Language>
+	<rd:ReportID>2e33786d-0e14-4e31-9f2b-a6b7741a5202</rd:ReportID>
+</Report>

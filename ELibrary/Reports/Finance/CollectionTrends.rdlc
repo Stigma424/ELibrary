@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
+        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+	<AutoRefresh>0</AutoRefresh>
+	<DataSources>
+		<DataSource Name="CollectionTrendsSource">
+			<ConnectionProperties>
+				<DataProvider>System.Data.DataSet</DataProvider>
+				<ConnectString>Local Report Data</ConnectString>
+			</ConnectionProperties>
+			<rd:DataSourceID>85ce12e8-8903-4e73-810f-64de36042f7a</rd:DataSourceID>
+		</DataSource>
+	</DataSources>
+	<DataSets>
+		<DataSet Name="CollectionTrendsDataSet">
+			<Fields>
+				<Field Name="PeriodStart">
+					<DataField>PeriodStart</DataField>
+					<rd:TypeName>System.DateTime</rd:TypeName>
+				</Field>
+				<Field Name="GrossPayments">
+					<DataField>GrossPayments</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="TotalRefunds">
+					<DataField>TotalRefunds</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="NetCollections">
+					<DataField>NetCollections</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="TransactionCount">
+					<DataField>TransactionCount</DataField>
+					<rd:TypeName>System.Int32</rd:TypeName>
+				</Field>
+			</Fields>
+			<Query>
+				<DataSourceName>CollectionTrendsSource</DataSourceName>
+				<CommandText>Local Report Data</CommandText>
+			</Query>
+		</DataSet>
+	</DataSets>
+	<Body>
+		<ReportItems>
+			<Textbox Name="brand">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>ELIBRARY / FINANCIAL REPORTS</Value>
+								<Style>
+									<FontFamily>Segoe UI</FontFamily>
+									<FontSize>9pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style />
+					</Paragraph>
+				</Paragraphs>
+				<Top>0.1in</Top>
+				<Left>0.1in</Left>
+				<Height>0.25in</Height>
+				<Width>7in</Width>
+				<Style />
+			</Textbox>
+			<Textbox Name="title">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>Collection Trends Report</Value>
+								<Style>
+									<FontFamily>Segoe UI</FontFamily>
+									<FontSize>20pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style />
+					</Paragraph>
+				</Paragraphs>
+				<Top>0.45in</Top>
+				<Left>0.1in</Left>
+				<Height>0.48in</Height>
+				<Width>7in</Width>
+				<Style />
+			</Textbox>
+			<Textbox Name="period">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>="Reporting period: " &amp; Parameters!Period.Value</Value>
+								<Style>
+									<FontSize>10pt</FontSize>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style />
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.04in</Top>
+				<Left>0.1in</Left>
+				<Height>0.3in</Height>
+				<Width>7in</Width>
+				<Style />
+			</Textbox>
+			<Textbox Name="grouping">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>="Grouped by: " &amp; Parameters!Grouping.Value</Value>
+								<Style>
+									<FontSize>9pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style />
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.42in</Top>
+				<Left>0.1in</Left>
+				<Height>0.28in</Height>
+				<Width>7in</Width>
+				<Style />
+			</Textbox>
+			<Textbox Name="summary">
+				<CanGrow>true</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>="Gross: " &amp; Parameters!GrossPayments.Value &amp; "     Refunds: " &amp; Parameters!TotalRefunds.Value &amp; "     Net: " &amp; Parameters!NetCollections.Value</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style />
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.85in</Top>
+				<Left>0.1in</Left>
+				<Height>0.4in</Height>
+				<Width>7in</Width>
+				<Style />
+			</Textbox>
+			<Tablix Name="tblCollectionTrends">
+				<TablixBody>
+					<TablixColumns>
+						<TablixColumn>
+							<Width>1.3in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.45in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.4in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.5in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.25in</Width>
+						</TablixColumn>
+					</TablixColumns>
+					<TablixRows>
+						<TablixRow>
+							<Height>0.42in</Height>
+							<TablixCells>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hPeriod">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>PERIOD START</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style />
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>6pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hGross">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>GROSS PAYMENTS</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingRight>6pt</PaddingRight>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hRefunds">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>REFUNDS</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingRight>6pt</PaddingRight>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hNet">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>NET COLLECTIONS</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingRight>6pt</PaddingRight>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hCount">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>TRANSACTIONS</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingRight>6pt</PaddingRight>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+							</TablixCells>
+						</TablixRow>
+						<TablixRow>
+							<Height>0.43in</Height>
+							<TablixCells>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vPeriod">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!PeriodStart.Value,"MM/dd/yyyy")</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style />
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vGross">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!GrossPayments.Value,"N2")</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>6pt</PaddingRight>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vRefunds">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!TotalRefunds.Value,"N2")</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<Color>#B94E49</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>6pt</PaddingRight>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vNet">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!NetCollections.Value,"N2")</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>#168A91</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>6pt</PaddingRight>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="vCount">
+											<CanGrow>false</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!TransactionCount.Value</Value>
+															<Style>
+																<FontSize>9pt</FontSize>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>6pt</PaddingRight>
+												<PaddingTop>7pt</PaddingTop>
+												<PaddingBottom>7pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+							</TablixCells>
+						</TablixRow>
+					</TablixRows>
+				</TablixBody>
+				<TablixColumnHierarchy>
+					<TablixMembers>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+					</TablixMembers>
+				</TablixColumnHierarchy>
+				<TablixRowHierarchy>
+					<TablixMembers>
+						<TablixMember>
+							<KeepWithGroup>After</KeepWithGroup>
+							<RepeatOnNewPage>true</RepeatOnNewPage>
+						</TablixMember>
+						<TablixMember>
+							<Group Name="CollectionDetails"/>
+						</TablixMember>
+					</TablixMembers>
+				</TablixRowHierarchy>
+				<DataSetName>CollectionTrendsDataSet</DataSetName>
+				<Top>2.45in</Top>
+				<Left>0.1in</Left>
+				<Height>0.85in</Height>
+				<Width>6.9in</Width>
+				<Style />
+			</Tablix>
+		</ReportItems>
+		<Height>3.5in</Height>
+		<Style />
+	</Body>
+	<ReportParameters>
+		<ReportParameter Name="Period">
+			<DataType>String</DataType>
+			<Prompt>Period</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="Grouping">
+			<DataType>String</DataType>
+			<Prompt>Grouping</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="GrossPayments">
+			<DataType>String</DataType>
+			<Prompt>Payments</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="TotalRefunds">
+			<DataType>String</DataType>
+			<Prompt>Refunds</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="NetCollections">
+			<DataType>String</DataType>
+			<Prompt>Net</Prompt>
+		</ReportParameter>
+		<ReportParameter Name="GeneratedOn">
+			<DataType>String</DataType>
+			<Prompt>Generated On</Prompt>
+		</ReportParameter>
+	</ReportParameters>
+	<Width>7.15in</Width>
+	<Page>
+		<PageFooter>
+			<Height>0.35in</Height>
+			<PrintOnFirstPage>true</PrintOnFirstPage>
+			<PrintOnLastPage>true</PrintOnLastPage>
+			<ReportItems>
+				<Textbox Name="footer">
+					<CanGrow>false</CanGrow>
+					<Paragraphs>
+						<Paragraph>
+							<TextRuns>
+								<TextRun>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Style>
+										<FontSize>8pt</FontSize>
+										<Color>#647F89</Color>
+									</Style>
+								</TextRun>
+							</TextRuns>
+							<Style />
+						</Paragraph>
+					</Paragraphs>
+					<Top>0.08in</Top>
+					<Left>0.1in</Left>
+					<Height>0.2in</Height>
+					<Width>6.5in</Width>
+					<Style />
+				</Textbox>
+			</ReportItems>
+			<Style />
+		</PageFooter>
+		<PageHeight>11in</PageHeight>
+		<PageWidth>8.5in</PageWidth>
+		<LeftMargin>0.5in</LeftMargin>
+		<RightMargin>0.5in</RightMargin>
+		<TopMargin>0.45in</TopMargin>
+		<BottomMargin>0.45in</BottomMargin>
+		<ColumnSpacing>0.13in</ColumnSpacing>
+		<Style />
+	</Page>
+	<Language>en-US</Language>
+	<rd:ReportID>958693c0-d953-4f21-afc3-739e14452269</rd:ReportID>
+</Report>

@@ -457,6 +457,21 @@
                 CssClass="el-menu-link"
                 Text="Dashboard" />
 
+            <!-- ==================================
+                 REPORTING
+                 ================================== -->
+
+            <div class="el-menu-label">
+                REPORTING
+            </div>
+
+            <asp:HyperLink
+                ID="navReports"
+                runat="server"
+                NavigateUrl="~/Admin/Reports/Reports.aspx"
+                CssClass="el-menu-link"
+                Text="Reports &amp; Analytics" />
+
             <div class="el-menu-label">
                 MANAGEMENT
             </div>
@@ -986,6 +1001,13 @@
                         "el-customer-nav-open"
                     );
                 }
+
+                if (customerButton) {
+                    customerButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
             }
         });
 
@@ -998,6 +1020,11 @@
             ) {
                 customerNav.classList.remove(
                     "el-customer-nav-open"
+                );
+
+                customerButton.setAttribute(
+                    "aria-expanded",
+                    "false"
                 );
             }
 
@@ -1016,101 +1043,51 @@
         });
 
         /* ======================================
-           PATH MATCHING
+           FRIENDLY URL PAGE MATCHING
            ====================================== */
 
-        function normalize(address) {
-            try {
-                var url = new URL(
-                    address,
-                    window.location.href
-                );
-
-                return decodeURIComponent(url.pathname)
-                    .replace(/\/+/g, "/")
-                    .replace(/\/+$/, "")
-                    .toLowerCase();
-            }
-            catch (e) {
-                return "";
-            }
+        function getPageName(path) {
+            return (path || "")
+                .split("?")[0]
+                .split("#")[0]
+                .replace(/\/+$/, "")
+                .split("/")
+                .pop()
+                .toLowerCase()
+                .replace(/\.aspx$/, "");
         }
 
-        function lastParts(path, count) {
-            return path.split("/")
-                .filter(function (part) {
-                    return part.length > 0;
-                })
-                .slice(-count)
-                .join("/");
-        }
+        function isReportingPage(path) {
+            var normalized = (path || "")
+                .split("?")[0]
+                .split("#")[0]
+                .replace(/\/+/g, "/")
+                .replace(/\/+$/, "")
+                .toLowerCase();
 
-        function samePage(current, target) {
-            if (!current || !target) {
-                return false;
-            }
-
-            if (current === target) {
-                return true;
-            }
-
-            // Allow different IIS application prefixes.
-            // Require both directory and filename to match.
-            return lastParts(current, 2) ===
-                lastParts(target, 2);
-        }
-
-        function effectivePage(current) {
-            if (current.endsWith(
-                "/admin/transactions/paytransactions.aspx"
-            )) {
-                return current.replace(
-                    /paytransactions\.aspx$/,
-                    "managetransactions.aspx"
-                );
-            }
-
-            if (current.endsWith(
-                "/customer/bookdetails.aspx"
-            )) {
-                return current.replace(
-                    /bookdetails\.aspx$/,
-                    "books.aspx"
-                );
-            }
-
-            return current;
+            // Works with both:
+            // /Admin/Reports/Reports
+            // /Admin/Reports/Reports.aspx
+            // /Admin/Reports/BorrowingReport
+            // /Admin/Reports/BorrowingReport.aspx
+            return normalized.indexOf(
+                "/admin/reports/"
+            ) !== -1;
         }
 
         /* ======================================
            DETERMINE ACTIVE LINK
            ====================================== */
 
-
-
         function selectActiveLink() {
-            function getPageName(path) {
-                return path
-                    .split("?")[0]
-                    .split("#")[0]
-                    .replace(/\/+$/, "")
-                    .split("/")
-                    .pop()
-                    .toLowerCase()
-                    .replace(/\.aspx$/, "");
-            }
+            var currentPath = window.location.pathname;
+            var currentPage = getPageName(currentPath);
 
-            var currentPage = getPageName(
-                window.location.pathname
-            );
-
-            var isAdmin = !!document.querySelector(
-                ".el-ocean-sidebar"
-            );
+            var isAdmin = !!sidebar;
 
             var container = isAdmin
-                ? document.querySelector(".el-ocean-sidebar")
-                : document.getElementById("customerNav");
+                ? sidebar
+                : customerNav;
 
             if (!container) {
                 return;
@@ -1122,12 +1099,19 @@
                     : "a.el-customer-nav-link[href]"
             );
 
+            // Existing subpage mappings.
             if (isAdmin && currentPage === "paytransactions") {
                 currentPage = "managetransactions";
             }
 
             if (!isAdmin && currentPage === "bookdetails") {
                 currentPage = "books";
+            }
+
+            // Reporting directory and every report page
+            // highlight one Reports & Analytics link.
+            if (isAdmin && isReportingPage(currentPath)) {
+                currentPage = "reports";
             }
 
             var selected = null;
@@ -1138,7 +1122,30 @@
                     "el-nav-current"
                 );
 
-                link.removeAttribute("aria-current");
+                link.removeAttribute(
+                    "aria-current"
+                );
+
+                // Clear styling from any earlier selection.
+                link.style.removeProperty(
+                    "background-color"
+                );
+
+                link.style.removeProperty(
+                    "color"
+                );
+
+                link.style.removeProperty(
+                    "font-weight"
+                );
+
+                link.style.removeProperty(
+                    "border-left"
+                );
+
+                link.style.removeProperty(
+                    "border-bottom"
+                );
 
                 var linkPage = getPageName(
                     new URL(
@@ -1157,10 +1164,20 @@
             });
 
             if (!selected) {
+                document.body.setAttribute(
+                    "data-el-navigation-status",
+                    "unmatched"
+                );
+
+                document.body.removeAttribute(
+                    "data-el-navigation-active"
+                );
+
                 console.warn(
-                    "ELibrary: no match for",
+                    "ELibrary: no navigation match for",
                     currentPage
                 );
+
                 return;
             }
 
@@ -1198,7 +1215,8 @@
                     "4px solid #B8FFF0",
                     "important"
                 );
-            } else {
+            }
+            else {
                 selected.style.setProperty(
                     "border-bottom",
                     "3px solid #B8FFF0",
@@ -1222,7 +1240,11 @@
             );
         }
 
+        /* ======================================
+           INITIALIZE ACTIVE LINK FIRST
+           ====================================== */
 
+        selectActiveLink();
 
         /* ======================================
            SIDEBAR GROUPS
@@ -1257,10 +1279,8 @@
 
                 var expanded = saved === "open";
 
-                // Active link is already set before
-                // group initialization.
                 if (panel.querySelector(
-                    ".el-menu-link.el-current-page"
+                    ".el-menu-link.el-nav-current"
                 )) {
                     expanded = true;
                 }
@@ -1281,7 +1301,7 @@
                     button.classList.toggle(
                         "el-group-current",
                         !!panel.querySelector(
-                            ".el-menu-link.el-current-page"
+                            ".el-menu-link.el-nav-current"
                         )
                     );
                 }
@@ -1376,14 +1396,9 @@
         }
 
         /* ======================================
-           INITIALIZE NAVIGATION
+           RECHECK AFTER BROWSER RESTORE
            ====================================== */
 
-        // All navigation markup is above this script,
-        // so the links are already present in the DOM.
-        selectActiveLink();
-
-        // Recheck when the browser restores a page.
         window.addEventListener(
             "pageshow",
             selectActiveLink

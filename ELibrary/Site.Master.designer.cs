@@ -60,6 +60,15 @@ namespace ELibrary
         protected global::System.Web.UI.WebControls.HyperLink navAdminDashboard;
 
         /// <summary>
+        /// navReports control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink navReports;
+
+        /// <summary>
         /// navManageBooks control.
         /// </summary>
         /// <remarks>
