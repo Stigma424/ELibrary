@@ -623,21 +623,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Audit\AuditTrailSummary.rdlc" />
-    <EmbeddedResource Include="Reports\Audit\LibrarianActivity.rdlc" />
-    <EmbeddedResource Include="Reports\Borrowing\BorrowingActivity.rdlc" />
-    <EmbeddedResource Include="Reports\Borrowing\CustomerBorrowing.rdlc" />
-    <EmbeddedResource Include="Reports\Borrowing\OverdueBooks.rdlc" />
-    <EmbeddedResource Include="Reports\Borrowing\ReservationConversion.rdlc" />
-    <EmbeddedResource Include="Reports\Deposits\DepositRefundStatus.rdlc" />
-    <EmbeddedResource Include="Reports\Deposits\SecurityDeposits.rdlc" />
-    <EmbeddedResource Include="Reports\Finance\CollectionTrends.rdlc" />
-    <EmbeddedResource Include="Reports\Finance\CustomerBalances.rdlc" />
-    <EmbeddedResource Include="Reports\Finance\FeeCollections.rdlc" />
-    <EmbeddedResource Include="Reports\Finance\LostBookSettlements.rdlc" />
-    <EmbeddedResource Include="Reports\Inventory\BookInventory.rdlc" />
-    <EmbeddedResource Include="Reports\Inventory\GenrePopularity.rdlc" />
-    <EmbeddedResource Include="Reports\Inventory\MostBorrowedBooks.rdlc" />
+    <Content Include="Reports\Audit\AuditTrailSummary.rdlc" />
+    <Content Include="Reports\Audit\LibrarianActivity.rdlc" />
+    <Content Include="Reports\Borrowing\BorrowingActivity.rdlc" />
+    <Content Include="Reports\Borrowing\CustomerBorrowing.rdlc" />
+    <Content Include="Reports\Borrowing\OverdueBooks.rdlc" />
+    <Content Include="Reports\Borrowing\ReservationConversion.rdlc" />
+    <Content Include="Reports\Deposits\DepositRefundStatus.rdlc" />
+    <Content Include="Reports\Deposits\SecurityDeposits.rdlc" />
+    <Content Include="Reports\Finance\CollectionTrends.rdlc" />
+    <Content Include="Reports\Finance\CustomerBalances.rdlc" />
+    <Content Include="Reports\Finance\FeeCollections.rdlc" />
+    <Content Include="Reports\Finance\LostBookSettlements.rdlc" />
+    <Content Include="Reports\Inventory\BookInventory.rdlc" />
+    <Content Include="Reports\Inventory\GenrePopularity.rdlc" />
+    <Content Include="Reports\Inventory\MostBorrowedBooks.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
