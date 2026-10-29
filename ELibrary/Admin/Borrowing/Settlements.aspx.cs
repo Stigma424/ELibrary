@@ -355,6 +355,7 @@ namespace ELibrary.Admin.Borrowing
             try
             {
                 int cancelledCount = 0;
+                bool summaryFound = false;
 
                 using (SqlConnection con =
                     new SqlConnection(ConnectionString))
@@ -378,28 +379,94 @@ namespace ELibrary.Admin.Borrowing
                     using (SqlDataReader reader =
                         cmd.ExecuteReader())
                     {
-                        if (!reader.Read())
+                        do
                         {
-                            throw new InvalidOperationException(
-                                "Expiration procedure returned " +
-                                "no summary.");
-                        }
+                            int summaryColumn = -1;
 
-                        cancelledCount =
-                            Convert.ToInt32(
-                                reader["ReservationsCancelled"]);
+                            for (int column = 0;
+                                column < reader.FieldCount;
+                                column++)
+                            {
+                                if (string.Equals(
+                                    reader.GetName(column),
+                                    "ReservationsCancelled",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    summaryColumn = column;
+                                    break;
+                                }
+                            }
+
+                            if (summaryColumn < 0)
+                            {
+                                continue;
+                            }
+
+                            if (!reader.Read())
+                            {
+                                continue;
+                            }
+
+                            if (reader.IsDBNull(summaryColumn))
+                            {
+                                continue;
+                            }
+
+                            cancelledCount =
+                                Convert.ToInt32(
+                                    reader.GetValue(summaryColumn));
+
+                            if (cancelledCount < 0)
+                            {
+                                throw new InvalidOperationException(
+                                    "The expiration procedure returned an " +
+                                    "invalid cancellation count.");
+                            }
+
+                            summaryFound = true;
+                        }
+                        while (reader.NextResult());
                     }
                 }
 
-                lblExpirationResult.CssClass =
-                    "settle-message settle-success";
+                /*
+                 * Do not classify a missing summary as a SQL
+                 * execution failure. The procedure may have
+                 * completed changes but returned no SELECT row.
+                 *
+                 * Also do not claim a specific number of
+                 * cancellations unless SQL supplied that number.
+                 */
 
-                lblExpirationResult.Text =
-                    Server.HtmlEncode(
-                        "Processing completed. " +
-                        cancelledCount +
-                        " eligible reservations cancelled.");
+                if (summaryFound)
+                {
+                    lblExpirationResult.CssClass =
+                        "settle-message settle-success";
 
+                    lblExpirationResult.Text =
+                        Server.HtmlEncode(
+                            "Expiration processing completed. " +
+                            cancelledCount +
+                            " eligible reservations cancelled.");
+                }
+                else
+                {
+                    lblExpirationResult.CssClass =
+                        "settle-message settle-success";
+
+                    lblExpirationResult.Text =
+                        Server.HtmlEncode(
+                            "Expiration procedure finished without " +
+                            "a cancellation-count summary. " +
+                            "Verify the reservation history and " +
+                            "inventory before running it again.");
+                }
+
+                /*
+                 * Reloading the lost-book settlement grid
+                 * must not change the outcome reported for
+                 * the separate expiration operation.
+                 */
                 LoadSettlements();
             }
             catch (SqlException ex)
@@ -418,8 +485,10 @@ namespace ELibrary.Admin.Borrowing
                     "settle-message settle-danger";
 
                 lblExpirationResult.Text =
-                    "Unable to confirm expiration processing. " +
-                    "Review reservation records before retrying.";
+                    Server.HtmlEncode(
+                        "Expiration processing could not be " +
+                        "confirmed. Review reservation records " +
+                        "and database messages before retrying.");
             }
         }
 
