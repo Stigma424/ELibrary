@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report
-  xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
-  xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
-
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
+        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
 	<AutoRefresh>0</AutoRefresh>
-
 	<DataSources>
-		<DataSource Name="ELibraryBorrowingSource">
+		<DataSource Name="BorrowingSource">
 			<ConnectionProperties>
 				<DataProvider>System.Data.DataSet</DataProvider>
 				<ConnectString>Local Report Data</ConnectString>
 			</ConnectionProperties>
-			<rd:DataSourceID>0ac60c1e-d03d-4bb2-8d9c-7a1b55e97a01</rd:DataSourceID>
+			<rd:DataSourceID>62c9eb43-2911-4e08-b189-19ab56852241</rd:DataSourceID>
 		</DataSource>
 	</DataSources>
-
 	<DataSets>
 		<DataSet Name="BorrowingDataSet">
 			<Fields>
@@ -68,22 +64,20 @@
 				</Field>
 			</Fields>
 			<Query>
-				<DataSourceName>ELibraryBorrowingSource</DataSourceName>
+				<DataSourceName>BorrowingSource</DataSourceName>
 				<CommandText>Local Report Data</CommandText>
 			</Query>
 		</DataSet>
 	</DataSets>
-
 	<Body>
 		<ReportItems>
-
 			<Textbox Name="txtBrand">
 				<CanGrow>false</CanGrow>
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>ELIBRARY / ADMINISTRATION</Value>
+								<Value>ELIBRARY / BORROWING ANALYTICS</Value>
 								<Style>
 									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>9pt</FontSize>
@@ -92,17 +86,16 @@
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
 				<Top>0.12in</Top>
 				<Left>0.15in</Left>
-				<Height>0.25in</Height>
-				<Width>6.5in</Width>
-				<Style />
+				<Height>0.24in</Height>
+				<Width>7in</Width>
+				<Style/>
 			</Textbox>
-
-			<Textbox Name="txtReportTitle">
+			<Textbox Name="txtTitle">
 				<CanGrow>false</CanGrow>
 				<Paragraphs>
 					<Paragraph>
@@ -117,156 +110,313 @@
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.48in</Top>
+				<Top>0.45in</Top>
 				<Left>0.15in</Left>
-				<Height>0.48in</Height>
+				<Height>0.46in</Height>
 				<Width>7in</Width>
-				<Style />
+				<Style/>
 			</Textbox>
-
-			<Textbox Name="txtSubtitle">
-				<CanGrow>false</CanGrow>
-				<Paragraphs>
-					<Paragraph>
-						<TextRuns>
-							<TextRun>
-								<Value>Borrowing transactions and collection history</Value>
-								<Style>
-									<FontFamily>Segoe UI</FontFamily>
-									<FontSize>9pt</FontSize>
-									<Color>#647F89</Color>
-								</Style>
-							</TextRun>
-						</TextRuns>
-						<Style />
-					</Paragraph>
-				</Paragraphs>
-				<Top>1.02in</Top>
-				<Left>0.15in</Left>
-				<Height>0.24in</Height>
-				<Width>7in</Width>
-				<Style />
-			</Textbox>
-
-			<Line Name="lineTitle">
-				<Top>1.38in</Top>
-				<Left>0.15in</Left>
-				<Height>0in</Height>
-				<Width>7.05in</Width>
-				<Style>
-					<Border>
-						<Color>#168A91</Color>
-						<Style>Solid</Style>
-						<Width>2pt</Width>
-					</Border>
-				</Style>
-			</Line>
-
-			<Textbox Name="txtPeriodHeading">
-				<CanGrow>false</CanGrow>
-				<Paragraphs>
-					<Paragraph>
-						<TextRuns>
-							<TextRun>
-								<Value>REPORTING PERIOD</Value>
-								<Style>
-									<FontFamily>Segoe UI</FontFamily>
-									<FontSize>8pt</FontSize>
-									<FontWeight>Bold</FontWeight>
-									<Color>#647F89</Color>
-								</Style>
-							</TextRun>
-						</TextRuns>
-						<Style />
-					</Paragraph>
-				</Paragraphs>
-				<Top>1.58in</Top>
-				<Left>0.15in</Left>
-				<Height>0.22in</Height>
-				<Width>4.5in</Width>
-				<Style />
-			</Textbox>
-
 			<Textbox Name="txtPeriod">
 				<CanGrow>false</CanGrow>
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>=Parameters!DateFrom.Value &amp; " - " &amp; Parameters!DateTo.Value</Value>
+								<Value>="Reporting period: " &amp; Parameters!DateFrom.Value &amp; " to " &amp; Parameters!DateTo.Value</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
-									<FontSize>10pt</FontSize>
-									<FontWeight>Bold</FontWeight>
-									<Color>#123B4A</Color>
+									<FontSize>9pt</FontSize>
+									<Color>#647F89</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.84in</Top>
+				<Top>1.02in</Top>
 				<Left>0.15in</Left>
-				<Height>0.27in</Height>
-				<Width>4.9in</Width>
-				<Style />
+				<Height>0.3in</Height>
+				<Width>7in</Width>
+				<Style/>
 			</Textbox>
 
-			<Textbox Name="txtCountHeading">
+			<Textbox Name="kpiTotal">
 				<CanGrow>false</CanGrow>
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>TOTAL TRANSACTIONS</Value>
+								<Value>MATCHING RECORDS</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>8pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#647F89</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style>
-							<TextAlign>Right</TextAlign>
-						</Style>
+						<Style/>
 					</Paragraph>
-				</Paragraphs>
-				<Top>1.58in</Top>
-				<Left>5.1in</Left>
-				<Height>0.22in</Height>
-				<Width>2.1in</Width>
-				<Style />
-			</Textbox>
-
-			<Textbox Name="txtCount">
-				<CanGrow>false</CanGrow>
-				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
 								<Value>=CountRows("BorrowingDataSet")</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
-									<FontSize>18pt</FontSize>
+									<FontSize>19pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.51in</Top>
+				<Left>0.15in</Left>
+				<Height>0.7in</Height>
+				<Width>1.7in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="kpiReturned">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>RETURNED</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Sum(IIF(Fields!Status.Value = "Returned",1,0),"BorrowingDataSet")</Value>
+								<Style>
+									<FontSize>19pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style>
-							<TextAlign>Right</TextAlign>
-						</Style>
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.83in</Top>
-				<Left>5.1in</Left>
-				<Height>0.4in</Height>
-				<Width>2.1in</Width>
-				<Style />
+				<Top>1.51in</Top>
+				<Left>1.92in</Left>
+				<Height>0.7in</Height>
+				<Width>1.7in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="kpiLost">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>LOST</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Sum(IIF(Fields!Status.Value = "Lost",1,0),"BorrowingDataSet")</Value>
+								<Style>
+									<FontSize>19pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#B94E49</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.51in</Top>
+				<Left>3.69in</Left>
+				<Height>0.7in</Height>
+				<Width>1.7in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="kpiCancelled">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>CANCELLED</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Sum(IIF(Fields!Status.Value = "Cancelled",1,0),"BorrowingDataSet")</Value>
+								<Style>
+									<FontSize>19pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#B46C28</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.51in</Top>
+				<Left>5.46in</Left>
+				<Height>0.7in</Height>
+				<Width>1.7in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+
+			<Textbox Name="txtChartHeading">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>BORROWING STATUS DISTRIBUTION</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>2.43in</Top>
+				<Left>0.15in</Left>
+				<Height>0.3in</Height>
+				<Width>7in</Width>
+				<Style/>
+			</Textbox>
+
+			<Chart Name="chtBorrowingStatus">
+				<ChartCategoryHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Group Name="BorrowingStatusChartGroup">
+								<GroupExpressions>
+									<GroupExpression>=Fields!ReportStatus.Value</GroupExpression>
+								</GroupExpressions>
+							</Group>
+							<SortExpressions>
+								<SortExpression>
+									<Value>=Fields!ReportStatus.Value</Value>
+								</SortExpression>
+							</SortExpressions>
+							<Label>=Fields!ReportStatus.Value</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartCategoryHierarchy>
+				<ChartSeriesHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Label>Records</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartSeriesHierarchy>
+				<ChartData>
+					<ChartSeriesCollection>
+						<ChartSeries Name="BorrowingRecords">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Count(Fields!BorrowLogID.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#168A91</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Column</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+					</ChartSeriesCollection>
+				</ChartData>
+				<ChartAreas>
+					<ChartArea Name="Default">
+						<ChartCategoryAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartCategoryAxes>
+						<ChartValueAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartValueAxes>
+						<Style/>
+					</ChartArea>
+				</ChartAreas>
+				<DataSetName>BorrowingDataSet</DataSetName>
+				<Top>2.8in</Top>
+				<Left>0.15in</Left>
+				<Height>2.15in</Height>
+				<Width>7in</Width>
+				<Style>
+					<BackgroundColor>White</BackgroundColor>
+				</Style>
+			</Chart>
+
+			<Textbox Name="txtDetailsHeading">
+				<CanGrow>false</CanGrow>
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>DETAILED BORROWING TRANSACTIONS</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>5.12in</Top>
+				<Left>0.15in</Left>
+				<Height>0.3in</Height>
+				<Width>7in</Width>
+				<Style/>
 			</Textbox>
 
 			<Tablix Name="tblBorrowingActivity">
@@ -288,15 +438,13 @@
 							<Width>1.15in</Width>
 						</TablixColumn>
 					</TablixColumns>
-
 					<TablixRows>
 						<TablixRow>
-							<Height>0.42in</Height>
+							<Height>0.38in</Height>
 							<TablixCells>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hdrDate">
+										<Textbox Name="hDate">
 											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -304,28 +452,26 @@
 														<TextRun>
 															<Value>DATE</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>White</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hdrBook">
+										<Textbox Name="hBook">
 											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -333,28 +479,26 @@
 														<TextRun>
 															<Value>BOOK TITLE</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>White</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hdrCustomer">
+										<Textbox Name="hCustomer">
 											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -362,28 +506,26 @@
 														<TextRun>
 															<Value>CUSTOMER</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>White</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hdrChannel">
+										<Textbox Name="hChannel">
 											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -391,28 +533,26 @@
 														<TextRun>
 															<Value>CHANNEL</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>White</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hdrStatus">
+										<Textbox Name="hStatus">
 											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -420,65 +560,58 @@
 														<TextRun>
 															<Value>STATUS</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>White</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 							</TablixCells>
 						</TablixRow>
-
 						<TablixRow>
-							<Height>0.43in</Height>
+							<Height>0.42in</Height>
 							<TablixCells>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="valDate">
+										<Textbox Name="vDate">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>=Format(Fields!DateBorrowed.Value, "MM/dd/yyyy")</Value>
+															<Value>=Format(Fields!DateBorrowed.Value,"MM/dd/yyyy")</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "#FFFFFF", "#F3F8F9")</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="valBook">
+										<Textbox Name="vBook">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -486,31 +619,27 @@
 														<TextRun>
 															<Value>=Fields!BookTitle.Value</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "#FFFFFF", "#F3F8F9")</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
-												<PaddingRight>5pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="valCustomer">
+										<Textbox Name="vCustomer">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -518,30 +647,26 @@
 														<TextRun>
 															<Value>=Fields!CustomerName.Value</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "#FFFFFF", "#F3F8F9")</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
-												<PaddingRight>5pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="valChannel">
+										<Textbox Name="vChannel">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -549,29 +674,26 @@
 														<TextRun>
 															<Value>=Fields!BorrowChannel.Value</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#647F89</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "#FFFFFF", "#F3F8F9")</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="valStatus">
+										<Textbox Name="vStatus">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -579,42 +701,37 @@
 														<TextRun>
 															<Value>=Fields!ReportStatus.Value</Value>
 															<Style>
-																<FontFamily>Segoe UI</FontFamily>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
-																<Color>=Switch(Fields!ReportStatus.Value = "Lost", "#B94E49", Fields!ReportStatus.Value = "Overdue", "#B46C28", Fields!ReportStatus.Value = "Completed", "#168A91", True, "#123B4A")</Color>
+																<Color>#168A91</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "#FFFFFF", "#F3F8F9")</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>8pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 							</TablixCells>
 						</TablixRow>
 					</TablixRows>
 				</TablixBody>
-
 				<TablixColumnHierarchy>
 					<TablixMembers>
-						<TablixMember />
-						<TablixMember />
-						<TablixMember />
-						<TablixMember />
-						<TablixMember />
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
+						<TablixMember/>
 					</TablixMembers>
 				</TablixColumnHierarchy>
-
 				<TablixRowHierarchy>
 					<TablixMembers>
 						<TablixMember>
@@ -622,104 +739,67 @@
 							<RepeatOnNewPage>true</RepeatOnNewPage>
 						</TablixMember>
 						<TablixMember>
-							<Group Name="Details" />
+							<Group Name="BorrowingDetailGroup"/>
 						</TablixMember>
 					</TablixMembers>
 				</TablixRowHierarchy>
-
 				<DataSetName>BorrowingDataSet</DataSetName>
-				<Top>2.4in</Top>
+				<Top>5.52in</Top>
 				<Left>0.15in</Left>
-				<Height>0.85in</Height>
+				<Height>0.8in</Height>
 				<Width>7.2in</Width>
-				<Style />
+				<Style/>
 			</Tablix>
-
 		</ReportItems>
-
-		<Height>3.5in</Height>
-		<Style />
+		<Height>6.6in</Height>
+		<Style/>
 	</Body>
-
 	<ReportParameters>
 		<ReportParameter Name="DateFrom">
 			<DataType>String</DataType>
 			<Prompt>Date From</Prompt>
 		</ReportParameter>
-
 		<ReportParameter Name="DateTo">
 			<DataType>String</DataType>
 			<Prompt>Date To</Prompt>
 		</ReportParameter>
-
 		<ReportParameter Name="GeneratedOn">
 			<DataType>String</DataType>
 			<Prompt>Generated On</Prompt>
 		</ReportParameter>
 	</ReportParameters>
-
 	<Width>7.4in</Width>
-
 	<Page>
 		<PageFooter>
-			<Height>0.45in</Height>
+			<Height>0.35in</Height>
 			<PrintOnFirstPage>true</PrintOnFirstPage>
 			<PrintOnLastPage>true</PrintOnLastPage>
-
 			<ReportItems>
-				<Textbox Name="txtFooterLeft">
+				<Textbox Name="txtFooter">
 					<CanGrow>false</CanGrow>
 					<Paragraphs>
 						<Paragraph>
 							<TextRuns>
 								<TextRun>
-									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value &amp; " | Page " &amp; Globals!PageNumber</Value>
 									<Style>
-										<FontFamily>Segoe UI</FontFamily>
 										<FontSize>8pt</FontSize>
 										<Color>#647F89</Color>
 									</Style>
 								</TextRun>
 							</TextRuns>
-							<Style />
+							<Style/>
 						</Paragraph>
 					</Paragraphs>
-					<Top>0.1in</Top>
+					<Top>0.07in</Top>
 					<Left>0.15in</Left>
-					<Height>0.22in</Height>
-					<Width>5.6in</Width>
-					<Style />
-				</Textbox>
-
-				<Textbox Name="txtFooterPage">
-					<CanGrow>false</CanGrow>
-					<Paragraphs>
-						<Paragraph>
-							<TextRuns>
-								<TextRun>
-									<Value>="Page " &amp; Globals!PageNumber &amp; " of " &amp; Globals!TotalPages</Value>
-									<Style>
-										<FontFamily>Segoe UI</FontFamily>
-										<FontSize>8pt</FontSize>
-										<Color>#647F89</Color>
-									</Style>
-								</TextRun>
-							</TextRuns>
-							<Style>
-								<TextAlign>Right</TextAlign>
-							</Style>
-						</Paragraph>
-					</Paragraphs>
-					<Top>0.1in</Top>
-					<Left>5.9in</Left>
-					<Height>0.22in</Height>
-					<Width>1.3in</Width>
-					<Style />
+					<Height>0.2in</Height>
+					<Width>7in</Width>
+					<Style/>
 				</Textbox>
 			</ReportItems>
-			<Style />
+			<Style/>
 		</PageFooter>
-
 		<PageHeight>11in</PageHeight>
 		<PageWidth>8.5in</PageWidth>
 		<LeftMargin>0.5in</LeftMargin>
@@ -727,10 +807,8 @@
 		<TopMargin>0.45in</TopMargin>
 		<BottomMargin>0.45in</BottomMargin>
 		<ColumnSpacing>0.13in</ColumnSpacing>
-		<Style />
+		<Style/>
 	</Page>
-
 	<Language>en-US</Language>
-	<rd:ReportID>c75cc90c-a5b4-4d3f-9acb-41f122e7a901</rd:ReportID>
-
+	<rd:ReportID>e6a67df4-ad4c-4ea5-a039-b35ddba44d01</rd:ReportID>
 </Report>

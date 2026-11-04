@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
-        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+ xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
 	<AutoRefresh>0</AutoRefresh>
-
 	<DataSources>
 		<DataSource Name="GenrePopularitySource">
 			<ConnectionProperties>
 				<DataProvider>System.Data.DataSet</DataProvider>
 				<ConnectString>Local Report Data</ConnectString>
 			</ConnectionProperties>
-			<rd:DataSourceID>84a560f0-8e81-4f2a-952a-f63d31463001</rd:DataSourceID>
+			<rd:DataSourceID>52c2f809-b1d2-44ac-b6d9-afe138701101</rd:DataSourceID>
 		</DataSource>
 	</DataSources>
-
 	<DataSets>
 		<DataSet Name="GenrePopularityDataSet">
 			<Fields>
@@ -26,11 +24,11 @@
 				</Field>
 				<Field Name="TitleCount">
 					<DataField>TitleCount</DataField>
-					<rd:TypeName>System.Int64</rd:TypeName>
+					<rd:TypeName>System.Int32</rd:TypeName>
 				</Field>
 				<Field Name="BorrowedTitleCount">
 					<DataField>BorrowedTitleCount</DataField>
-					<rd:TypeName>System.Int64</rd:TypeName>
+					<rd:TypeName>System.Int32</rd:TypeName>
 				</Field>
 				<Field Name="BorrowingCount">
 					<DataField>BorrowingCount</DataField>
@@ -43,17 +41,14 @@
 			</Query>
 		</DataSet>
 	</DataSets>
-
 	<Body>
 		<ReportItems>
-
-			<Textbox Name="txtBrand">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Brand">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>ELIBRARY / INVENTORY REPORTS</Value>
+								<Value>ELIBRARY / INVENTORY ANALYTICS</Value>
 								<Style>
 									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>9pt</FontSize>
@@ -66,14 +61,12 @@
 					</Paragraph>
 				</Paragraphs>
 				<Top>0.12in</Top>
-				<Left>0.1in</Left>
-				<Height>0.25in</Height>
+				<Left>0.12in</Left>
+				<Height>0.24in</Height>
 				<Width>7in</Width>
 				<Style/>
 			</Textbox>
-
-			<Textbox Name="txtTitle">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Title">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
@@ -90,20 +83,18 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.48in</Top>
-				<Left>0.1in</Left>
-				<Height>0.49in</Height>
+				<Top>0.44in</Top>
+				<Left>0.12in</Left>
+				<Height>0.48in</Height>
 				<Width>7in</Width>
 				<Style/>
 			</Textbox>
-
-			<Textbox Name="txtPeriod">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="PeriodText">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Borrowing creation period: " &amp; Parameters!Period.Value</Value>
+								<Value>=Parameters!Period.Value</Value>
 								<Style>
 									<FontSize>10pt</FontSize>
 									<Color>#647F89</Color>
@@ -113,14 +104,13 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.10in</Top>
-				<Left>0.1in</Left>
-				<Height>0.3in</Height>
-				<Width>7.2in</Width>
+				<Top>1.01in</Top>
+				<Left>0.12in</Left>
+				<Height>0.28in</Height>
+				<Width>7in</Width>
 				<Style/>
 			</Textbox>
-
-			<Textbox Name="txtFilters">
+			<Textbox Name="FilterText">
 				<CanGrow>true</CanGrow>
 				<Paragraphs>
 					<Paragraph>
@@ -128,7 +118,7 @@
 							<TextRun>
 								<Value>=Parameters!Filters.Value</Value>
 								<Style>
-									<FontSize>9pt</FontSize>
+									<FontSize>8pt</FontSize>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
@@ -136,20 +126,148 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.46in</Top>
-				<Left>0.1in</Left>
-				<Height>0.32in</Height>
-				<Width>7.2in</Width>
+				<Top>1.32in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7in</Width>
 				<Style/>
 			</Textbox>
-
-			<Textbox Name="txtTotal">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="KpiGenres">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Qualifying Borrowings: " &amp; Parameters!TotalBorrowings.Value</Value>
+								<Value>GENRES SHOWN</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountRows("GenrePopularityDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.8in</Top>
+				<Left>0.12in</Left>
+				<Height>0.75in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiBorrowings">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>TOTAL BORROWINGS</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!TotalBorrowings.Value</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.8in</Top>
+				<Left>1.94in</Left>
+				<Height>0.75in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiBorrowedTitles">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>BORROWED TITLES</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Sum(Fields!BorrowedTitleCount.Value,"GenrePopularityDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.8in</Top>
+				<Left>3.76in</Left>
+				<Height>0.75in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiLeading">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>TOP GENRE</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=First(Fields!GenreName.Value,"GenrePopularityDataSet")</Value>
 								<Style>
 									<FontSize>12pt</FontSize>
 									<FontWeight>Bold</FontWeight>
@@ -160,21 +278,134 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.9in</Top>
-				<Left>0.1in</Left>
-				<Height>0.36in</Height>
-				<Width>7in</Width>
+				<Top>1.8in</Top>
+				<Left>5.58in</Left>
+				<Height>0.75in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="ChartHeading">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>BORROWING VOLUME BY GENRE</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>2.78in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.1in</Width>
 				<Style/>
 			</Textbox>
-
-			<Tablix Name="tblGenrePopularity">
+			<Chart Name="GenrePopularityChart">
+				<ChartCategoryHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Group Name="GenreChartCategory">
+								<GroupExpressions>
+									<GroupExpression>=Fields!GenreName.Value</GroupExpression>
+								</GroupExpressions>
+							</Group>
+							<SortExpressions>
+								<SortExpression>
+									<Value>=Sum(Fields!BorrowingCount.Value)</Value>
+									<Direction>Descending</Direction>
+								</SortExpression>
+							</SortExpressions>
+							<Label>=Fields!GenreName.Value</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartCategoryHierarchy>
+				<ChartSeriesHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Label>Borrowings</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartSeriesHierarchy>
+				<ChartData>
+					<ChartSeriesCollection>
+						<ChartSeries Name="GenreBorrowings">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Sum(Fields!BorrowingCount.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#168A91</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Bar</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+					</ChartSeriesCollection>
+				</ChartData>
+				<ChartAreas>
+					<ChartArea Name="Default">
+						<ChartCategoryAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartCategoryAxes>
+						<ChartValueAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartValueAxes>
+						<Style/>
+					</ChartArea>
+				</ChartAreas>
+				<DataSetName>GenrePopularityDataSet</DataSetName>
+				<Top>3.15in</Top>
+				<Left>0.12in</Left>
+				<Height>2.3in</Height>
+				<Width>7.13in</Width>
+				<Style/>
+			</Chart>
+			<Textbox Name="DetailsHeading">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>GENRE POPULARITY RANKING</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>5.63in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.1in</Width>
+				<Style/>
+			</Textbox>
+			<Tablix Name="GenreRankingTable">
 				<TablixBody>
 					<TablixColumns>
 						<TablixColumn>
-							<Width>0.6in</Width>
+							<Width>0.75in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>2.5in</Width>
+							<Width>2.55in</Width>
 						</TablixColumn>
 						<TablixColumn>
 							<Width>1.25in</Width>
@@ -183,18 +414,16 @@
 							<Width>1.35in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.45in</Width>
+							<Width>1.25in</Width>
 						</TablixColumn>
 					</TablixColumns>
-
 					<TablixRows>
 						<TablixRow>
-							<Height>0.43in</Height>
+							<Height>0.39in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
 										<Textbox Name="hRank">
-											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -212,22 +441,20 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
 												<PaddingLeft>5pt</PaddingLeft>
+												<VerticalAlign>Middle</VerticalAlign>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
 										<Textbox Name="hGenre">
-											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>GENRE</Value>
+															<Value>GENRE NAME</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
@@ -240,22 +467,20 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
 										<Textbox Name="hTitles">
-											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>TITLES</Value>
+															<Value>TOTAL TITLES</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
@@ -263,24 +488,20 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style>
-														<TextAlign>Right</TextAlign>
-													</Style>
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hActiveTitles">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="hBorrowedTitles">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -293,24 +514,20 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style>
-														<TextAlign>Right</TextAlign>
-													</Style>
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hBorrowings">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="hCount">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -323,29 +540,25 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style>
-														<TextAlign>Right</TextAlign>
-													</Style>
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 							</TablixCells>
 						</TablixRow>
-
 						<TablixRow>
 							<Height>0.44in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vRank">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="dRank">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -362,18 +575,16 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
 												<PaddingLeft>5pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<PaddingTop>6pt</PaddingTop>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vGenre">
+										<Textbox Name="dGenre">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -381,7 +592,7 @@
 														<TextRun>
 															<Value>=Fields!GenreName.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#123B4A</Color>
 															</Style>
@@ -391,101 +602,85 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vTitles">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="dTitles">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Fields!TitleCount.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style>
-														<TextAlign>Right</TextAlign>
-													</Style>
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vActiveTitles">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="dBorrowedTitles">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Fields!BorrowedTitleCount.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style>
-														<TextAlign>Right</TextAlign>
-													</Style>
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
-
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vBorrowings">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="dCount">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Fields!BorrowingCount.Value</Value>
 															<Style>
-																<FontSize>10pt</FontSize>
+																<FontSize>9pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#168A91</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style>
-														<TextAlign>Right</TextAlign>
-													</Style>
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -494,7 +689,6 @@
 						</TablixRow>
 					</TablixRows>
 				</TablixBody>
-
 				<TablixColumnHierarchy>
 					<TablixMembers>
 						<TablixMember/>
@@ -504,7 +698,6 @@
 						<TablixMember/>
 					</TablixMembers>
 				</TablixColumnHierarchy>
-
 				<TablixRowHierarchy>
 					<TablixMembers>
 						<TablixMember>
@@ -512,24 +705,21 @@
 							<RepeatOnNewPage>true</RepeatOnNewPage>
 						</TablixMember>
 						<TablixMember>
-							<Group Name="GenreDetailGroup"/>
+							<Group Name="GenreDetailsGroup"/>
 						</TablixMember>
 					</TablixMembers>
 				</TablixRowHierarchy>
-
 				<DataSetName>GenrePopularityDataSet</DataSetName>
-				<Top>2.49in</Top>
-				<Left>0.1in</Left>
-				<Height>0.87in</Height>
+				<Top>6.03in</Top>
+				<Left>0.12in</Left>
+				<Height>0.83in</Height>
 				<Width>7.15in</Width>
 				<Style/>
 			</Tablix>
 		</ReportItems>
-
-		<Height>3.6in</Height>
+		<Height>7.15in</Height>
 		<Style/>
 	</Body>
-
 	<ReportParameters>
 		<ReportParameter Name="Period">
 			<DataType>String</DataType>
@@ -541,29 +731,26 @@
 		</ReportParameter>
 		<ReportParameter Name="TotalBorrowings">
 			<DataType>String</DataType>
-			<Prompt>Borrowings</Prompt>
+			<Prompt>Total Borrowings</Prompt>
 		</ReportParameter>
 		<ReportParameter Name="GeneratedOn">
 			<DataType>String</DataType>
 			<Prompt>Generated On</Prompt>
 		</ReportParameter>
 	</ReportParameters>
-
 	<Width>7.4in</Width>
-
 	<Page>
 		<PageFooter>
 			<Height>0.35in</Height>
 			<PrintOnFirstPage>true</PrintOnFirstPage>
 			<PrintOnLastPage>true</PrintOnLastPage>
 			<ReportItems>
-				<Textbox Name="footer">
-					<CanGrow>false</CanGrow>
+				<Textbox Name="Footer">
 					<Paragraphs>
 						<Paragraph>
 							<TextRuns>
 								<TextRun>
-									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value &amp; " | Page " &amp; Globals!PageNumber</Value>
 									<Style>
 										<FontSize>8pt</FontSize>
 										<Color>#647F89</Color>
@@ -573,10 +760,10 @@
 							<Style/>
 						</Paragraph>
 					</Paragraphs>
-					<Top>0.08in</Top>
-					<Left>0.1in</Left>
-					<Height>0.2in</Height>
-					<Width>6.6in</Width>
+					<Top>0.07in</Top>
+					<Left>0.12in</Left>
+					<Height>0.22in</Height>
+					<Width>7.1in</Width>
 					<Style/>
 				</Textbox>
 			</ReportItems>
@@ -591,7 +778,6 @@
 		<ColumnSpacing>0.13in</ColumnSpacing>
 		<Style/>
 	</Page>
-
 	<Language>en-US</Language>
-	<rd:ReportID>3ba90816-60d0-418c-aea3-811eeb93b001</rd:ReportID>
+	<rd:ReportID>3d78fac5-f55a-49bb-9486-c267d6a35f09</rd:ReportID>
 </Report>

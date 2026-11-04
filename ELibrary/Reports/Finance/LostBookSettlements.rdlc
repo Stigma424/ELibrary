@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
-        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
 	<AutoRefresh>0</AutoRefresh>
 	<DataSources>
 		<DataSource Name="LostBooksSource">
@@ -51,77 +50,72 @@
 	</DataSets>
 	<Body>
 		<ReportItems>
-			<Textbox Name="txtBrand">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Brand">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>ELIBRARY / FINANCIAL REPORTS</Value>
+								<Value>ELIBRARY / FINANCIAL ANALYTICS</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>9pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.1in</Top>
-				<Left>0.1in</Left>
+				<Top>0.12in</Top>
+				<Left>0.12in</Left>
 				<Height>0.25in</Height>
-				<Width>8in</Width>
-				<Style />
+				<Width>9in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtTitle">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Title">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
 								<Value>Lost Book Settlements</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>20pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#123B4A</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
 				<Top>0.45in</Top>
-				<Left>0.1in</Left>
-				<Height>0.49in</Height>
-				<Width>8in</Width>
-				<Style />
+				<Left>0.12in</Left>
+				<Height>0.48in</Height>
+				<Width>9in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtPeriod">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Period">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Lost-book period: " &amp; Parameters!Period.Value</Value>
+								<Value>=Parameters!Period.Value</Value>
 								<Style>
 									<FontSize>10pt</FontSize>
 									<Color>#647F89</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.05in</Top>
-				<Left>0.1in</Left>
+				<Top>1.08in</Top>
+				<Left>0.12in</Left>
 				<Height>0.28in</Height>
-				<Width>8in</Width>
-				<Style />
+				<Width>9in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtFilters">
+			<Textbox Name="Filters">
 				<CanGrow>true</CanGrow>
 				<Paragraphs>
 					<Paragraph>
@@ -134,47 +128,289 @@
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.4in</Top>
-				<Left>0.1in</Left>
-				<Height>0.32in</Height>
-				<Width>8.2in</Width>
-				<Style />
+				<Top>1.43in</Top>
+				<Left>0.12in</Left>
+				<Height>0.33in</Height>
+				<Width>9in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtTotal">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="KpiCases">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Current outstanding balance: " &amp; Parameters!OutstandingTotal.Value</Value>
+								<Value>LOST BOOK CASES</Value>
 								<Style>
-									<FontSize>13pt</FontSize>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountRows("LostBookSettlementsDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.94in</Top>
+				<Left>0.12in</Left>
+				<Height>0.75in</Height>
+				<Width>2.1in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiCharges">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>TOTAL CHARGES</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Format(Sum(Fields!TotalCharges.Value,"LostBookSettlementsDataSet"),"N2")</Value>
+								<Style>
+									<FontSize>16pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.94in</Top>
+				<Left>2.4in</Left>
+				<Height>0.75in</Height>
+				<Width>2.1in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiPaid">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>TOTAL PAID</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Format(Sum(Fields!TotalPaid.Value,"LostBookSettlementsDataSet"),"N2")</Value>
+								<Style>
+									<FontSize>16pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.82in</Top>
-				<Left>0.1in</Left>
-				<Height>0.38in</Height>
-				<Width>8.5in</Width>
-				<Style />
+				<Top>1.94in</Top>
+				<Left>4.68in</Left>
+				<Height>0.75in</Height>
+				<Width>2.1in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
 			</Textbox>
-
-			<Tablix Name="tblLostBooks">
+			<Textbox Name="KpiOutstanding">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>OUTSTANDING</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!OutstandingTotal.Value</Value>
+								<Style>
+									<FontSize>16pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#B94E49</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.94in</Top>
+				<Left>6.96in</Left>
+				<Height>0.75in</Height>
+				<Width>2.1in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="ChartTitle">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>SETTLEMENT CASES BY STATUS</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>2.9in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>9in</Width>
+				<Style/>
+			</Textbox>
+			<Chart Name="SettlementStatusChart">
+				<ChartCategoryHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Group Name="SettlementCategory">
+								<GroupExpressions>
+									<GroupExpression>=Fields!SettlementStatus.Value</GroupExpression>
+								</GroupExpressions>
+							</Group>
+							<Label>=Fields!SettlementStatus.Value</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartCategoryHierarchy>
+				<ChartSeriesHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Label>Cases</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartSeriesHierarchy>
+				<ChartData>
+					<ChartSeriesCollection>
+						<ChartSeries Name="Cases">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Count(Fields!BookTitle.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#168A91</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Column</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+					</ChartSeriesCollection>
+				</ChartData>
+				<ChartAreas>
+					<ChartArea Name="Default">
+						<ChartCategoryAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartCategoryAxes>
+						<ChartValueAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartValueAxes>
+						<Style/>
+					</ChartArea>
+				</ChartAreas>
+				<DataSetName>LostBookSettlementsDataSet</DataSetName>
+				<Top>3.25in</Top>
+				<Left>0.12in</Left>
+				<Height>2.0in</Height>
+				<Width>8.95in</Width>
+				<Style/>
+			</Chart>
+			<Textbox Name="DetailsTitle">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>LOST BOOK SETTLEMENT DETAILS</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>5.43in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>9in</Width>
+				<Style/>
+			</Textbox>
+			<Tablix Name="LostBookTable">
 				<TablixBody>
 					<TablixColumns>
 						<TablixColumn>
-							<Width>2in</Width>
+							<Width>1.05in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.6in</Width>
+							<Width>1.7in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.55in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.1in</Width>
 						</TablixColumn>
 						<TablixColumn>
 							<Width>1.1in</Width>
@@ -183,20 +419,42 @@
 							<Width>1.1in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.1in</Width>
-						</TablixColumn>
-						<TablixColumn>
-							<Width>1.4in</Width>
+							<Width>1.15in</Width>
 						</TablixColumn>
 					</TablixColumns>
 					<TablixRows>
 						<TablixRow>
-							<Height>0.42in</Height>
+							<Height>0.4in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hBook">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HLostDate">
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>LOST DATE</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<VerticalAlign>Middle</VerticalAlign>
+												<PaddingLeft>4pt</PaddingLeft>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="HBook">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -209,21 +467,20 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>4pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hCustomer">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HCustomer">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -236,21 +493,20 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>4pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hCharges">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HCharges">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -271,15 +527,14 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>5pt</PaddingRight>
+												<PaddingRight>4pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hPaid">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HPaid">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -300,22 +555,21 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>5pt</PaddingRight>
+												<PaddingRight>4pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hBalance">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HOutstanding">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>BALANCE</Value>
+															<Value>OUTSTANDING</Value>
 															<Style>
-																<FontSize>8pt</FontSize>
+																<FontSize>7pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>White</Color>
 															</Style>
@@ -329,20 +583,19 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>5pt</PaddingRight>
+												<PaddingRight>4pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hStatus">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HStatus">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>SETTLEMENT</Value>
+															<Value>STATUS</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
@@ -350,13 +603,13 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>4pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -364,11 +617,37 @@
 							</TablixCells>
 						</TablixRow>
 						<TablixRow>
-							<Height>0.43in</Height>
+							<Height>0.44in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vBook">
+										<Textbox Name="DLostDate">
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Format(Fields!LostDate.Value,"MM/dd/yyyy")</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>4pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="DBook">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -376,27 +655,27 @@
 														<TextRun>
 															<Value>=Fields!BookTitle.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>4pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vCustomer">
+										<Textbox Name="DCustomer">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -404,34 +683,33 @@
 														<TextRun>
 															<Value>=Fields!CustomerName.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>4pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vCharges">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DCharges">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Format(Fields!TotalCharges.Value,"N2")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
@@ -442,25 +720,24 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>5pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>4pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vPaid">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DPaid">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Format(Fields!TotalPaid.Value,"N2")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#168A91</Color>
 															</Style>
 														</TextRun>
@@ -471,25 +748,24 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>5pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>4pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vBalance">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DOutstanding">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Format(Fields!OutstandingBalance.Value,"N2")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#B94E49</Color>
 															</Style>
@@ -501,17 +777,17 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>5pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>4pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vStatus">
+										<Textbox Name="DStatus">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -520,19 +796,18 @@
 															<Value>=Fields!SettlementStatus.Value</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
-																<FontWeight>Bold</FontWeight>
-																<Color>=IIF(Fields!SettlementStatus.Value = "Fully Paid","#168A91","#B46C28")</Color>
+																<Color>#168A91</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>4pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -543,6 +818,7 @@
 				</TablixBody>
 				<TablixColumnHierarchy>
 					<TablixMembers>
+						<TablixMember/>
 						<TablixMember/>
 						<TablixMember/>
 						<TablixMember/>
@@ -563,15 +839,15 @@
 					</TablixMembers>
 				</TablixRowHierarchy>
 				<DataSetName>LostBookSettlementsDataSet</DataSetName>
-				<Top>2.45in</Top>
-				<Left>0.1in</Left>
-				<Height>0.85in</Height>
-				<Width>8.3in</Width>
-				<Style />
+				<Top>5.81in</Top>
+				<Left>0.12in</Left>
+				<Height>0.84in</Height>
+				<Width>8.75in</Width>
+				<Style/>
 			</Tablix>
 		</ReportItems>
-		<Height>3.5in</Height>
-		<Style />
+		<Height>6.95in</Height>
+		<Style/>
 	</Body>
 	<ReportParameters>
 		<ReportParameter Name="Period">
@@ -588,50 +864,49 @@
 		</ReportParameter>
 		<ReportParameter Name="GeneratedOn">
 			<DataType>String</DataType>
-			<Prompt>Generated On</Prompt>
+			<Prompt>Generated</Prompt>
 		</ReportParameter>
 	</ReportParameters>
-	<Width>8.5in</Width>
+	<Width>9.15in</Width>
 	<Page>
 		<PageFooter>
 			<Height>0.35in</Height>
 			<PrintOnFirstPage>true</PrintOnFirstPage>
 			<PrintOnLastPage>true</PrintOnLastPage>
 			<ReportItems>
-				<Textbox Name="footer">
-					<CanGrow>false</CanGrow>
+				<Textbox Name="Footer">
 					<Paragraphs>
 						<Paragraph>
 							<TextRuns>
 								<TextRun>
-									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value &amp; " | Page " &amp; Globals!PageNumber</Value>
 									<Style>
 										<FontSize>8pt</FontSize>
 										<Color>#647F89</Color>
 									</Style>
 								</TextRun>
 							</TextRuns>
-							<Style />
+							<Style/>
 						</Paragraph>
 					</Paragraphs>
-					<Top>0.08in</Top>
-					<Left>0.1in</Left>
-					<Height>0.2in</Height>
-					<Width>7in</Width>
-					<Style />
+					<Top>0.07in</Top>
+					<Left>0.12in</Left>
+					<Height>0.22in</Height>
+					<Width>8.7in</Width>
+					<Style/>
 				</Textbox>
 			</ReportItems>
-			<Style />
+			<Style/>
 		</PageFooter>
 		<PageHeight>8.5in</PageHeight>
 		<PageWidth>11in</PageWidth>
-		<LeftMargin>0.65in</LeftMargin>
-		<RightMargin>0.65in</RightMargin>
+		<LeftMargin>0.5in</LeftMargin>
+		<RightMargin>0.5in</RightMargin>
 		<TopMargin>0.45in</TopMargin>
 		<BottomMargin>0.45in</BottomMargin>
 		<ColumnSpacing>0.13in</ColumnSpacing>
-		<Style />
+		<Style/>
 	</Page>
 	<Language>en-US</Language>
-	<rd:ReportID>149bde01-c276-4d63-b6fa-37825b488321</rd:ReportID>
+	<rd:ReportID>d4c546b0-360d-4df2-9563-d52ff042ab15</rd:ReportID>
 </Report>

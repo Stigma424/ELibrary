@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
-        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
 	<AutoRefresh>0</AutoRefresh>
 	<DataSources>
 		<DataSource Name="CollectionTrendsSource">
@@ -43,83 +42,77 @@
 	</DataSets>
 	<Body>
 		<ReportItems>
-			<Textbox Name="brand">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Brand">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>ELIBRARY / FINANCIAL REPORTS</Value>
+								<Value>ELIBRARY / FINANCIAL ANALYTICS</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>9pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.1in</Top>
-				<Left>0.1in</Left>
+				<Top>0.12in</Top>
+				<Left>0.12in</Left>
 				<Height>0.25in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Width>7.2in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="title">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Title">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
 								<Value>Collection Trends Report</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>20pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#123B4A</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
 				<Top>0.45in</Top>
-				<Left>0.1in</Left>
+				<Left>0.12in</Left>
 				<Height>0.48in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Width>7.2in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="period">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Period">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Reporting period: " &amp; Parameters!Period.Value</Value>
+								<Value>=Parameters!Period.Value</Value>
 								<Style>
 									<FontSize>10pt</FontSize>
 									<Color>#647F89</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.04in</Top>
-				<Left>0.1in</Left>
-				<Height>0.3in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Top>1.08in</Top>
+				<Left>0.12in</Left>
+				<Height>0.28in</Height>
+				<Width>7.2in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="grouping">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Grouping">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Grouped by: " &amp; Parameters!Grouping.Value</Value>
+								<Value>="Grouping: " &amp; Parameters!Grouping.Value</Value>
 								<Style>
 									<FontSize>9pt</FontSize>
 									<FontWeight>Bold</FontWeight>
@@ -127,22 +120,177 @@
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.42in</Top>
-				<Left>0.1in</Left>
-				<Height>0.28in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Top>1.43in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.2in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="summary">
-				<CanGrow>true</CanGrow>
+			<Textbox Name="KpiGross">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Gross: " &amp; Parameters!GrossPayments.Value &amp; "     Refunds: " &amp; Parameters!TotalRefunds.Value &amp; "     Net: " &amp; Parameters!NetCollections.Value</Value>
+								<Value>GROSS PAYMENTS</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!GrossPayments.Value</Value>
+								<Style>
+									<FontSize>14pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>0.12in</Left>
+				<Height>0.75in</Height>
+				<Width>1.68in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiRefunds">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>TOTAL REFUNDS</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!TotalRefunds.Value</Value>
+								<Style>
+									<FontSize>14pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#B94E49</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>1.94in</Left>
+				<Height>0.75in</Height>
+				<Width>1.68in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiNet">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>NET COLLECTIONS</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!NetCollections.Value</Value>
+								<Style>
+									<FontSize>14pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>3.76in</Left>
+				<Height>0.75in</Height>
+				<Width>1.68in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiPeriods">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>REPORTING PERIODS</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountRows("CollectionTrendsDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>5.58in</Left>
+				<Height>0.75in</Height>
+				<Width>1.68in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="ChartTitle">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>GROSS PAYMENTS VS. NET COLLECTIONS</Value>
 								<Style>
 									<FontSize>11pt</FontSize>
 									<FontWeight>Bold</FontWeight>
@@ -150,42 +298,146 @@
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.85in</Top>
-				<Left>0.1in</Left>
-				<Height>0.4in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Top>2.86in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.15in</Width>
+				<Style/>
 			</Textbox>
-			<Tablix Name="tblCollectionTrends">
+			<Chart Name="CollectionLineChart">
+				<ChartCategoryHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Group Name="TrendPeriodGroup">
+								<GroupExpressions>
+									<GroupExpression>=Fields!PeriodStart.Value</GroupExpression>
+								</GroupExpressions>
+							</Group>
+							<SortExpressions>
+								<SortExpression>
+									<Value>=Fields!PeriodStart.Value</Value>
+									<Direction>Ascending</Direction>
+								</SortExpression>
+							</SortExpressions>
+							<Label>=Format(Fields!PeriodStart.Value,"MMM dd, yyyy")</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartCategoryHierarchy>
+				<ChartSeriesHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Label>Gross Payments</Label>
+						</ChartMember>
+						<ChartMember>
+							<Label>Net Collections</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartSeriesHierarchy>
+				<ChartData>
+					<ChartSeriesCollection>
+						<ChartSeries Name="GrossSeries">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Sum(Fields!GrossPayments.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#123B4A</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Line</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+						<ChartSeries Name="NetSeries">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Sum(Fields!NetCollections.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#168A91</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Line</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+					</ChartSeriesCollection>
+				</ChartData>
+				<ChartAreas>
+					<ChartArea Name="Default">
+						<ChartCategoryAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartCategoryAxes>
+						<ChartValueAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartValueAxes>
+						<Style/>
+					</ChartArea>
+				</ChartAreas>
+				<DataSetName>CollectionTrendsDataSet</DataSetName>
+				<Top>3.22in</Top>
+				<Left>0.12in</Left>
+				<Height>2.2in</Height>
+				<Width>7.14in</Width>
+				<Style/>
+			</Chart>
+			<Textbox Name="DetailsTitle">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>PERIOD-BY-PERIOD COLLECTION SUMMARY</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>5.59in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.15in</Width>
+				<Style/>
+			</Textbox>
+			<Tablix Name="CollectionTrendsTable">
 				<TablixBody>
 					<TablixColumns>
 						<TablixColumn>
-							<Width>1.3in</Width>
+							<Width>1.45in</Width>
 						</TablixColumn>
 						<TablixColumn>
 							<Width>1.45in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.4in</Width>
+							<Width>1.35in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.5in</Width>
+							<Width>1.45in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.25in</Width>
+							<Width>1.45in</Width>
 						</TablixColumn>
 					</TablixColumns>
 					<TablixRows>
 						<TablixRow>
-							<Height>0.42in</Height>
+							<Height>0.4in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hPeriod">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HPeriod">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -198,21 +450,20 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hGross">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HGross">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -233,15 +484,14 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
+												<PaddingRight>5pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hRefunds">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HRefunds">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -262,15 +512,14 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
+												<PaddingRight>5pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hNet">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HNet">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -291,15 +540,14 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
+												<PaddingRight>5pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hCount">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HCount">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -320,7 +568,7 @@
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingRight>6pt</PaddingRight>
+												<PaddingRight>5pt</PaddingRight>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -328,47 +576,44 @@
 							</TablixCells>
 						</TablixRow>
 						<TablixRow>
-							<Height>0.43in</Height>
+							<Height>0.44in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vPeriod">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DPeriod">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>=Format(Fields!PeriodStart.Value,"MM/dd/yyyy")</Value>
+															<Value>=Format(Fields!PeriodStart.Value,"MMM dd, yyyy")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
-																<FontWeight>Bold</FontWeight>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vGross">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DGross">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Format(Fields!GrossPayments.Value,"N2")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
@@ -379,25 +624,24 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>5pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vRefunds">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DRefunds">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Format(Fields!TotalRefunds.Value,"N2")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#B94E49</Color>
 															</Style>
 														</TextRun>
@@ -408,18 +652,17 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>5pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vNet">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DNet">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -438,25 +681,24 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>5pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vCount">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DCount">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
 															<Value>=Fields!TransactionCount.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
@@ -467,10 +709,10 @@
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingRight>6pt</PaddingRight>
-												<PaddingTop>7pt</PaddingTop>
-												<PaddingBottom>7pt</PaddingBottom>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingRight>5pt</PaddingRight>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -495,20 +737,20 @@
 							<RepeatOnNewPage>true</RepeatOnNewPage>
 						</TablixMember>
 						<TablixMember>
-							<Group Name="CollectionDetails"/>
+							<Group Name="TrendDetailRows"/>
 						</TablixMember>
 					</TablixMembers>
 				</TablixRowHierarchy>
 				<DataSetName>CollectionTrendsDataSet</DataSetName>
-				<Top>2.45in</Top>
-				<Left>0.1in</Left>
-				<Height>0.85in</Height>
-				<Width>6.9in</Width>
-				<Style />
+				<Top>5.96in</Top>
+				<Left>0.12in</Left>
+				<Height>0.84in</Height>
+				<Width>7.15in</Width>
+				<Style/>
 			</Tablix>
 		</ReportItems>
-		<Height>3.5in</Height>
-		<Style />
+		<Height>7.05in</Height>
+		<Style/>
 	</Body>
 	<ReportParameters>
 		<ReportParameter Name="Period">
@@ -521,7 +763,7 @@
 		</ReportParameter>
 		<ReportParameter Name="GrossPayments">
 			<DataType>String</DataType>
-			<Prompt>Payments</Prompt>
+			<Prompt>Gross</Prompt>
 		</ReportParameter>
 		<ReportParameter Name="TotalRefunds">
 			<DataType>String</DataType>
@@ -536,37 +778,36 @@
 			<Prompt>Generated On</Prompt>
 		</ReportParameter>
 	</ReportParameters>
-	<Width>7.15in</Width>
+	<Width>7.4in</Width>
 	<Page>
 		<PageFooter>
 			<Height>0.35in</Height>
 			<PrintOnFirstPage>true</PrintOnFirstPage>
 			<PrintOnLastPage>true</PrintOnLastPage>
 			<ReportItems>
-				<Textbox Name="footer">
-					<CanGrow>false</CanGrow>
+				<Textbox Name="Footer">
 					<Paragraphs>
 						<Paragraph>
 							<TextRuns>
 								<TextRun>
-									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value &amp; " | Page " &amp; Globals!PageNumber</Value>
 									<Style>
 										<FontSize>8pt</FontSize>
 										<Color>#647F89</Color>
 									</Style>
 								</TextRun>
 							</TextRuns>
-							<Style />
+							<Style/>
 						</Paragraph>
 					</Paragraphs>
-					<Top>0.08in</Top>
-					<Left>0.1in</Left>
-					<Height>0.2in</Height>
-					<Width>6.5in</Width>
-					<Style />
+					<Top>0.07in</Top>
+					<Left>0.12in</Left>
+					<Height>0.22in</Height>
+					<Width>7.1in</Width>
+					<Style/>
 				</Textbox>
 			</ReportItems>
-			<Style />
+			<Style/>
 		</PageFooter>
 		<PageHeight>11in</PageHeight>
 		<PageWidth>8.5in</PageWidth>
@@ -575,8 +816,8 @@
 		<TopMargin>0.45in</TopMargin>
 		<BottomMargin>0.45in</BottomMargin>
 		<ColumnSpacing>0.13in</ColumnSpacing>
-		<Style />
+		<Style/>
 	</Page>
 	<Language>en-US</Language>
-	<rd:ReportID>958693c0-d953-4f21-afc3-739e14452269</rd:ReportID>
+	<rd:ReportID>c7dce267-b6f0-49e5-a1c9-9f1c720a7b31</rd:ReportID>
 </Report>

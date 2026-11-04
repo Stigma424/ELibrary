@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report
- xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
- xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
 	<AutoRefresh>0</AutoRefresh>
 	<DataSources>
 		<DataSource Name="ELibraryReservationSource">
@@ -9,7 +7,7 @@
 				<DataProvider>System.Data.DataSet</DataProvider>
 				<ConnectString>Local Report Data</ConnectString>
 			</ConnectionProperties>
-			<rd:DataSourceID>52487456-5F66-4357-A3E1-523888801A96</rd:DataSourceID>
+			<rd:DataSourceID>52487456-5f66-4357-a3e1-523888801a96</rd:DataSourceID>
 		</DataSource>
 	</DataSources>
 	<DataSets>
@@ -48,83 +46,255 @@
 	</DataSets>
 	<Body>
 		<ReportItems>
-			<Textbox Name="txtBrand">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Brand">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>ELIBRARY / BORROWING REPORTS</Value>
+								<Value>ELIBRARY / RESERVATION ANALYTICS</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>9pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
 				<Top>0.12in</Top>
-				<Left>0.15in</Left>
+				<Left>0.12in</Left>
 				<Height>0.25in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Width>7.1in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtTitle">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Title">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>Reservation Conversion Report</Value>
+								<Value>Online Reservation Conversion</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
-									<FontSize>20pt</FontSize>
+									<FontSize>19pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#123B4A</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.48in</Top>
-				<Left>0.15in</Left>
-				<Height>0.48in</Height>
-				<Width>7in</Width>
-				<Style />
+				<Top>0.45in</Top>
+				<Left>0.12in</Left>
+				<Height>0.5in</Height>
+				<Width>7.2in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtPeriod">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="PeriodText">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Reservation creation period: " &amp; Parameters!Period.Value</Value>
+								<Value>=Parameters!Period.Value</Value>
 								<Style>
 									<FontSize>10pt</FontSize>
 									<Color>#647F89</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
 				<Top>1.08in</Top>
-				<Left>0.15in</Left>
+				<Left>0.12in</Left>
 				<Height>0.3in</Height>
-				<Width>7.2in</Width>
-				<Style />
+				<Width>7.1in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtSummary">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="ScopeText">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Reservations: " &amp; Parameters!TotalReservations.Value &amp; "     Collected: " &amp; Parameters!CollectedReservations.Value</Value>
+								<Value>Online reservations only. Walk-in borrowing transactions are excluded.</Value>
+								<Style>
+									<FontSize>9pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.42in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.1in</Width>
+				<Style/>
+			</Textbox>
+			<Textbox Name="KpiTotal">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>ONLINE RESERVATIONS</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!TotalReservations.Value</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>0.12in</Left>
+				<Height>0.72in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EDF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiCollected">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>COLLECTED</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!CollectedReservations.Value</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>1.94in</Left>
+				<Height>0.72in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EDF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiOthers">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>NOT CONVERTED</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountRows("ReservationConversionDataSet")-Sum(Fields!IsConverted.Value,"ReservationConversionDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#B46C28</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>3.76in</Left>
+				<Height>0.72in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EDF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiConversion">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>CONVERSION RATE</Value>
+								<Style>
+									<FontSize>7pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Parameters!ConversionRate.Value</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.9in</Top>
+				<Left>5.58in</Left>
+				<Height>0.72in</Height>
+				<Width>1.67in</Width>
+				<Style>
+					<BackgroundColor>#EDF6F7</BackgroundColor>
+					<PaddingLeft>7pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="ChartHeading">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>ONLINE RESERVATION OUTCOMES</Value>
 								<Style>
 									<FontSize>11pt</FontSize>
 									<FontWeight>Bold</FontWeight>
@@ -132,66 +302,120 @@
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.50in</Top>
-				<Left>0.15in</Left>
-				<Height>0.35in</Height>
-				<Width>7.2in</Width>
-				<Style />
+				<Top>2.84in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.1in</Width>
+				<Style/>
 			</Textbox>
-			<Textbox Name="txtRate">
-				<CanGrow>false</CanGrow>
+			<Chart Name="ReservationOutcomeChart">
+				<ChartCategoryHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Group Name="ReservationOutcomeGroup">
+								<GroupExpressions>
+									<GroupExpression>=Fields!ReservationOutcome.Value</GroupExpression>
+								</GroupExpressions>
+							</Group>
+							<Label>=Fields!ReservationOutcome.Value</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartCategoryHierarchy>
+				<ChartSeriesHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Label>Reservations</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartSeriesHierarchy>
+				<ChartData>
+					<ChartSeriesCollection>
+						<ChartSeries Name="ReservationCount">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Count(Fields!BorrowLogID.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#168A91</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Column</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+					</ChartSeriesCollection>
+				</ChartData>
+				<ChartAreas>
+					<ChartArea Name="Default">
+						<ChartCategoryAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartCategoryAxes>
+						<ChartValueAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartValueAxes>
+						<Style/>
+					</ChartArea>
+				</ChartAreas>
+				<DataSetName>ReservationConversionDataSet</DataSetName>
+				<Top>3.2in</Top>
+				<Left>0.12in</Left>
+				<Height>2.1in</Height>
+				<Width>7.13in</Width>
+				<Style/>
+			</Chart>
+			<Textbox Name="TableHeading">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Pickup Conversion Rate: " &amp; Parameters!ConversionRate.Value</Value>
+								<Value>RESERVATION DETAILS</Value>
 								<Style>
-									<FontSize>13pt</FontSize>
+									<FontSize>11pt</FontSize>
 									<FontWeight>Bold</FontWeight>
-									<Color>#168A91</Color>
+									<Color>#123B4A</Color>
 								</Style>
 							</TextRun>
 						</TextRuns>
-						<Style />
+						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.90in</Top>
-				<Left>0.15in</Left>
-				<Height>0.35in</Height>
-				<Width>7.2in</Width>
-				<Style />
+				<Top>5.48in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>7.1in</Width>
+				<Style/>
 			</Textbox>
-
-			<Tablix Name="tblReservations">
+			<Tablix Name="ReservationTable">
 				<TablixBody>
 					<TablixColumns>
 						<TablixColumn>
-							<Width>1.45in</Width>
+							<Width>1.55in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>2.15in</Width>
+							<Width>2.05in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.05in</Width>
+							<Width>1.15in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.8in</Width>
-						</TablixColumn>
-						<TablixColumn>
-							<Width>0.85in</Width>
+							<Width>2.4in</Width>
 						</TablixColumn>
 					</TablixColumns>
 					<TablixRows>
 						<TablixRow>
-							<Height>0.4in</Height>
+							<Height>0.39in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hCustomer">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HCustomer">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -204,21 +428,20 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hBook">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HBook">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -231,34 +454,7 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
-												</Paragraph>
-											</Paragraphs>
-											<Style>
-												<BackgroundColor>#123B4A</BackgroundColor>
-												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
-											</Style>
-										</Textbox>
-									</CellContents>
-								</TablixCell>
-								<TablixCell>
-									<CellContents>
-										<Textbox Name="hDate">
-											<CanGrow>false</CanGrow>
-											<Paragraphs>
-												<Paragraph>
-													<TextRuns>
-														<TextRun>
-															<Value>CREATED</Value>
-															<Style>
-																<FontSize>8pt</FontSize>
-																<FontWeight>Bold</FontWeight>
-																<Color>White</Color>
-															</Style>
-														</TextRun>
-													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
@@ -271,13 +467,12 @@
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hOutcome">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HDate">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>OUTCOME</Value>
+															<Value>DATE</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
@@ -285,26 +480,25 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hConverted">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="HOutcome">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>PICKED UP</Value>
+															<Value>RESERVATION OUTCOME</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
@@ -312,13 +506,13 @@
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>4pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -326,11 +520,11 @@
 							</TablixCells>
 						</TablixRow>
 						<TablixRow>
-							<Height>0.4in</Height>
+							<Height>0.44in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vCustomer">
+										<Textbox Name="DCustomer">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -338,71 +532,17 @@
 														<TextRun>
 															<Value>=Fields!CustomerName.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
-																<Color>#123B4A</Color>
-															</Style>
-														</TextRun>
-													</TextRuns>
-													<Style />
-												</Paragraph>
-											</Paragraphs>
-											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "White", "#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>6pt</PaddingTop>
-												<PaddingBottom>6pt</PaddingBottom>
-											</Style>
-										</Textbox>
-									</CellContents>
-								</TablixCell>
-								<TablixCell>
-									<CellContents>
-										<Textbox Name="vBook">
-											<CanGrow>true</CanGrow>
-											<Paragraphs>
-												<Paragraph>
-													<TextRuns>
-														<TextRun>
-															<Value>=Fields!BookTitle.Value</Value>
-															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "White", "#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
-												<PaddingTop>6pt</PaddingTop>
-												<PaddingBottom>6pt</PaddingBottom>
-											</Style>
-										</Textbox>
-									</CellContents>
-								</TablixCell>
-								<TablixCell>
-									<CellContents>
-										<Textbox Name="vDate">
-											<CanGrow>false</CanGrow>
-											<Paragraphs>
-												<Paragraph>
-													<TextRuns>
-														<TextRun>
-															<Value>=Format(Fields!DateBorrowed.Value, "MM/dd/yyyy")</Value>
-															<Style>
-																<FontSize>8pt</FontSize>
-																<Color>#123B4A</Color>
-															</Style>
-														</TextRun>
-													</TextRuns>
-													<Style />
-												</Paragraph>
-											</Paragraphs>
-											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "White", "#F3F8F9")</BackgroundColor>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
 												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
 												<PaddingBottom>6pt</PaddingBottom>
@@ -412,25 +552,25 @@
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vOutcome">
+										<Textbox Name="DBook">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>=Fields!ReservationOutcome.Value</Value>
+															<Value>=Fields!BookTitle.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
-																<Color>#168A91</Color>
+																<FontSize>8pt</FontSize>
+																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "White", "#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
 												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
@@ -439,26 +579,52 @@
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vConverted">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="DDate">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>=IIF(Fields!IsConverted.Value = 1, "Yes", "No")</Value>
+															<Value>=Format(Fields!DateBorrowed.Value,"MM/dd/yyyy")</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
-																<FontWeight>Bold</FontWeight>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
 													</TextRuns>
-													<Style />
+													<Style/>
 												</Paragraph>
 											</Paragraphs>
 											<Style>
-												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2 = 0, "White", "#F3F8F9")</BackgroundColor>
-												<PaddingLeft>4pt</PaddingLeft>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+												<PaddingBottom>6pt</PaddingBottom>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="DOutcome">
+											<CanGrow>true</CanGrow>
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!ReservationOutcome.Value</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>#168A91</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
 												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
@@ -475,7 +641,6 @@
 						<TablixMember/>
 						<TablixMember/>
 						<TablixMember/>
-						<TablixMember/>
 					</TablixMembers>
 				</TablixColumnHierarchy>
 				<TablixRowHierarchy>
@@ -485,20 +650,20 @@
 							<RepeatOnNewPage>true</RepeatOnNewPage>
 						</TablixMember>
 						<TablixMember>
-							<Group Name="ReservationDetails"/>
+							<Group Name="ReservationDetailRows"/>
 						</TablixMember>
 					</TablixMembers>
 				</TablixRowHierarchy>
 				<DataSetName>ReservationConversionDataSet</DataSetName>
-				<Top>2.50in</Top>
-				<Left>0.15in</Left>
-				<Height>0.8in</Height>
-				<Width>7.30in</Width>
-				<Style />
+				<Top>5.85in</Top>
+				<Left>0.12in</Left>
+				<Height>0.83in</Height>
+				<Width>7.15in</Width>
+				<Style/>
 			</Tablix>
 		</ReportItems>
-		<Height>3.45in</Height>
-		<Style />
+		<Height>6.95in</Height>
+		<Style/>
 	</Body>
 	<ReportParameters>
 		<ReportParameter Name="Period">
@@ -511,58 +676,57 @@
 		</ReportParameter>
 		<ReportParameter Name="CollectedReservations">
 			<DataType>String</DataType>
-			<Prompt>Collected Reservations</Prompt>
+			<Prompt>Collected</Prompt>
 		</ReportParameter>
 		<ReportParameter Name="ConversionRate">
 			<DataType>String</DataType>
-			<Prompt>Conversion Rate</Prompt>
+			<Prompt>Conversion</Prompt>
 		</ReportParameter>
 		<ReportParameter Name="GeneratedOn">
 			<DataType>String</DataType>
 			<Prompt>Generated On</Prompt>
 		</ReportParameter>
 	</ReportParameters>
-	<Width>7.5in</Width>
+	<Width>7.4in</Width>
 	<Page>
 		<PageFooter>
-			<Height>0.38in</Height>
+			<Height>0.35in</Height>
 			<PrintOnFirstPage>true</PrintOnFirstPage>
 			<PrintOnLastPage>true</PrintOnLastPage>
 			<ReportItems>
-				<Textbox Name="footer">
-					<CanGrow>false</CanGrow>
+				<Textbox Name="Footer">
 					<Paragraphs>
 						<Paragraph>
 							<TextRuns>
 								<TextRun>
-									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value &amp; " | Page " &amp; Globals!PageNumber</Value>
 									<Style>
 										<FontSize>8pt</FontSize>
 										<Color>#647F89</Color>
 									</Style>
 								</TextRun>
 							</TextRuns>
-							<Style />
+							<Style/>
 						</Paragraph>
 					</Paragraphs>
-					<Top>0.1in</Top>
-					<Left>0.15in</Left>
+					<Top>0.07in</Top>
+					<Left>0.12in</Left>
 					<Height>0.22in</Height>
-					<Width>6in</Width>
-					<Style />
+					<Width>7.1in</Width>
+					<Style/>
 				</Textbox>
 			</ReportItems>
-			<Style />
+			<Style/>
 		</PageFooter>
 		<PageHeight>11in</PageHeight>
 		<PageWidth>8.5in</PageWidth>
-		<LeftMargin>0.4in</LeftMargin>
-		<RightMargin>0.4in</RightMargin>
+		<LeftMargin>0.5in</LeftMargin>
+		<RightMargin>0.5in</RightMargin>
 		<TopMargin>0.45in</TopMargin>
 		<BottomMargin>0.45in</BottomMargin>
 		<ColumnSpacing>0.13in</ColumnSpacing>
-		<Style />
+		<Style/>
 	</Page>
 	<Language>en-US</Language>
-	<rd:ReportID>029D1390-38C1-4C91-973E-6056F02325B3</rd:ReportID>
+	<rd:ReportID>a6c3b31c-5156-40d6-8546-2610c4b70902</rd:ReportID>
 </Report>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
- xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
 	<AutoRefresh>0</AutoRefresh>
 	<DataSources>
 		<DataSource Name="LibrarianActivitySource">
@@ -8,7 +7,7 @@
 				<DataProvider>System.Data.DataSet</DataProvider>
 				<ConnectString>Local Report Data</ConnectString>
 			</ConnectionProperties>
-			<rd:DataSourceID>b4612166-43e1-4a93-aecb-14111e4b6301</rd:DataSourceID>
+			<rd:DataSourceID>2e3604ac-7c0d-481f-8b34-a27d6312fca1</rd:DataSourceID>
 		</DataSource>
 	</DataSources>
 	<DataSets>
@@ -43,15 +42,13 @@
 	</DataSets>
 	<Body>
 		<ReportItems>
-			<Textbox Name="brand">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Brand">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>ELIBRARY / ADMINISTRATION REPORTS</Value>
+								<Value>ELIBRARY / AUDIT ANALYTICS</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>9pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#168A91</Color>
@@ -61,21 +58,19 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.1in</Top>
-				<Left>0.1in</Left>
+				<Top>0.12in</Top>
+				<Left>0.12in</Left>
 				<Height>0.25in</Height>
-				<Width>8in</Width>
+				<Width>9in</Width>
 				<Style/>
 			</Textbox>
-			<Textbox Name="title">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Title">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
 								<Value>Librarian Activity Report</Value>
 								<Style>
-									<FontFamily>Segoe UI</FontFamily>
 									<FontSize>20pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#123B4A</Color>
@@ -85,19 +80,18 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>0.46in</Top>
-				<Left>0.1in</Left>
-				<Height>0.5in</Height>
-				<Width>8in</Width>
+				<Top>0.45in</Top>
+				<Left>0.12in</Left>
+				<Height>0.48in</Height>
+				<Width>9in</Width>
 				<Style/>
 			</Textbox>
-			<Textbox Name="period">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="Period">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Activity period: " &amp; Parameters!Period.Value</Value>
+								<Value>=Parameters!Period.Value</Value>
 								<Style>
 									<FontSize>10pt</FontSize>
 									<Color>#647F89</Color>
@@ -107,13 +101,13 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.08in</Top>
-				<Left>0.1in</Left>
-				<Height>0.29in</Height>
-				<Width>8in</Width>
+				<Top>1.07in</Top>
+				<Left>0.12in</Left>
+				<Height>0.28in</Height>
+				<Width>9in</Width>
 				<Style/>
 			</Textbox>
-			<Textbox Name="filters">
+			<Textbox Name="Filters">
 				<CanGrow>true</CanGrow>
 				<Paragraphs>
 					<Paragraph>
@@ -121,7 +115,7 @@
 							<TextRun>
 								<Value>=Parameters!Filters.Value</Value>
 								<Style>
-									<FontSize>9pt</FontSize>
+									<FontSize>8pt</FontSize>
 									<Color>#168A91</Color>
 								</Style>
 							</TextRun>
@@ -129,21 +123,33 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.48in</Top>
-				<Left>0.1in</Left>
-				<Height>0.34in</Height>
-				<Width>8in</Width>
+				<Top>1.43in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>9in</Width>
 				<Style/>
 			</Textbox>
-			<Textbox Name="count">
-				<CanGrow>false</CanGrow>
+			<Textbox Name="KpiActivities">
 				<Paragraphs>
 					<Paragraph>
 						<TextRuns>
 							<TextRun>
-								<Value>="Recorded Activities: " &amp; CountRows("LibrarianActivityDataSet")</Value>
+								<Value>LOGGED ACTIVITIES</Value>
 								<Style>
-									<FontSize>12pt</FontSize>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountRows("LibrarianActivityDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
 									<FontWeight>Bold</FontWeight>
 									<Color>#123B4A</Color>
 								</Style>
@@ -152,23 +158,251 @@
 						<Style/>
 					</Paragraph>
 				</Paragraphs>
-				<Top>1.95in</Top>
-				<Left>0.1in</Left>
-				<Height>0.35in</Height>
-				<Width>8in</Width>
+				<Top>1.93in</Top>
+				<Left>0.12in</Left>
+				<Height>0.76in</Height>
+				<Width>2.13in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiLibrarians">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>ACTIVE LIBRARIANS</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountDistinct(Fields!LibrarianName.Value,"LibrarianActivityDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.93in</Top>
+				<Left>2.42in</Left>
+				<Height>0.76in</Height>
+				<Width>2.13in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiCategories">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>ACTION CATEGORIES</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=CountDistinct(Fields!ActionCategory.Value,"LibrarianActivityDataSet")</Value>
+								<Style>
+									<FontSize>18pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#168A91</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.93in</Top>
+				<Left>4.72in</Left>
+				<Height>0.76in</Height>
+				<Width>2.13in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="KpiFirstActivity">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>EARLIEST ACTIVITY</Value>
+								<Style>
+									<FontSize>8pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#647F89</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>=Format(Min(Fields!ActionDate.Value,"LibrarianActivityDataSet"),"MMM dd, yyyy")</Value>
+								<Style>
+									<FontSize>13pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>1.93in</Top>
+				<Left>7.02in</Left>
+				<Height>0.76in</Height>
+				<Width>2.13in</Width>
+				<Style>
+					<BackgroundColor>#EFF6F7</BackgroundColor>
+					<PaddingLeft>8pt</PaddingLeft>
+					<PaddingTop>6pt</PaddingTop>
+				</Style>
+			</Textbox>
+			<Textbox Name="ChartHeading">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>LIBRARIAN ACTIONS BY CATEGORY</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>2.91in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>9in</Width>
 				<Style/>
 			</Textbox>
-			<Tablix Name="tblLibrarianActivity">
+			<Chart Name="LibrarianActivityChart">
+				<ChartCategoryHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Group Name="LibrarianActivityCategory">
+								<GroupExpressions>
+									<GroupExpression>=Fields!ActionCategory.Value</GroupExpression>
+								</GroupExpressions>
+							</Group>
+							<Label>=Fields!ActionCategory.Value</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartCategoryHierarchy>
+				<ChartSeriesHierarchy>
+					<ChartMembers>
+						<ChartMember>
+							<Label>Audit actions</Label>
+						</ChartMember>
+					</ChartMembers>
+				</ChartSeriesHierarchy>
+				<ChartData>
+					<ChartSeriesCollection>
+						<ChartSeries Name="ActivityCount">
+							<ChartDataPoints>
+								<ChartDataPoint>
+									<ChartDataPointValues>
+										<Y>=Count(Fields!LogID.Value)</Y>
+									</ChartDataPointValues>
+									<Style>
+										<Color>#168A91</Color>
+									</Style>
+								</ChartDataPoint>
+							</ChartDataPoints>
+							<Type>Column</Type>
+							<Subtype>Plain</Subtype>
+						</ChartSeries>
+					</ChartSeriesCollection>
+				</ChartData>
+				<ChartAreas>
+					<ChartArea Name="Default">
+						<ChartCategoryAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartCategoryAxes>
+						<ChartValueAxes>
+							<ChartAxis Name="Primary">
+								<Style/>
+							</ChartAxis>
+						</ChartValueAxes>
+						<Style/>
+					</ChartArea>
+				</ChartAreas>
+				<DataSetName>LibrarianActivityDataSet</DataSetName>
+				<Top>3.27in</Top>
+				<Left>0.12in</Left>
+				<Height>2.05in</Height>
+				<Width>9.03in</Width>
+				<Style/>
+			</Chart>
+			<Textbox Name="DetailsHeading">
+				<Paragraphs>
+					<Paragraph>
+						<TextRuns>
+							<TextRun>
+								<Value>DETAILED LIBRARIAN ACTION LOG</Value>
+								<Style>
+									<FontSize>11pt</FontSize>
+									<FontWeight>Bold</FontWeight>
+									<Color>#123B4A</Color>
+								</Style>
+							</TextRun>
+						</TextRuns>
+						<Style/>
+					</Paragraph>
+				</Paragraphs>
+				<Top>5.48in</Top>
+				<Left>0.12in</Left>
+				<Height>0.3in</Height>
+				<Width>9in</Width>
+				<Style/>
+			</Textbox>
+			<Tablix Name="LibrarianActivityTable">
 				<TablixBody>
 					<TablixColumns>
 						<TablixColumn>
-							<Width>1.35in</Width>
+							<Width>0.75in</Width>
+						</TablixColumn>
+						<TablixColumn>
+							<Width>1.4in</Width>
 						</TablixColumn>
 						<TablixColumn>
 							<Width>1.7in</Width>
 						</TablixColumn>
 						<TablixColumn>
-							<Width>1.5in</Width>
+							<Width>1.45in</Width>
 						</TablixColumn>
 						<TablixColumn>
 							<Width>3.5in</Width>
@@ -176,17 +410,16 @@
 					</TablixColumns>
 					<TablixRows>
 						<TablixRow>
-							<Height>0.42in</Height>
+							<Height>0.4in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hDate">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="hID">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
 														<TextRun>
-															<Value>DATE / TIME</Value>
+															<Value>LOG ID</Value>
 															<Style>
 																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
@@ -199,16 +432,41 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hStaff">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="hDate">
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>ACTION DATE</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<FontWeight>Bold</FontWeight>
+																<Color>White</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="hLibrarian">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -226,8 +484,8 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -235,7 +493,6 @@
 								<TablixCell>
 									<CellContents>
 										<Textbox Name="hCategory">
-											<CanGrow>false</CanGrow>
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -253,16 +510,15 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="hAction">
-											<CanGrow>false</CanGrow>
+										<Textbox Name="hDescription">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -280,8 +536,8 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>#123B4A</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
 												<VerticalAlign>Middle</VerticalAlign>
-												<PaddingLeft>6pt</PaddingLeft>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -289,12 +545,36 @@
 							</TablixCells>
 						</TablixRow>
 						<TablixRow>
-							<Height>0.45in</Height>
+							<Height>0.46in</Height>
 							<TablixCells>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vDate">
-											<CanGrow>true</CanGrow>
+										<Textbox Name="dID">
+											<Paragraphs>
+												<Paragraph>
+													<TextRuns>
+														<TextRun>
+															<Value>=Fields!LogID.Value</Value>
+															<Style>
+																<FontSize>8pt</FontSize>
+																<Color>#123B4A</Color>
+															</Style>
+														</TextRun>
+													</TextRuns>
+													<Style/>
+												</Paragraph>
+											</Paragraphs>
+											<Style>
+												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
+												<PaddingLeft>5pt</PaddingLeft>
+												<PaddingTop>6pt</PaddingTop>
+											</Style>
+										</Textbox>
+									</CellContents>
+								</TablixCell>
+								<TablixCell>
+									<CellContents>
+										<Textbox Name="dDate">
 											<Paragraphs>
 												<Paragraph>
 													<TextRuns>
@@ -311,16 +591,15 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
-												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vStaff">
+										<Textbox Name="dLibrarian">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -328,7 +607,7 @@
 														<TextRun>
 															<Value>=Fields!LibrarianName.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<FontWeight>Bold</FontWeight>
 																<Color>#123B4A</Color>
 															</Style>
@@ -339,16 +618,15 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
-												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vCategory">
+										<Textbox Name="dCategory">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -366,16 +644,15 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
-												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
 								</TablixCell>
 								<TablixCell>
 									<CellContents>
-										<Textbox Name="vAction">
+										<Textbox Name="dDescription">
 											<CanGrow>true</CanGrow>
 											<Paragraphs>
 												<Paragraph>
@@ -383,7 +660,7 @@
 														<TextRun>
 															<Value>=Fields!ActionDesc.Value</Value>
 															<Style>
-																<FontSize>9pt</FontSize>
+																<FontSize>8pt</FontSize>
 																<Color>#123B4A</Color>
 															</Style>
 														</TextRun>
@@ -393,9 +670,8 @@
 											</Paragraphs>
 											<Style>
 												<BackgroundColor>=IIF(RowNumber(Nothing) Mod 2=0,"White","#F3F8F9")</BackgroundColor>
-												<PaddingLeft>6pt</PaddingLeft>
+												<PaddingLeft>5pt</PaddingLeft>
 												<PaddingTop>6pt</PaddingTop>
-												<PaddingBottom>6pt</PaddingBottom>
 											</Style>
 										</Textbox>
 									</CellContents>
@@ -410,6 +686,7 @@
 						<TablixMember/>
 						<TablixMember/>
 						<TablixMember/>
+						<TablixMember/>
 					</TablixMembers>
 				</TablixColumnHierarchy>
 				<TablixRowHierarchy>
@@ -419,19 +696,19 @@
 							<RepeatOnNewPage>true</RepeatOnNewPage>
 						</TablixMember>
 						<TablixMember>
-							<Group Name="LibrarianDetails"/>
+							<Group Name="LibrarianActivityDetails"/>
 						</TablixMember>
 					</TablixMembers>
 				</TablixRowHierarchy>
 				<DataSetName>LibrarianActivityDataSet</DataSetName>
-				<Top>2.5in</Top>
-				<Left>0.1in</Left>
-				<Height>0.87in</Height>
-				<Width>8.05in</Width>
+				<Top>5.87in</Top>
+				<Left>0.12in</Left>
+				<Height>0.86in</Height>
+				<Width>8.8in</Width>
 				<Style/>
 			</Tablix>
 		</ReportItems>
-		<Height>3.6in</Height>
+		<Height>7.05in</Height>
 		<Style/>
 	</Body>
 	<ReportParameters>
@@ -448,20 +725,19 @@
 			<Prompt>Generated</Prompt>
 		</ReportParameter>
 	</ReportParameters>
-	<Width>8.3in</Width>
+	<Width>9.3in</Width>
 	<Page>
 		<PageFooter>
 			<Height>0.35in</Height>
 			<PrintOnFirstPage>true</PrintOnFirstPage>
 			<PrintOnLastPage>true</PrintOnLastPage>
 			<ReportItems>
-				<Textbox Name="footer">
-					<CanGrow>false</CanGrow>
+				<Textbox Name="Footer">
 					<Paragraphs>
 						<Paragraph>
 							<TextRuns>
 								<TextRun>
-									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value</Value>
+									<Value>="ELibrary | Generated: " &amp; Parameters!GeneratedOn.Value &amp; " | Page " &amp; Globals!PageNumber</Value>
 									<Style>
 										<FontSize>8pt</FontSize>
 										<Color>#647F89</Color>
@@ -471,24 +747,24 @@
 							<Style/>
 						</Paragraph>
 					</Paragraphs>
-					<Top>0.08in</Top>
-					<Left>0.1in</Left>
-					<Height>0.2in</Height>
-					<Width>7in</Width>
+					<Top>0.07in</Top>
+					<Left>0.12in</Left>
+					<Height>0.22in</Height>
+					<Width>8.8in</Width>
 					<Style/>
 				</Textbox>
 			</ReportItems>
 			<Style/>
 		</PageFooter>
-		<PageWidth>11in</PageWidth>
 		<PageHeight>8.5in</PageHeight>
-		<LeftMargin>0.6in</LeftMargin>
-		<RightMargin>0.6in</RightMargin>
+		<PageWidth>11in</PageWidth>
+		<LeftMargin>0.5in</LeftMargin>
+		<RightMargin>0.5in</RightMargin>
 		<TopMargin>0.45in</TopMargin>
 		<BottomMargin>0.45in</BottomMargin>
 		<ColumnSpacing>0.13in</ColumnSpacing>
 		<Style/>
 	</Page>
 	<Language>en-US</Language>
-	<rd:ReportID>3c842e1e-bc9e-4756-b119-24159c7b0201</rd:ReportID>
+	<rd:ReportID>df937421-0bda-4c78-982c-650227ab67c9</rd:ReportID>
 </Report>
