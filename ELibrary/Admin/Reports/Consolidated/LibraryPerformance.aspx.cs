@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Text;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.Reporting.WebForms;
@@ -17,6 +19,8 @@ namespace ELibrary.Admin.Reports.Consolidated
 
         private static readonly CultureInfo PhilippineCulture =
             CultureInfo.GetCultureInfo("en-PH");
+
+        private string _currentStage = "Initializing report";
 
         private string ConnectionString
         {
@@ -74,7 +78,6 @@ namespace ELibrary.Admin.Reports.Consolidated
             }
 
             ddlYear.SelectedValue = today.Year.ToString();
-
             ddlPeriod.SelectedValue = "Monthly";
             ddlMonth.SelectedValue = today.Month.ToString();
 
@@ -97,13 +100,14 @@ namespace ELibrary.Admin.Reports.Consolidated
             DateTime to;
             string periodType;
 
+            _currentStage = "Validating reporting period";
+
             if (!TryResolvePeriod(
                     out from,
                     out to,
                     out periodType))
             {
-                Reset(
-                    "Please select a valid reporting period.");
+                Reset("Please select a valid reporting period.");
                 return;
             }
 
@@ -118,6 +122,8 @@ namespace ELibrary.Admin.Reports.Consolidated
 
             try
             {
+                _currentStage = "Creating report state";
+
                 ReportState state = new ReportState
                 {
                     From = from,
@@ -126,28 +132,31 @@ namespace ELibrary.Admin.Reports.Consolidated
                     GeneratedOn = DateTime.Now
                 };
 
+                _currentStage = "Loading consolidated report data";
+
                 state.Data = LoadReportData(from, to);
 
-                if (state.Data.Tables["OverviewDataSet"]
-                    .Rows.Count == 0)
+                _currentStage = "Checking overview dataset";
+
+                if (state.Data.Tables["OverviewDataSet"] == null ||
+                    state.Data.Tables["OverviewDataSet"].Rows.Count == 0)
                 {
                     Reset(
                         "The consolidated overview returned no data.");
                     return;
                 }
 
+                _currentStage = "Saving report session";
+
                 Session[CacheKey] = state;
+
+                _currentStage = "Binding RDLC report";
 
                 BindReport(state);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.TraceError(
-                    "LibraryPerformance generation failed: " + ex);
-
-                Reset(
-                    "Unable to generate the consolidated report. " +
-                    "Verify the stored procedures and RDLC file.");
+                HandleReportError(ex);
             }
         }
 
@@ -241,10 +250,15 @@ namespace ELibrary.Admin.Reports.Consolidated
             DataSet result = new DataSet(
                 "LibraryPerformanceReport");
 
+            _currentStage = "Opening SQL Server connection";
+
             using (SqlConnection con =
                 new SqlConnection(ConnectionString))
             {
                 con.Open();
+
+                _currentStage =
+                    "Executing dbo.EReport_ConsolidatedOverview";
 
                 AddStoredProcedureTable(
                     con,
@@ -254,6 +268,9 @@ namespace ELibrary.Admin.Reports.Consolidated
                     from,
                     to);
 
+                _currentStage =
+                    "Executing dbo.EReport_ConsolidatedBorrowingTrend";
+
                 AddStoredProcedureTable(
                     con,
                     result,
@@ -262,11 +279,28 @@ namespace ELibrary.Admin.Reports.Consolidated
                     from,
                     to);
 
+                _currentStage =
+                    "Executing dbo.EReport_CollectionTrends";
+
                 LoadFinancialTrends(con, result, from, to);
+
+                _currentStage =
+                    "Executing dbo.EReport_MostBorrowedBooks";
+
                 LoadTopBooks(con, result, from, to);
+
+                _currentStage =
+                    "Executing dbo.EReport_GenrePopularity";
+
                 LoadGenrePopularity(con, result, from, to);
+
+                _currentStage =
+                    "Loading audit category breakdown";
+
                 LoadAuditCategories(con, result, from, to);
             }
+
+            _currentStage = "All SQL datasets loaded";
 
             return result;
         }
@@ -299,10 +333,12 @@ namespace ELibrary.Admin.Reports.Consolidated
             DateTime to)
         {
             cmd.Parameters.Add(
-                "@DateFrom", SqlDbType.Date).Value = from;
+                "@DateFrom",
+                SqlDbType.Date).Value = from;
 
             cmd.Parameters.Add(
-                "@DateTo", SqlDbType.Date).Value = to;
+                "@DateTo",
+                SqlDbType.Date).Value = to;
         }
 
         private static void FillTable(
@@ -338,8 +374,9 @@ namespace ELibrary.Admin.Reports.Consolidated
                 AddDateRange(cmd, from, to);
 
                 cmd.Parameters.Add(
-                    "@Grouping", SqlDbType.VarChar, 10)
-                    .Value = "Monthly";
+                    "@Grouping",
+                    SqlDbType.VarChar,
+                    10).Value = "Monthly";
 
                 FillTable(
                     result,
@@ -365,22 +402,26 @@ namespace ELibrary.Admin.Reports.Consolidated
                 AddDateRange(cmd, from, to);
 
                 cmd.Parameters.Add(
-                    "@Search", SqlDbType.NVarChar, 150)
-                    .Value = DBNull.Value;
+                    "@Search",
+                    SqlDbType.NVarChar,
+                    150).Value = DBNull.Value;
 
                 cmd.Parameters.Add(
-                    "@GenreID", SqlDbType.Int)
-                    .Value = DBNull.Value;
+                    "@GenreID",
+                    SqlDbType.Int).Value = DBNull.Value;
 
                 cmd.Parameters.Add(
-                    "@IncludeArchived", SqlDbType.Bit)
-                    .Value = false;
+                    "@IncludeArchived",
+                    SqlDbType.Bit).Value = false;
 
                 cmd.Parameters.Add(
-                    "@TopN", SqlDbType.Int)
-                    .Value = 10;
+                    "@TopN",
+                    SqlDbType.Int).Value = 10;
 
-                FillTable(result, "TopBooksDataSet", cmd);
+                FillTable(
+                    result,
+                    "TopBooksDataSet",
+                    cmd);
             }
         }
 
@@ -401,12 +442,13 @@ namespace ELibrary.Admin.Reports.Consolidated
                 AddDateRange(cmd, from, to);
 
                 cmd.Parameters.Add(
-                    "@IncludeArchived", SqlDbType.Bit)
-                    .Value = false;
+                    "@IncludeArchived",
+                    SqlDbType.Bit).Value = false;
 
                 cmd.Parameters.Add(
-                    "@Search", SqlDbType.NVarChar, 100)
-                    .Value = DBNull.Value;
+                    "@Search",
+                    SqlDbType.NVarChar,
+                    100).Value = DBNull.Value;
 
                 FillTable(
                     result,
@@ -455,12 +497,16 @@ ORDER BY EventCount DESC, ActionCategory;";
 
         private void BindReport(ReportState state)
         {
+            _currentStage = "Reading overview KPIs";
+
             DataRow overview =
                 state.Data.Tables["OverviewDataSet"].Rows[0];
 
             decimal gross = 0m;
             decimal refunds = 0m;
             decimal net = 0m;
+
+            _currentStage = "Calculating financial totals";
 
             foreach (DataRow row in
                 state.Data.Tables["FinancialTrendDataSet"].Rows)
@@ -469,6 +515,8 @@ ORDER BY EventCount DESC, ActionCategory;";
                 refunds += ToDecimal(row["TotalRefunds"]);
                 net += ToDecimal(row["NetCollections"]);
             }
+
+            _currentStage = "Displaying KPI labels";
 
             lblBorrowings.Text =
                 Convert.ToInt32(
@@ -494,6 +542,8 @@ ORDER BY EventCount DESC, ActionCategory;";
             pnlResults.Visible = true;
             pnlEmpty.Visible = false;
 
+            _currentStage = "Configuring ReportViewer";
+
             rvReport.ProcessingMode =
                 ProcessingMode.Local;
 
@@ -507,25 +557,18 @@ ORDER BY EventCount DESC, ActionCategory;";
                 state.From.ToString("yyyyMMdd") + "_" +
                 state.To.ToString("yyyyMMdd");
 
+            _currentStage = "Binding report data sources";
+
             rvReport.LocalReport.DataSources.Clear();
 
-            AddReportSource(
-                state, "OverviewDataSet");
+            AddReportSource(state, "OverviewDataSet");
+            AddReportSource(state, "BorrowingTrendDataSet");
+            AddReportSource(state, "FinancialTrendDataSet");
+            AddReportSource(state, "TopBooksDataSet");
+            AddReportSource(state, "GenrePopularityDataSet");
+            AddReportSource(state, "AuditCategoryDataSet");
 
-            AddReportSource(
-                state, "BorrowingTrendDataSet");
-
-            AddReportSource(
-                state, "FinancialTrendDataSet");
-
-            AddReportSource(
-                state, "TopBooksDataSet");
-
-            AddReportSource(
-                state, "GenrePopularityDataSet");
-
-            AddReportSource(
-                state, "AuditCategoryDataSet");
+            _currentStage = "Setting RDLC report parameters";
 
             rvReport.LocalReport.SetParameters(
                 new ReportParameter[]
@@ -546,16 +589,24 @@ ORDER BY EventCount DESC, ActionCategory;";
                             "MMM dd, yyyy hh:mm tt")),
 
                     new ReportParameter(
-                        "GrossPayments", Money(gross)),
+                        "GrossPayments",
+                        Money(gross)),
 
                     new ReportParameter(
-                        "TotalRefunds", Money(refunds)),
+                        "TotalRefunds",
+                        Money(refunds)),
 
                     new ReportParameter(
-                        "NetCollections", Money(net))
+                        "NetCollections",
+                        Money(net))
                 });
 
+            _currentStage = "Refreshing consolidated RDLC";
+
             rvReport.LocalReport.Refresh();
+
+            _currentStage = "Report generated successfully";
+
             lblError.Text = "";
         }
 
@@ -586,11 +637,7 @@ ORDER BY EventCount DESC, ActionCategory;";
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.TraceError(
-                            "Consolidated report restore failed: " + ex);
-
-                        Reset(
-                            "Unable to restore consolidated report.");
+                        HandleReportError(ex);
                     }
                 }
             }
@@ -600,8 +647,11 @@ ORDER BY EventCount DESC, ActionCategory;";
 
         private static decimal ToDecimal(object value)
         {
-            if (value == null || value == DBNull.Value)
+            if (value == null ||
+                value == DBNull.Value)
+            {
                 return 0m;
+            }
 
             return Convert.ToDecimal(value);
         }
@@ -609,14 +659,83 @@ ORDER BY EventCount DESC, ActionCategory;";
         private static string Money(decimal amount)
         {
             return "₱" + amount.ToString(
-                "N2", PhilippineCulture);
+                "N2",
+                PhilippineCulture);
+        }
+
+        private void HandleReportError(Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(
+                "ELibrary Consolidated Report ERROR" +
+                Environment.NewLine +
+                "Stage: " + _currentStage +
+                Environment.NewLine +
+                ex.ToString());
+
+            Session.Remove(CacheKey);
+
+            pnlResults.Visible = false;
+            pnlEmpty.Visible = true;
+
+            // Show detailed errors only when debugging locally.
+            // Production visitors receive a generic message.
+            if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                StringBuilder details = new StringBuilder();
+
+                details.AppendLine(
+                    "CONSOLIDATED REPORT DEBUG ERROR");
+
+                details.AppendLine(
+                    "Failed stage: " + _currentStage);
+
+                Exception current = ex;
+                int depth = 0;
+
+                while (current != null && depth < 10)
+                {
+                    details.AppendLine(
+                        "Exception: " +
+                        current.GetType().FullName);
+
+                    details.AppendLine(
+                        "Message: " +
+                        current.Message);
+
+                    current = current.InnerException;
+                    depth++;
+                }
+
+                details.AppendLine();
+                details.AppendLine(ex.ToString());
+
+                lblError.Text =
+                    "<pre style='white-space:pre-wrap;" +
+                    "overflow-wrap:anywhere;" +
+                    "background:#FFF4F2;" +
+                    "padding:16px;" +
+                    "border:1px solid #E8C9C4;" +
+                    "border-radius:10px;" +
+                    "font-size:12px;" +
+                    "line-height:1.6;'>" +
+                    Server.HtmlEncode(details.ToString()) +
+                    "</pre>";
+            }
+            else
+            {
+                lblError.Text =
+                    "Unable to generate the consolidated report. " +
+                    "Please contact the administrator.";
+            }
         }
 
         private void Reset(string message)
         {
             Session.Remove(CacheKey);
+
             pnlResults.Visible = false;
             pnlEmpty.Visible = true;
+
             lblError.Text = Server.HtmlEncode(message);
         }
     }
